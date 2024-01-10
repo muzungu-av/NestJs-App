@@ -80,6 +80,7 @@ pids
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+**/*.code-workspace
 
 # yarn v2
 **/.yarn/cache
