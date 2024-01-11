@@ -90,5 +90,6 @@ pids
 .pnp.*
 
 **/yarn.lock
+**/package-lock.json
 **/.vscode/
-**/*.http
+**/img/

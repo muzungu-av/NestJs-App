@@ -1,15 +1,24 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { ImageService } from './image.service';
-import { CreateImageDto } from './dto/create-image.dto';
+// import { CreateImageDto } from './dto/create-image.dto';
+import { Express } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('image')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
-  //todo - придумать механизм безопасности, чтобы не завалить сервер картинками
   @Post()
-  create(@Body() createImageDto: CreateImageDto) {
-    return this.imageService.create(createImageDto);
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
   }
 
   @Get()
@@ -19,6 +28,6 @@ export class ImageController {
 
   @Get(':id')
   findOne(@Param('id') id: string): string {
-    return this.imageService.findOne(+id);
+    return this.imageService.findOne(id);
   }
 }
