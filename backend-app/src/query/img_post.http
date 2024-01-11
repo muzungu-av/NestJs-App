@@ -7,8 +7,8 @@ Content-Disposition: form-data; name="text"
 
 title
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="file"; filename="1.png"
+Content-Disposition: form-data; name="file"; filename="1.txt"
 Content-Type: image/png
 
-< ./img/1.png
+< ./img/1.txt
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--

@@ -6,6 +6,8 @@ import {
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
+import * as path from 'path';
+import * as fs from 'fs';
 import { ImageService } from './image.service';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -22,9 +24,20 @@ export class ImageController {
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     const dest = this.configService.get('MULTER_DEST');
+    console.log(file.fieldname);
     console.log(file.originalname);
-    console.log(dest);
-    console.log(process.env.NODE_ENV);
+    console.log(file.encoding);
+    console.log(file.mimetype);
+    console.log(file.size);
+
+    if (!fs.existsSync(dest)) {
+      fs.mkdirSync(dest, { recursive: true });
+    }
+
+    const fileName = `${Date.now()}_${file.originalname}`;
+
+    const filePath = path.join(dest, fileName);
+    fs.writeFileSync(filePath, file.buffer);
   }
 
   @Get()
