@@ -1,14 +1,9 @@
-import { Injectable, Param } from '@nestjs/common';
-import { CreateImageDto } from './dto/create-image.dto';
+import { Injectable } from '@nestjs/common';
+
 // import { UpdateImageDto } from './dto/update-image.dto';
 
 @Injectable()
 export class ImageService {
-  create(createImageDto: CreateImageDto) {
-    console.log(createImageDto);
-    return 'This action adds a new image';
-  }
-
   findAll() {
     return `This action returns all image`;
   }

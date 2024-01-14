@@ -93,3 +93,4 @@ pids
 **/package-lock.json
 **/.vscode/
 **/img/
+**/*file_storage/
