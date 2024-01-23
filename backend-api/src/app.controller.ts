@@ -5,14 +5,15 @@ import { AuthService } from 'auth/auth.service';
 
 @Controller()
 export class AppController {
-  appService: AppService;
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private appService: AppService,
+  ) {}
 
-  //todo сделать возможность public получать
-  // @Get()
-  // getHello(): string {
-  //   return this.appService.getHello();
-  // }
+  @Get('/')
+  getHello(): string {
+    return this.appService.getHello();
+  }
 
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
