@@ -7,4 +7,5 @@ export const validationSchema = Joi.object({
   // couldn't convert to an array here
   //ALLOWED_IMAGE_EXTENSIONS: Joi.array().items(Joi.string()).required(),
   ALLOWED_IMAGE_EXTENSIONS: Joi.string().required(),
+  SECRET_KEY: Joi.string(),
 });
