@@ -17,6 +17,15 @@ root.render(
          }
         `}
       </script>
+      <script type="text/javascript">
+        {`
+        window.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+            }
+        });
+        `}
+      </script>
     </Helmet>
     <App />
   </React.StrictMode>
