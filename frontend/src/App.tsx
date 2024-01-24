@@ -1,11 +1,35 @@
 import "./App.css";
-import React, { useEffect, useRef } from "react";
-import ImageCanvas from "./components/ImageCanvas";
-import pic from "./assets/images/MobileAppBg.jpg"; // Adjust the path based on your project structure
+import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
+import { PublicPage } from "./components/PublicPage";
+import { PrivatePage } from "./components/PrivatePage";
+import LoginPage from "./components/LoginPage";
+
 const App = () => {
   return (
     <div style={{ background: "#fff" }}>
-      <ImageCanvas pic={pic} />
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/auth">Авторизация</Link>
+              </li>
+              <li>
+                <Link to="/public">Публичная страница</Link>
+              </li>
+              <li>
+                <Link to="/private">Приватная страница</Link>
+              </li>
+            </ul>
+          </nav>
+
+          <Routes>
+            <Route path="/auth" element={<LoginPage />} />
+            <Route path="/public" element={<PublicPage />} />
+            <Route path="/private" element={<PrivatePage />} />
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
 };
