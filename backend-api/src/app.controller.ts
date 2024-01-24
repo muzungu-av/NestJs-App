@@ -2,6 +2,7 @@ import { Controller, Get, Post, UseGuards, Request } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LocalAuthGuard } from 'auth/local-auth.guard';
 import { AuthService } from 'auth/auth.service';
+import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 
 @Controller('/api')
 export class AppController {
@@ -12,7 +13,13 @@ export class AppController {
 
   @Get('/')
   getHello(): string {
-    return this.appService.getHello();
+    return this.appService.getPublicHello();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/private')
+  getPrivateHello(): string {
+    return this.appService.getPrivateHello();
   }
 
   @UseGuards(LocalAuthGuard)

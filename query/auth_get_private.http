@@ -1,0 +1,3 @@
+GET http://localhost:3000/api/private
+ 
+Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTcwNjA5OTczOCwiZXhwIjoxNzA2MDk5Nzk4fQ.I7kDdUuPa4AZdnuu70X7HHu7li9HJF1Wfmdlgvjehao"
