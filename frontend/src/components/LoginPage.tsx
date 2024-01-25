@@ -1,11 +1,17 @@
 import React, { useState } from "react";
+import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
 
-interface FormData {
+import AuthStore from "../store/AuthStore";
+
+type FormData = {
   username: string;
   password: string;
-}
+};
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC = observer(() => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
@@ -18,26 +24,17 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      //todo CORS error
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const { token } = await response.json();
+      // Call the login method from AuthStore and wait for it to complete
+      const response = await AuthStore.login(formData);
+      if (AuthStore.isLoggedIn) {
+        const token = AuthStore.token;
         localStorage.setItem("token", token);
-        // Перенаправление на другую страницу после успешной авторизации
-        window.location.replace("/private"); // Или используйте React Router для перенаправления
+        navigate("/private");
       } else {
-        // Обработка ошибок
-        console.error("Ошибка авторизации");
+        console.error("Authentication error: Invalid response");
       }
     } catch (error) {
-      console.error("Ошибка:", error);
+      console.error("Authentication error:", error);
     }
   };
 
@@ -71,6 +68,6 @@ const LoginPage: React.FC = () => {
       </form>
     </div>
   );
-};
+});
 
 export default LoginPage;
