@@ -6,9 +6,3 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
-
-//todo - придумать механизм авторизации
-//todo - scope области видимости для разделения запросов разных клиентов (https://nestjs.ru/fundamentals/injection-scopes)
-//todo - длительный процесс работы с файлом (вместо ws) - https://nestjs.ru/controllers подзаголовок Asynchronicity
-//todo - валидатор и pipe для метода /image
-//todo - HTTP Digest Auth
