@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/createUserDto';
 import { User } from './schemas/user.schema';
+import { LocalAuthGuard } from 'auth/local-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -12,6 +13,7 @@ export class UserController {
     await this.userService.create(createUserDto);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Get()
   async findAll(): Promise<User[]> {
     return this.userService.findAll();

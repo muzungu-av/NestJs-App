@@ -7,9 +7,13 @@ import { configuration } from 'config/configuration';
 import { validationSchema } from 'config/validation';
 import { ImageModule } from 'image/image.module';
 import { AuthModule } from './auth/auth.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
+    MongooseModule.forRoot(
+      `mongodb://picAdmin:618542@172.18.0.101:27017/paint`,
+    ),
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
       load: [configuration],
