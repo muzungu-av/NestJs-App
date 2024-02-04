@@ -3,34 +3,63 @@ import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 import { PublicPage } from "./components/PublicPage";
 import { PrivatePage } from "./components/PrivatePage";
 import LoginPage from "./components/LoginPage";
+import { ReactNode } from "react";
+import "./App.css";
 
-const App = () => {
+interface MenuLinkProps {
+  to: string;
+  children: React.ReactNode;
+}
+const MenuLink: React.FC<MenuLinkProps> = ({ to, children }) => {
   return (
-    <div style={{ background: "#fff" }}>
-      <Router>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/auth">Авторизация</Link>
-              </li>
-              <li>
-                <Link to="/public">Публичная страница</Link>
-              </li>
-              <li>
-                <Link to="/private">Приватная страница</Link>
-              </li>
-            </ul>
-          </nav>
-
-          <Routes>
-            <Route path="/auth" element={<LoginPage />} />
-            <Route path="/public" element={<PublicPage />} />
-            <Route path="/private" element={<PrivatePage />} />
-          </Routes>
-        </div>
-      </Router>
+    <div>
+      <Link to={to} className="menu-link">
+        {children}
+      </Link>
     </div>
+  );
+};
+
+const AboutMe: React.FC = () => {
+  return <div>About me content</div>;
+};
+
+const Painting: React.FC = () => {
+  return <div>Painting content</div>;
+};
+
+const Dibond: React.FC = () => {
+  return <div>Dibond content</div>;
+};
+
+const Contacts: React.FC = () => {
+  return <div>Contacts content</div>;
+};
+
+const App: React.FC = () => {
+  return (
+    // className="header-menu"
+
+    <Router>
+      <div className="header">
+        <nav className="navLinks">
+          <MenuLink to="/about-me">About me</MenuLink>
+          <MenuLink to="/painting">Painting</MenuLink>
+          <MenuLink to="/dibond">Dibond</MenuLink>
+          <MenuLink to="/contacts">Contacts</MenuLink>
+          <MenuLink to="/login">Log in</MenuLink>
+        </nav>
+      </div>
+      <div className="main-content">
+        <Routes>
+          <Route path="/about-me" element={<AboutMe />} />
+          <Route path="/painting" element={<Painting />} />
+          <Route path="/dibond" element={<Dibond />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
