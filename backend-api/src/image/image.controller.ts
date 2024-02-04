@@ -10,11 +10,9 @@ import { ImageService } from './image.service';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('image')
+@Controller('/api/image')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
-
-  //todo - Валидатор для проверки типа файла на основе GraphicImage
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))

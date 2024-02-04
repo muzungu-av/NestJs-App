@@ -9,7 +9,7 @@ export class ImageService {
   }
 
   findOne(id: string): string {
-    return `Это действие возвращает #${id} записи кота`;
+    return `Это действие возвращает #${id} записи`;
   }
 }
 

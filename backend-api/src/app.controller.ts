@@ -29,10 +29,3 @@ export class AppController {
     return this.authService.login(req.user);
   }
 }
-/*
-c;curl -X POST http://localhost:3000/api/auth/login -H "Content-Type: application/json" -d '"username": "john", "password": "903"}' ; echo ""
-
-curl -X GET http://localhost:3000/api/private -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDcwNDg2NjEsImV4cCI6MTcwNzEzNTA2MX0.BGaeeu7p56UTLD5O6_hF39S-3Rbht9HuqPd7ZDyJfLQ"
-
-curl -X GET GET http://localhost:3000/api -H "Content-Type: application/json"
-*/
