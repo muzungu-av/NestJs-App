@@ -1,0 +1,83 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo
+    container_name: "mongodb"
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    ports:
+      - ${MONGO_DB_PORT}:${MONGO_DB_PORT}
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_DB_PORT=${MONGO_DB_PORT}
+      - MONGO_DB_NAME=${PAINT_DB}
+      - MONGO_DB_USERNAME=${PAINT_DB_USERNAME}
+      - MONGO_DB_PASSWORD=${PAINT_DB_PASSWORD}
+    volumes:
+      - mongodata:/data/db
+    networks:
+      pic_network:
+        ipv4_address: 172.18.0.101
+
+  paint-back-api:
+    image: paint-back-api-img
+    container_name: "paint-back-api-img"
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    env_file:
+      - ../backend-api/.env.development
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    build:
+      context: .
+      dockerfile: ../backend-api/Dockerfile
+    networks:
+      pic_network:
+        ipv4_address: 172.18.0.102
+
+  paint-front-api:
+    image: paint-front-api-img
+    container_name: "paint-front-api-img"
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      - paint-back-api
+    env_file:
+      - ../frontend/.env.development
+    ports:
+      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+    build:
+      context: .
+      dockerfile: ../frontend/Dockerfile
+    networks:
+      pic_network:
+        ipv4_address: 172.18.0.100
+#https://github.com/arunbandari/mongo-gui/tree/master
+# mongo-gui:
+#   container_name: "mongo-gui"
+#   image: ugleiton/mongo-gui
+#   restart: unless-stopped
+#   env_file:
+#     - .env
+#   ports:
+#     - "4321:4321"
+#   environment:
+#     - MONGO_URL=mongodb://mongodb:27017
+#   networks:
+#     pic_network:
+#       ipv4_address: 172.18.0.100
+
+volumes:
+  mongodata:
+
+networks:
+  pic_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+# docker compose  --env-file .env.development --env-file ../backend-api/.env.development up -d

@@ -3,8 +3,15 @@ import { AppModule } from './app.module';
 // import { configuration } from 'config/configuration';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  const app = await NestFactory.create(AppModule, new ExpressAdapter());
+
+  app.enableCors({
+    origin: 'http://localhost:8080', // Замените на разрешенный домен вашего клиента
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
+  await app.listen(process.env.BACKEND_PORT);
 }
 bootstrap();
 
