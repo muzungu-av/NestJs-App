@@ -1,10 +1,11 @@
 import "./App.css";
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
-import { PublicPage } from "./components/PublicPage";
-import { PrivatePage } from "./components/PrivatePage";
-import LoginPage from "./components/LoginPage";
+import { PublicPage } from "./pages/PublicPage";
+import { PrivatePage } from "./pages/PrivatePage";
+import LoginPage from "./pages/LoginPage";
 import { ReactNode } from "react";
 import "./App.css";
+import "./output.css"
 
 interface MenuLinkProps {
   to: string;
@@ -42,6 +43,7 @@ const App: React.FC = () => {
 
     <Router>
       <div className="header">
+      
         <nav className="navLinks">
           <MenuLink to="/about-me">About me</MenuLink>
           <MenuLink to="/painting">Painting</MenuLink>

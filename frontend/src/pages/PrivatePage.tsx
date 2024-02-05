@@ -1,4 +1,4 @@
-import ImageCanvas from "./ImageCanvas";
+import ImageCanvas from "../components/ImageCanvas";
 import pic from "../assets/images/pic.png"; // Adjust the path based on your project structure
 
 const divStyle = {

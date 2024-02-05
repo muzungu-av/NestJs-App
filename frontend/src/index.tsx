@@ -6,8 +6,10 @@ import { Helmet } from "react-helmet";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
-    {/* <Helmet>
-      <script type="text/javascript">
+    <Helmet>
+      <link href="./output.css" rel="stylesheet"/>
+
+      {/* <script type="text/javascript">
         {`
          document.ondragstart = test;
          document.onselectstart = test;
@@ -25,8 +27,8 @@ root.render(
             }
         });
         `}
-      </script>
-    </Helmet> */}
+      </script> */}
+    </Helmet>
     <App />
   </React.StrictMode>
 );

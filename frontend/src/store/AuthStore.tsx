@@ -19,16 +19,24 @@ class AuthStore {
       username: "",
       password: "",
     };
-    this.token = "";
+    this.token = localStorage.getItem("token") || "";
+    this.isLoggedIn = !!this.token;
   }
   async login(loginFormData: { username: string; password: string }) {
     try {
       const res = await AxiosInstance.post("/api/auth/login", loginFormData);
       this.token = res.data.token;
+      localStorage.setItem("token", this.token);
       this.isLoggedIn = true;
     } catch (error: any) {
       this.error = error.response?.data?.message || "An error occurred";
     }
+  }
+
+  logout() {
+    localStorage.removeItem("token");
+    this.token = "";
+    this.isLoggedIn = false;
   }
 }
 
