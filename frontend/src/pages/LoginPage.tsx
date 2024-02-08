@@ -9,7 +9,7 @@ type FormData = {
   password: string;
 };
 
-const LoginPage: React.FC = observer(() => {
+export const LoginPage: React.FC = observer(() => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<FormData>({
@@ -139,5 +139,3 @@ const LoginPage: React.FC = observer(() => {
     </section>
   );
 });
-
-export default LoginPage;
