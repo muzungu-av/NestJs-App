@@ -13,10 +13,3 @@ import { User, UserSchema } from './schemas/user.schema';
   exports: [UserService],
 })
 export class UserModule {}
-
-/*
-Эта ошибка чаще всего возникает, когда NestJS не может найти или создать экземпляр зависимости, 
-которая требуется для вашего сервиса UserService. 
-В данном случае, проблема связана с зависимостью UserModel, 
-которая должна быть доступна в контексте UserModule.
-*/

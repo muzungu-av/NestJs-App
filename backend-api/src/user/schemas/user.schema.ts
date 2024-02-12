@@ -6,10 +6,10 @@ export type UserDocument = User & Document;
 @Schema() // strict: true enabled by default
 export class User {
   @Prop() //, id: false
-  name: string;
+  username: string;
 
   @Prop({ required: true, index: { unique: true } })
-  login: string;
+  email: string;
 
   @Prop({ required: true })
   password: string;

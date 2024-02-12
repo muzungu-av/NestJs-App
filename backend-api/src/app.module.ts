@@ -8,11 +8,20 @@ import { validationSchema } from 'config/validation';
 import { ImageModule } from 'image/image.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { WinstonModule } from 'nest-winston';
+import { winstonLogger } from './winston.logger';
+
+console.log('NODE_ENV = ' + process.env.NODE_ENV);
+console.log('env file = ');
+console.log(`${process.cwd()}/.env.${process.env.NODE_ENV}`);
 
 @Module({
   imports: [
+    WinstonModule.forRoot({
+      transports: [winstonLogger],
+    }),
     MongooseModule.forRoot(
-      `mongodb://picAdmin:618542@172.18.0.101:27017/paint`,
+      `mongodb://owner:903903@172.18.0.103:27017/paintings`,
     ),
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
