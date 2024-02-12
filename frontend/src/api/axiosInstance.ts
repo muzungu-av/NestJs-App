@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// const MAIN_API_URL = `http://localhost:${process.env.REACT_APP_PORT}`;
-const MAIN_API_URL = `http://localhost:3000`;
+const MAIN_API_URL = `http://${process.env.REACT_APP_URL}:${process.env.REACT_APP_PORT}`;
 
 export const AxiosInstance = axios.create({
   baseURL: MAIN_API_URL,
@@ -14,5 +13,5 @@ export const AxiosInstance = axios.create({
 });
 
 export const LogIn = async () => {
-  const res = await AxiosInstance.post("/api/auth/login");
+  const res = await AxiosInstance.post(`${process.env.REACT_APP_API_LOGIN}`);
 };

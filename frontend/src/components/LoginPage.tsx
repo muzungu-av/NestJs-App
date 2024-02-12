@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-
 import AuthStore from "../store/AuthStore";
 
 type FormData = {
@@ -24,10 +23,13 @@ const LoginPage: React.FC = observer(() => {
 
   const handleLogin = async () => {
     try {
+      console.log(formData);
       // Call the login method from AuthStore and wait for it to complete
       const response = await AuthStore.login(formData);
+      console.log(response);
       if (AuthStore.isLoggedIn) {
         const token = AuthStore.token;
+        console.log(token);
         localStorage.setItem("token", token);
         navigate("/private");
       } else {

@@ -20,6 +20,7 @@
   "devDependencies": {
     "@rsbuild/core": "^0.3.6",
     "@rsbuild/plugin-react": "^0.3.6",
+    "@types/node": "^20.11.17",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
     "@types/react-helmet": "^6.1.11",
