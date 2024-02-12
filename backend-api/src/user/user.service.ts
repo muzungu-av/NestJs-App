@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 
 import { CreateUserDto } from './dto/createUserDto';
 import { User } from './schemas/user.schema';
+import { winstonLogger } from 'winston.logger';
 
 @Injectable()
 export class UserService {
@@ -12,6 +13,7 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    winstonLogger.info('A user is created: ', createUserDto);
     const createdUser = await this.userModel.create(createUserDto);
     return createdUser;
   }
@@ -20,7 +22,8 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  async findOne(login: string): Promise<User> {
-    return this.userModel.findOne({ login: login }).exec();
+  async findOne(email: string): Promise<User> {
+    winstonLogger.info(`Trying to find the user: ${email}`);
+    return this.userModel.findOne({ email: email }).exec();
   }
 }

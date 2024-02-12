@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter());
 
   app.enableCors({
-    origin: 'http://localhost:8080', // Замените на разрешенный домен вашего клиента
+    origin: 'http://172.18.0.101:8080', // Замените на разрешенный домен вашего клиента
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
@@ -19,4 +19,5 @@ bootstrap();
 
 console.log(`NODE_ENV=` + process.env.NODE_ENV);
 console.log(`env file=` + `${process.cwd()}/.env.${process.env.NODE_ENV}`);
+console.log('PORT = ' + process.env.BACKEND_PORT);
 // console.log(configuration());
