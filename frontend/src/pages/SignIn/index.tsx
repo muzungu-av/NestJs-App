@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../Layouts/MainLayout";
 import AuthStore from "../../store/AuthStore";
+import { debounce } from "lodash";
 
 type FormData = {
   username: string;
@@ -10,8 +11,14 @@ type FormData = {
 };
 
 export const SignIn: React.FC = observer(() => {
-  const navigate = useNavigate();
+  useEffect(() => {
+    // Set focus on the username input when the component mounts
+    usernameInputRef.current?.focus();
+  }, []);
 
+  const navigate = useNavigate();
+  const usernameInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
@@ -37,8 +44,9 @@ export const SignIn: React.FC = observer(() => {
       console.error("Authentication error:", error);
     }
   };
-  const SignInSection = () => {
-    return (
+
+  return (
+    <MainLayout>
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
@@ -64,7 +72,7 @@ export const SignIn: React.FC = observer(() => {
                     onChange={handleInputChange}
                     value={formData.username}
                     type="email"
-                    name="email"
+                    name="username"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@email.com"
@@ -137,12 +145,6 @@ export const SignIn: React.FC = observer(() => {
           </div>
         </div>
       </section>
-    );
-  };
-
-  return (
-    <MainLayout>
-      <SignInSection />
     </MainLayout>
   );
 });
