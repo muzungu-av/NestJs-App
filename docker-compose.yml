@@ -1,0 +1,87 @@
+version: "3.9"
+
+services:
+  mongodb:
+    container_name: mongodb
+    image: paint-mongo
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    build:
+      context: .
+      dockerfile: ./mongo/Dockerfile
+    volumes:
+      - mongodata:/data/db
+      - ./mongo/mongod.conf:/etc/mongod.conf
+      - ./mongo/mongod_log:/var/log/mongodb/
+      - ./mongo/init-script.js:/docker-entrypoint-initdb.d/init-script.js
+
+    command: mongod --logpath /var/log/mongodb/mongod.log --config /etc/mongod.conf --keyFile /var/lib/mongodb/mongodb-keyfile
+
+    networks:
+      pic_network:
+        ipv4_address: 172.18.0.103
+
+  paint-back-api:
+    image: paint-back-api-img
+    container_name: "paint-back-api"
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    env_file:
+      - ./backend-api/.env.development
+    ports:
+      - 3000:3000
+    build:
+      context: .
+      dockerfile: ./backend-api/Dockerfile
+    volumes:
+      - ./backend-api/logs:/app/logs
+    networks:
+      pic_network:
+        ipv4_address: 172.18.0.102
+
+  paint-front-api:
+    image: paint-front-api-img
+    container_name: "paint-front"
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      - paint-back-api
+    env_file:
+      - ./frontend/.env
+    ports:
+      - 8080:8080
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    networks:
+      pic_network:
+        ipv4_address: 172.18.0.101
+
+#https://github.com/arunbandari/mongo-gui/tree/master
+
+# mongo-gui:
+#   container_name: "mongo-gui"
+#   image: ugleiton/mongo-gui
+#   restart: unless-stopped
+#   env_file:
+#     - .env
+#   ports:
+#     - "4321:4321"
+#   environment:
+#     - MONGO_URL=mongodb://mongodb:27017
+#   networks:
+#     pic_network:
+#       ipv4_address: 172.18.0.100
+
+volumes:
+  mongodata:
+
+networks:
+  pic_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+# docker compose  --env-file .env.development --env-file ../backend-api/.env.development up -d

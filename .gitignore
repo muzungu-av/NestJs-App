@@ -48,8 +48,11 @@ pids
 # Optional stylelint cache
 .stylelintcache
 
+frontend/src/output.css
+
 # Optional REPL history
 **/.node_repl_history
+frontend/rspack.config.js
 
 # Output of 'npm pack'
 *.tgz

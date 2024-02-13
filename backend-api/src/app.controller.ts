@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { LocalAuthGuard } from 'auth/local-auth.guard';
 import { AuthService } from 'auth/auth.service';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
+import { winstonLogger } from 'winston.logger';
 
 @Controller('/api')
 export class AppController {
@@ -25,7 +26,7 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
-    console.log(req.user);
+    winstonLogger.info('Successful user authorisation');
     return this.authService.login(req.user);
   }
 }
