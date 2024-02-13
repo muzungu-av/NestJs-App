@@ -8,6 +8,7 @@
     "build": "npm run build:css && rsbuild build",
     "build:css": "npm run generate:css -- --minify",
     "preview": "rsbuild preview",
+    "dev:css": "tailwindcss -w -i ./src/input.css -o ./src/output.css",
     "generate:css": "tailwindcss -i ./src/input.css -o ./src/output.css"
   },
   "dependencies": {
