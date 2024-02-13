@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 
-import AuthStore from "../store/AuthStore";
+import AuthStore from "../../store/AuthStore";
 
 type FormData = {
   username: string;
   password: string;
 };
 
-export const LoginPage: React.FC = observer(() => {
+export const SignIn: React.FC = observer(() => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<FormData>({
@@ -117,7 +117,7 @@ export const LoginPage: React.FC = observer(() => {
                 </a>
               </div>
               <button
-                // onClick={handleLogin}
+                onClick={handleLogin}
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >

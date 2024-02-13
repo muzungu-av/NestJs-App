@@ -1,62 +1,52 @@
 import "./App.css";
-import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
-import { PublicPage } from "./pages/PublicPage";
-import { PrivatePage } from "./pages/PrivatePage";
-import { LoginPage } from "./pages/LoginPage";
-import { Painting } from "./pages/Painting/Painting";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+
+import { Main } from "./pages/Main";
+import { SignIn } from "./pages/SignIn";
+import { Paintings } from "./pages/Paintings";
+import { Dibond } from "./pages/Dibond";
+import { Contacts } from "./pages/Contacts";
+import { AboutMe } from "./pages/AboutMe";
+import { AboutPainting } from "./pages/AboutPainting";
+
 import { ReactNode } from "react";
 import "./App.css";
 import "./output.css";
 
-interface MenuLinkProps {
-  to: string;
-  children: React.ReactNode;
-}
-const MenuLink: React.FC<MenuLinkProps> = ({ to, children }) => {
-  return (
-    <div>
-      <Link to={to} className="menu-link">
-        {children}
-      </Link>
-    </div>
-  );
-};
-
-const AboutMe: React.FC = () => {
-  return <div>About me content</div>;
-};
-
-const Dibond: React.FC = () => {
-  return <div>Dibond content</div>;
-};
-
-const Contacts: React.FC = () => {
-  return <div>Contacts content</div>;
-};
-
 const App: React.FC = () => {
-  return (
-    // className="header-menu"
+  const PrivateRoute = ({ children }: { children: ReactNode }) => {
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token") || "";
+    if (!token) {
+      navigate("/login", { replace: true });
+      return null;
+    }
+    return <>{children}</>;
+  };
 
+  return (
     <Router>
-      <div className="header">
-        <nav className="navLinks">
-          <MenuLink to="/about-me">About me</MenuLink>
-          <MenuLink to="/painting">Painting</MenuLink>
-          <MenuLink to="/dibond">Dibond</MenuLink>
-          <MenuLink to="/contacts">Contacts</MenuLink>
-          <MenuLink to="/login">Log in</MenuLink>
-        </nav>
-      </div>
-      <div className="main-content">
-        <Routes>
-          <Route path="/about-me" element={<AboutMe />} />
-          <Route path="/painting" element={<Painting />} />
-          <Route path="/dibond" element={<Dibond />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="/login" element={<LoginPage />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route
+          path="/about-me"
+          element={
+            // <PrivateRoute>
+            <AboutMe />
+            // </PrivateRoute>
+          }
+        />
+        <Route path="/paintings" element={<Paintings />} />
+        <Route path="/dibond" element={<Dibond />} />
+        <Route path="/contacts" element={<Contacts />} />
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/painting" element={<AboutPainting />} />
+        <Route path="/" element={<Main />} />
+      </Routes>
     </Router>
   );
 };

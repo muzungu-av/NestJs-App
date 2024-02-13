@@ -1,0 +1,33 @@
+.slider-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.sliderContainer {
+  display: flex;
+  justify-content: center; /* Center align the slider */
+  padding: 0 50px; /* Adjust padding to center the active slide */
+}
+slick-slide.slick-active {
+  outline: none !important;
+}
+.slick-track {
+  transition: transform 0.5s ease;
+}
+
+.hover-area {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50px; /* Adjust width as needed */
+  z-index: 1;
+  cursor: pointer;
+}
+
+.hover-area-left {
+  left: 0;
+}
+
+.hover-area-right {
+  right: 0;
+}
