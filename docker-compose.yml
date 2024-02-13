@@ -49,7 +49,7 @@ services:
       - mongodb
       - paint-back-api
     env_file:
-      - ./frontend/.env.development
+      - ./frontend/.env
     ports:
       - 8080:8080
     build:
