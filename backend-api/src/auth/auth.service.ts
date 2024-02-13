@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { winstonLogger } from 'winston.logger';
 
 @Injectable()
 export class AuthService {
@@ -9,18 +10,25 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne(email);
-    if (user && user.password === pass) {
+    winstonLogger.info(`User login attempt: ${email}`);
+    winstonLogger.info(`User password attempt: ${password}`);
+
+    if (user && user.password === password) {
+      winstonLogger.info(`Find User: ${user.email}`);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
+    } else {
+      winstonLogger.info('User Not Found');
     }
     return null;
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+    winstonLogger.info(`Try login User: ${user.email}`);
+    const payload = { email: user.email, sub: user.userId };
     return {
       access_token: this.jwtService.sign(payload),
     };

@@ -8,7 +8,6 @@
     "build": "npm run build:css && rsbuild build",
     "build:css": "npm run generate:css -- --minify",
     "preview": "rsbuild preview",
-    "dev:css": "tailwindcss -w -i ./src/input.css -o ./src/output.css",
     "generate:css": "tailwindcss -i ./src/input.css -o ./src/output.css"
   },
   "dependencies": {
@@ -29,6 +28,7 @@
   "devDependencies": {
     "@rsbuild/core": "^0.3.6",
     "@rsbuild/plugin-react": "^0.3.6",
+    "@types/node": "^20.11.17",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
     "@types/react-helmet": "^6.1.11",
