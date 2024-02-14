@@ -1,4 +1,4 @@
-# Rsbuild Project
+# React + TypeScript + Vite
 
 ## Setup
 
