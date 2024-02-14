@@ -1,7 +1,7 @@
 import MainLayout from "../../Layouts/MainLayout";
 import Slide from "../../assets/images/slide.jpg";
-import React, { useState, useRef, useEffect } from "react";
-import Slider, { Settings } from "react-slick";
+import React, { useState, useRef } from "react";
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./painting.module.scss";
@@ -27,7 +27,7 @@ export const AboutPainting: React.FC = () => {
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      beforeChange: (current: number, next: number) => {
+      beforeChange: (_current: number, next: number) => {
         // Synchronize slider2 with slider1
         setSlider2Index(next);
         slider2.current?.slickGoTo(next);
@@ -39,7 +39,7 @@ export const AboutPainting: React.FC = () => {
       slidesToShow: 3,
       slidesToScroll: 1,
       initialSlide: Math.floor(slides.length / 2), // Select the center slide initially
-      beforeChange: (current: number, next: number) => {
+      beforeChange: (_current: number, next: number) => {
         // Synchronize slider1 with slider2
         setSlider1Index(next);
         slider1.current?.slickGoTo(next);
