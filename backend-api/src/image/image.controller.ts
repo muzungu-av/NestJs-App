@@ -30,6 +30,8 @@ export class ImageController {
         'Unprocessable Entity',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
+    } else {
+      winstonLogger.info(JSON.stringify(result));
     }
   }
 

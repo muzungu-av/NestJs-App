@@ -11,7 +11,10 @@ export interface ImgFileProcessingResult {
   originalName?: string;
   fileName?: string;
   path?: string;
+<<<<<<< HEAD
   miniPath?: string;
+=======
+>>>>>>> 4b3c044 (Images. preparation for mongo)
   sizeBytes?: number;
   createdAt?: Date;
 }
