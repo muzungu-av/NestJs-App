@@ -6,6 +6,8 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { Express } from 'express';
@@ -20,8 +22,13 @@ export class ImageController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  uploadFileAndPassValidation(@UploadedFile() file: Express.Multer.File) {
-    winstonLogger.info(`File accepted : ${file.filename}, Size: ${file.size}`);
+  async uploadFileAndPassValidation(@UploadedFile() file: Express.Multer.File) {
+    if ((await this.imageService.processNewFile(file.filename)) === false) {
+      throw new HttpException(
+        'Unprocessable Entity',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 
   @Get()

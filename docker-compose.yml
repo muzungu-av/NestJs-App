@@ -41,8 +41,8 @@ services:
       pic_network:
         ipv4_address: 172.18.0.102
 
-  paint-front-api:
-    image: paint-front-api-img
+  paint-front:
+    image: paint-front-img
     container_name: "paint-front"
     restart: unless-stopped
     depends_on:

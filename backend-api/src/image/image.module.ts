@@ -3,6 +3,7 @@ import { ImageService } from './image.service';
 import { ImageController } from './image.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfigService } from './MulterConfigService';
+import { ImageHandler } from './gm/imageHandler';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { MulterConfigService } from './MulterConfigService';
     }),
   ],
   controllers: [ImageController],
-  providers: [ImageService],
+  providers: [ImageService, ImageHandler],
 })
 export class ImageModule {}
