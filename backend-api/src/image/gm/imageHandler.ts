@@ -53,7 +53,6 @@ export class ImageHandler {
 
       if (identifyResult.success) {
         winstonLogger.info(`Identification was successful`);
-
         const resizedResult = await this.resize(
           identifyResult.buffer,
           miniFilePath,
