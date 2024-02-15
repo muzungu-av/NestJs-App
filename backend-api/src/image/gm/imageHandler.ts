@@ -29,12 +29,14 @@ export class ImageHandler {
     const originalFileName = file.originalname; // see MulterConfigService
     const newFileName = file.filename;
     const filePath = path.join(process.cwd(), this.dest, newFileName); // from MulterConfigService
+
     const miniFilePath = path.join(
       process.cwd(),
       this.dest,
       this.mini_prefix + newFileName.replace(/\.[^/.]+$/, ''),
       this.mini_prefix + newFileName,
     );
+
     const fileSize = file.size;
 
     winstonLogger.info(`(ImageHandler) Work with the file begins: ${filePath}`);
@@ -51,6 +53,15 @@ export class ImageHandler {
       if (identifyResult.success) {
         winstonLogger.info(`Identification was successful`);
 
+<<<<<<< HEAD
+=======
+        const newFilePath = path.join(
+          process.cwd(),
+          this.dest,
+          this.mini_prefix + newFileName.replace(/\.[^/.]+$/, ''),
+          this.mini_prefix + newFileName,
+        );
+>>>>>>> 4b3c044ae578f81de5689e944aefce6bb52f24d5
         const resizedResult = await this.resize(
           identifyResult.buffer,
           miniFilePath,
@@ -62,8 +73,12 @@ export class ImageHandler {
 
         result.originalName = originalFileName;
         result.fileName = newFileName;
+<<<<<<< HEAD
         result.path = filePath;
         result.miniPath = miniFilePath;
+=======
+        result.path = newFilePath;
+>>>>>>> 4b3c044ae578f81de5689e944aefce6bb52f24d5
         result.sizeBytes = fileSize;
         result.createdAt = new Date();
         result.success = true;
