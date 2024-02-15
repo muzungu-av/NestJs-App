@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ImageHandler } from './gm/imageHandler';
+import { ImageHandler, ImgFileProcessingResult } from './gm/imageHandler';
 
 // import { UpdateImageDto } from './dto/update-image.dto';
 
@@ -16,8 +16,10 @@ export class ImageService {
     return `Это действие возвращает #${id} записи`;
   }
 
-  async processNewFile(filename: string): Promise<boolean> {
-    return await this.handler.do(filename);
+  async processNewFile(
+    file: Express.Multer.File,
+  ): Promise<ImgFileProcessingResult> {
+    return await this.handler.do(file);
   }
 }
 
