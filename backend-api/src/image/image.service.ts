@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { ImageHandler } from './gm/imageHandler';
+import { ImageHandler, ImgFileProcessingResult } from './gm/imageHandler';
+import { winstonLogger } from 'winston.logger';
 
 // import { UpdateImageDto } from './dto/update-image.dto';
 
 @Injectable()
 export class ImageService {
-  constructor(private handler: ImageHandler) {
+  constructor(private readonly handler: ImageHandler) {
     this.handler = handler;
   }
   findAll() {
@@ -16,8 +17,24 @@ export class ImageService {
     return `Это действие возвращает #${id} записи`;
   }
 
-  async processNewFile(filename: string): Promise<boolean> {
-    return await this.handler.do(filename);
+  async processNewFile(
+    file: Express.Multer.File,
+  ): Promise<ImgFileProcessingResult> {
+    return new Promise((resolve) => {
+      this.handler.do(file).then((result) => {
+        if (result.success === true) {
+          //todo - отправить в монго
+          winstonLogger.info(JSON.stringify(result));
+          // {"success":true,
+          // "originalName":"000123.jpg",
+          // "fileName":"1708011270174_000123.jpg",
+          // "path":"/app/file_storage/mini_1708011270174_000123/mini_1708011270174_000123.jpg",
+          // "sizeBytes":124405,
+          // "createdAt":"2024-02-15T15:34:30.351Z"}
+        }
+        resolve(result);
+      });
+    });
   }
 }
 

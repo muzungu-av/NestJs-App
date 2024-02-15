@@ -6,6 +6,16 @@ import { promisify } from 'util';
 import { ConfigService } from '@nestjs/config';
 import { winstonLogger } from 'winston.logger';
 
+export interface ImgFileProcessingResult {
+  success: boolean;
+  originalName?: string;
+  fileName?: string;
+  path?: string;
+  miniPath?: string;
+  sizeBytes?: number;
+  createdAt?: Date;
+}
+
 @Injectable()
 export class ImageHandler {
   private readonly readFileAsync = promisify(fs.readFile);
@@ -15,37 +25,57 @@ export class ImageHandler {
     this.dest = this.configService.get<string>('MULTER_DEST');
   }
 
-  async do(fileName: string): Promise<boolean> {
-    const filePath = path.join(process.cwd(), this.dest, fileName);
+  async do(file: Express.Multer.File): Promise<ImgFileProcessingResult> {
+    const originalFileName = file.originalname; // see MulterConfigService
+    const newFileName = file.filename;
+    const filePath = path.join(process.cwd(), this.dest, newFileName); // from MulterConfigService
+    const miniFilePath = path.join(
+      process.cwd(),
+      this.dest,
+      this.mini_prefix + newFileName.replace(/\.[^/.]+$/, ''),
+      this.mini_prefix + newFileName,
+    );
+    const fileSize = file.size;
+
     winstonLogger.info(`(ImageHandler) Work with the file begins: ${filePath}`);
+
     const imageFileBuffer = await this.readFileAsync(filePath);
+
+    const result: ImgFileProcessingResult = {
+      success: false,
+    };
+
     try {
       const identifyResult = await this.identify(imageFileBuffer);
 
       if (identifyResult.success) {
         winstonLogger.info(`Identification was successful`);
 
-        const newFilePath = path.join(
-          process.cwd(),
-          this.dest,
-          this.mini_prefix + fileName.replace(/\.[^/.]+$/, ''),
-          this.mini_prefix + fileName,
-        );
         const resizedResult = await this.resize(
           identifyResult.buffer,
-          newFilePath,
+          miniFilePath,
         );
         if (resizedResult.resized !== undefined) {
           //todo  `Добавить в МОНГО: ${filePath} - ${resizedResult.resized}`,
         }
         winstonLogger.info(`The resysis was a success`);
-        return true;
-      } else return false;
+
+        result.originalName = originalFileName;
+        result.fileName = newFileName;
+        result.path = filePath;
+        result.miniPath = miniFilePath;
+        result.sizeBytes = fileSize;
+        result.createdAt = new Date();
+        result.success = true;
+        return result;
+      } else {
+        return result;
+      }
     } catch (error) {
       winstonLogger.info(`There's been an error: ${error.errorMsg}`);
       winstonLogger.info(`Deleting the file: ${filePath}`);
       this.remove(filePath);
-      return false;
+      return result;
     }
   }
 

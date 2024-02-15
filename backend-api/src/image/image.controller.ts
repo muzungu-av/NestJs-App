@@ -23,7 +23,9 @@ export class ImageController {
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async uploadFileAndPassValidation(@UploadedFile() file: Express.Multer.File) {
-    if ((await this.imageService.processNewFile(file.filename)) === false) {
+    winstonLogger.info('Post request');
+    const result = await this.imageService.processNewFile(file);
+    if (result.success === false) {
       throw new HttpException(
         'Unprocessable Entity',
         HttpStatus.UNPROCESSABLE_ENTITY,
