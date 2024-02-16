@@ -3,20 +3,26 @@ import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../Layouts/MainLayout";
 import AuthStore from "../../store/AuthStore";
-import { debounce } from "lodash";
-
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { gapi } from "gapi-script";
 type FormData = {
   username: string;
   password: string;
 };
 
 export const SignIn: React.FC = observer(() => {
+  const CLIENT_ID =
+    "507280334434-9lr0l5ir0kq800mlmarlhvhup4v7sp4a.apps.googleusercontent.com";
   useEffect(() => {
-    // Set focus on the username input when the component mounts
+    function start() {
+      gapi.client.init({ clientId: CLIENT_ID, scope: "" });
+    }
+    gapi.load("client:auth2", start);
     usernameInputRef.current?.focus();
   }, []);
 
   const navigate = useNavigate();
+  const [token, setToken] = useState<string>("");
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -24,6 +30,15 @@ export const SignIn: React.FC = observer(() => {
     password: "",
   });
 
+  const onSuccess = () => {
+    const accessToken = gapi.auth.getToken().access_token;
+    localStorage.setItem("token", accessToken);
+    console.log(accessToken);
+  };
+  const onLogoutSuccess = () => {
+    localStorage.removeItem("token");
+    console.log("logout success");
+  };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -131,6 +146,19 @@ export const SignIn: React.FC = observer(() => {
                 >
                   Sign in
                 </button>
+                <GoogleLogin
+                  clientId={CLIENT_ID}
+                  buttonText="Sign in"
+                  onSuccess={onSuccess}
+                  onFailure={() => console.log("login fail")}
+                  cookiePolicy="single_host_origin"
+                  isSignedIn={true}
+                />
+                <GoogleLogout
+                  clientId={CLIENT_ID}
+                  buttonText="Sign out"
+                  onLogoutSuccess={onLogoutSuccess}
+                />
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?{" "}
                   <a
