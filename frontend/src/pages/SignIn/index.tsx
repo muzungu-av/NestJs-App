@@ -24,7 +24,7 @@ export const SignIn: React.FC = observer(() => {
   const navigate = useNavigate();
   const [token, setToken] = useState<string>("");
   const usernameInputRef = useRef<HTMLInputElement>(null);
-  const passwordInputRef = useRef<HTMLInputElement>(null);
+  useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
@@ -47,7 +47,7 @@ export const SignIn: React.FC = observer(() => {
   const handleLogin = async () => {
     try {
       // Call the login method from AuthStore and wait for it to complete
-      const response = await AuthStore.login(formData);
+      await AuthStore.login(formData);
       if (AuthStore.isLoggedIn) {
         const token = AuthStore.token;
         localStorage.setItem("token", token);

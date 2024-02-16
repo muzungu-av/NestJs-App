@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const MAIN_API_URL = "http://172.18.0.102:3000";
-// const MAIN_API_URL = `http://${process.env.BACKEND_URL}:${process.env.PORT}`;
+const MAIN_API_URL = import.meta.env.VITE_BACKEND_URL
+  ? `http://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_PORT}`
+  : "http://localhost-default:9000";
 
 const createAxiosInstance = () => {
   const token = localStorage.getItem("token") || "";

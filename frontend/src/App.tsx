@@ -35,9 +35,9 @@ const App: React.FC = () => {
         <Route
           path="/about-me"
           element={
-            // <PrivateRoute>
-            <AboutMe />
-            // </PrivateRoute>
+            <PrivateRoute>
+              <AboutMe />
+            </PrivateRoute>
           }
         />
         <Route path="/paintings" element={<Paintings />} />

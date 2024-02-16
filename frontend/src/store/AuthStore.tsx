@@ -1,7 +1,4 @@
-import React from "react";
 import { makeAutoObservable } from "mobx";
-import { observer } from "mobx-react-lite";
-import { observable, action } from "mobx";
 import { AxiosInstance } from "../api/axiosInstance";
 
 class AuthStore {
@@ -24,7 +21,12 @@ class AuthStore {
   }
   async login(loginFormData: { username: string; password: string }) {
     try {
-      const res = await AxiosInstance.post("/api/auth/login", loginFormData);
+      const res = await AxiosInstance.post(
+        import.meta.env.VITE_API_LOGIN
+          ? import.meta.env.VITE_API_LOGIN
+          : "empty_api_login_url",
+        loginFormData
+      );
       this.token = res.data.token;
       localStorage.setItem("token", this.token);
       this.isLoggedIn = true;

@@ -1,7 +1,6 @@
 
-//todo - ??? (не нужно) scope области видимости для разделения запросов разных клиентов (https://nestjs.ru/fundamentals/injection-scopes)
+//todo - Добавить в МОНГО инфу о файлах
 //todo - длительный процесс работы с файлом (вместо ws) - https://nestjs.ru/controllers подзаголовок Asynchronicity
 //todo - HTTP Digest Auth
 //todo - Валидатор для проверки типа файла на основе GraphicImage
-
-//todo - UI фреймворк фронтенд
+//todo - проверить сделать возврат 401 для методов работы с картинками, сейчас 500

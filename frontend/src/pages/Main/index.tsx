@@ -1,5 +1,5 @@
 import MainLayout from "../../Layouts/MainLayout";
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import Slide from "../../assets/images/slide.jpg";
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
