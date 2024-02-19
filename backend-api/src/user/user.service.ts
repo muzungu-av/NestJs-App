@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-
-import { CreateUserDto } from './dto/createUserDto';
 import { User } from './schemas/user.schema';
 import { winstonLogger } from 'winston.logger';
+import { CreateUserDto } from './dto/createUserDto';
 
 @Injectable()
 export class UserService {
@@ -12,11 +11,16 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    winstonLogger.info('A user is created: ', createUserDto);
-    const createdUser = await this.userModel.create(createUserDto);
-    return createdUser;
-  }
+  // async create(createUserDto: CreateUserDto): Promise<User> {
+  //   try {
+  //     const createdUser = await this.userModel.create(createUserDto);
+  //     winstonLogger.info('A user is created: ', createUserDto);
+  //     return createdUser;
+  //   } catch (error) {
+  //     winstonLogger.error('Error creating user: ', error.message);
+  //     throw new Error('Failed to create user');
+  //   }
+  // }
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
