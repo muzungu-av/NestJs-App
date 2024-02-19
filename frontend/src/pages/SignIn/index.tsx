@@ -5,14 +5,13 @@ import MainLayout from "../../Layouts/MainLayout";
 import AuthStore from "../../store/AuthStore";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { gapi } from "gapi-script";
+import { CLIENT_ID } from "../../constants";
 type FormData = {
   username: string;
   password: string;
 };
 
 export const SignIn: React.FC = observer(() => {
-  const CLIENT_ID =
-    "507280334434-9lr0l5ir0kq800mlmarlhvhup4v7sp4a.apps.googleusercontent.com";
   useEffect(() => {
     function start() {
       gapi.client.init({ clientId: CLIENT_ID, scope: "" });
@@ -22,7 +21,6 @@ export const SignIn: React.FC = observer(() => {
   }, []);
 
   const navigate = useNavigate();
-  const [token, setToken] = useState<string>("");
   const usernameInputRef = useRef<HTMLInputElement>(null);
   useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -46,7 +44,6 @@ export const SignIn: React.FC = observer(() => {
 
   const handleLogin = async () => {
     try {
-      // Call the login method from AuthStore and wait for it to complete
       await AuthStore.login(formData);
       if (AuthStore.isLoggedIn) {
         const token = AuthStore.token;
@@ -132,12 +129,6 @@ export const SignIn: React.FC = observer(() => {
                       </label>
                     </div>
                   </div>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                  >
-                    Forgot password?
-                  </a>
                 </div>
                 <button
                   onClick={handleLogin}

@@ -27,7 +27,7 @@ class AuthStore {
           : "empty_api_login_url",
         loginFormData
       );
-      this.token = res.data.token;
+      this.token = res.data.access_token;
       localStorage.setItem("token", this.token);
       this.isLoggedIn = true;
     } catch (error: any) {
