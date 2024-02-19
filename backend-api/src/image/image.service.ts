@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { ImageHandler, ImgFileProcessingResult } from './gm/imageHandler';
 import { winstonLogger } from 'winston.logger';
-
+import { Image } from './schemas/image.schema';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { CreateImageDto } from './dto/сreateImageDto';
 // import { UpdateImageDto } from './dto/update-image.dto';
 
 @Injectable()
 export class ImageService {
-  constructor(private readonly handler: ImageHandler) {
-    this.handler = handler;
-  }
+  // private readonly createImageDto: CreateImageDto;
+  constructor(
+    @InjectModel(Image.name) private readonly imageModel: Model<Image>,
+    private readonly handler: ImageHandler,
+  ) {}
+
   findAll() {
     return `This action returns all image`;
   }
@@ -19,18 +25,21 @@ export class ImageService {
 
   async processNewFile(
     file: Express.Multer.File,
+    description: string,
   ): Promise<ImgFileProcessingResult> {
     return new Promise((resolve) => {
-      this.handler.do(file).then((result) => {
+      this.handler.do(file).then(async (result) => {
         if (result.success === true) {
-          //todo - отправить в монго
-          winstonLogger.info(JSON.stringify(result));
-          // {"success":true,
-          // "originalName":"000123.jpg",
-          // "fileName":"1708011270174_000123.jpg",
-          // "path":"/app/file_storage/mini_1708011270174_000123/mini_1708011270174_000123.jpg",
-          // "sizeBytes":124405,
-          // "createdAt":"2024-02-15T15:34:30.351Z"}
+          try {
+            //todo - удаление файлов если в монго уже была инфа об этом файле
+            result.description = description;
+            const createImageDto = new CreateImageDto(result);
+            this.imageModel.create(createImageDto);
+            winstonLogger.info(`A images is created: ${result}`);
+          } catch (error) {
+            winstonLogger.error('Error creating image in DB: ', error);
+            throw new Error('Failed to create image');
+          }
         }
         resolve(result);
       });

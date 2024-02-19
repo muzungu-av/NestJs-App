@@ -5,18 +5,18 @@ import * as path from 'path';
 import { promisify } from 'util';
 import { ConfigService } from '@nestjs/config';
 import { winstonLogger } from 'winston.logger';
+import { CryptoHash } from 'image/crypto/crypto';
 
 export interface ImgFileProcessingResult {
+  uid?: string;
   success: boolean;
   originalName?: string;
   fileName?: string;
   path?: string;
-<<<<<<< HEAD
   miniPath?: string;
-=======
->>>>>>> 4b3c044 (Images. preparation for mongo)
   sizeBytes?: number;
   createdAt?: Date;
+  description?: string;
 }
 
 @Injectable()
@@ -24,7 +24,10 @@ export class ImageHandler {
   private readonly readFileAsync = promisify(fs.readFile);
   private readonly dest: string;
   private readonly mini_prefix: string = 'mini_';
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private crypto: CryptoHash,
+  ) {
     this.dest = this.configService.get<string>('MULTER_DEST');
   }
 
@@ -42,7 +45,18 @@ export class ImageHandler {
 
     const fileSize = file.size;
 
-    winstonLogger.info(`(ImageHandler) Work with the file begins: ${filePath}`);
+    const uid = await this.crypto
+      .calculateFileHash(filePath)
+      .then((hash) => {
+        winstonLogger.info(`File hash ${filePath}: ${hash}`);
+        return hash;
+      })
+      .catch((error) => {
+        winstonLogger.info(`Error when calculating the file hash: ${error}`);
+        return '';
+      });
+
+    winstonLogger.info(`Work with the file begins (ImageHandler): ${filePath}`);
 
     const imageFileBuffer = await this.readFileAsync(filePath);
 
@@ -64,6 +78,7 @@ export class ImageHandler {
         }
         winstonLogger.info(`The resysis was a success`);
 
+        result.uid = uid;
         result.originalName = originalFileName;
         result.fileName = newFileName;
         result.path = filePath;
