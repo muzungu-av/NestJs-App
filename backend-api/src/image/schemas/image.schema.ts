@@ -5,28 +5,28 @@ export type ImageDocument = Image & Document;
 
 @Schema() // strict: true enabled by default
 export class Image {
-  @Prop({ required: false, index: { unique: true } })
+  @Prop({ required: true, index: { unique: true } })
   uid: string;
 
-  @Prop({ required: false }) //, id: false
+  @Prop({ required: true }) //, id: false
   originalName: string;
 
-  @Prop({ required: false, index: { unique: true } })
+  @Prop({ required: true, index: { unique: true } })
   fileName: string;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   path: string;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   miniPath: string;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   sizeBytes: string;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   createdAt: string;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   description: string;
 }
 
