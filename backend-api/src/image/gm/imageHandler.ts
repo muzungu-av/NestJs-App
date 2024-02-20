@@ -69,13 +69,7 @@ export class ImageHandler {
 
       if (identifyResult.success) {
         winstonLogger.info(`Identification was successful`);
-        const resizedResult = await this.resize(
-          identifyResult.buffer,
-          miniFilePath,
-        );
-        if (resizedResult.resized !== undefined) {
-          //todo  `Добавить в МОНГО: ${filePath} - ${resizedResult.resized}`,
-        }
+        await this.resize(identifyResult.buffer, miniFilePath);
         winstonLogger.info(`The resysis was a success`);
 
         result.uid = uid;
@@ -88,6 +82,7 @@ export class ImageHandler {
         result.success = true;
         return result;
       } else {
+        winstonLogger.info(`Identification wasn't successful`);
         return result;
       }
     } catch (error) {
@@ -117,12 +112,10 @@ export class ImageHandler {
   private async resize(
     buffer: Buffer,
     newPath: string,
-  ): Promise<{ success: boolean; resized?: string }> {
+  ): Promise<{ success: boolean; resizedPath?: string }> {
     const directoryPath = path.dirname(newPath);
 
-    // Проверяем существование директории
     if (!fs.existsSync(directoryPath)) {
-      // Если директории нет, создаем её
       fs.mkdirSync(directoryPath, { recursive: true });
     }
 
@@ -133,18 +126,29 @@ export class ImageHandler {
           if (err) {
             reject({ success: false, errorMsg: err.message });
           } else {
-            resolve({ success: true, resized: newPath });
+            resolve({ success: true, resizedPath: newPath });
           }
         });
     });
   }
 
-  private remove(filePath: string) {
+  public remove(filePath: string) {
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
       winstonLogger.info(`The file has been successfully deleted: ${filePath}`);
     } else {
       winstonLogger.info(`The file does not exist: ${filePath} `);
+    }
+  }
+
+  public removeDir(filePath: string) {
+    try {
+      const directoryPath = path.dirname(filePath);
+      // Delete directory synchronously and recursively
+      fs.rmdirSync(directoryPath, { recursive: true });
+      winstonLogger.info(`Directory successfully deleted ${directoryPath}`);
+    } catch (err) {
+      winstonLogger.error(`Error when deleting a directory: ${err.message}`);
     }
   }
 }

@@ -5,7 +5,6 @@ import { Image } from './schemas/image.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateImageDto } from './dto/сreateImageDto';
-// import { UpdateImageDto } from './dto/update-image.dto';
 
 @Injectable()
 export class ImageService {
@@ -27,22 +26,37 @@ export class ImageService {
     file: Express.Multer.File,
     description: string,
   ): Promise<ImgFileProcessingResult> {
-    return new Promise((resolve) => {
-      this.handler.do(file).then(async (result) => {
-        if (result.success === true) {
-          try {
-            //todo - удаление файлов если в монго уже была инфа об этом файле
-            result.description = description;
-            const createImageDto = new CreateImageDto(result);
-            this.imageModel.create(createImageDto);
-            winstonLogger.info(`A images is created: ${result}`);
-          } catch (error) {
-            winstonLogger.error('Error creating image in DB: ', error);
-            throw new Error('Failed to create image');
+    return new Promise((resolve, reject) => {
+      this.handler
+        .do(file)
+        .then(async (result) => {
+          if (result.success === true) {
+            try {
+              result.description = description;
+              const createImageDto = new CreateImageDto(result);
+              await this.imageModel.create(createImageDto);
+              winstonLogger.info(`A image is created: ${result}`);
+              resolve(result);
+            } catch (error) {
+              winstonLogger.error(
+                `Error creating image in DB: ${error.message}`,
+              );
+              //No duplicates accepted
+              this.handler.remove(result.path);
+              this.handler.removeDir(result.miniPath);
+              reject(
+                new Error(`Failed to create image (No duplicates accepted)`),
+              );
+            }
+          } else {
+            //Failed validation
+            reject(new Error(`Failed to create image (Failed validation)`));
           }
-        }
-        resolve(result);
-      });
+        })
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .catch((error) => {
+          reject(new Error('Unknown file handling error'));
+        });
     });
   }
 }
