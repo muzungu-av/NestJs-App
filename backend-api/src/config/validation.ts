@@ -8,4 +8,7 @@ export const validationSchema = Joi.object({
   //ALLOWED_IMAGE_EXTENSIONS: Joi.array().items(Joi.string()).required(),
   ALLOWED_IMAGE_EXTENSIONS: Joi.string().required(),
   SECRET_KEY: Joi.string(),
+  MONGO_DB_PORT: Joi.number().required(),
+  BACKEND_PORT: Joi.number().required(),
+  CLOUDINARY_URL: Joi.string().required(),
 });

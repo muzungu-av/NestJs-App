@@ -29,14 +29,18 @@ export class ImageService {
     return new Promise((resolve, reject) => {
       this.handler
         .do(file)
+        //validation and creation of a miniature
         .then(async (result) => {
           if (result.success === true) {
             try {
               result.description = description;
               const createImageDto = new CreateImageDto(result);
               await this.imageModel.create(createImageDto);
-              winstonLogger.info(`A image is created: ${result}`);
-              resolve(result);
+              winstonLogger.info(`An image is created: ${result.uid}`);
+              //resolve(result);
+              return new Promise((resolve) => {
+                return resolve(result);
+              });
             } catch (error) {
               winstonLogger.error(
                 `Error creating image in DB: ${error.message}`,
@@ -53,11 +57,23 @@ export class ImageService {
             reject(new Error(`Failed to create image (Failed validation)`));
           }
         })
+        //sending to cloudinary api
+        .then((result: ImgFileProcessingResult) => {
+          const someAsyncResult = this.someAsyncFunction(result);
+          resolve(someAsyncResult);
+        })
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .catch((error) => {
-          reject(new Error('Unknown file handling error'));
+          reject(new Error(`Unknown handling error: ${error}`));
         });
     });
+  }
+
+  someAsyncFunction(
+    resource: ImgFileProcessingResult,
+  ): ImgFileProcessingResult {
+    // const _res = ...
+    return resource;
   }
 }
 
