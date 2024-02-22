@@ -1,4 +1,4 @@
-docker compose down
+docker compose stop
 cd ./backend-api
 yarn build
 #cd .. && cd ./frontend

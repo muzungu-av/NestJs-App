@@ -9,6 +9,7 @@ export class CreateImageDto {
   sizeBytes: string;
   createdAt: string;
   description: string;
+  imageUrl: string;
 
   constructor(imgFileProcessingResult: ImgFileProcessingResult) {
     this.uid = imgFileProcessingResult.uid;

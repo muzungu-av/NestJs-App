@@ -7,6 +7,7 @@ import { ImageHandler } from './gm/imageHandler';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ImageSchema, Image } from './schemas/image.schema';
 import { CryptoHash } from './crypto/crypto';
+import { CloudinaryModule } from 'cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -14,8 +15,9 @@ import { CryptoHash } from './crypto/crypto';
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
+    CloudinaryModule,
   ],
   controllers: [ImageController],
-  providers: [ImageService, ImageHandler, CryptoHash],
+  providers: [ImageService, ImageHandler, CryptoHash, Image],
 })
 export class ImageModule {}

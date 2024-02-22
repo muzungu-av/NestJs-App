@@ -8,6 +8,7 @@ import {
   UseGuards,
   Body,
   Res,
+  Req,
 } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { Express } from 'express';
@@ -25,12 +26,22 @@ export class ImageController {
   async uploadFileAndPassValidation(
     @UploadedFile() file: Express.Multer.File,
     @Body('description') description: string,
+    @Req() request: any,
     @Res() response: any,
   ) {
-    winstonLogger.info('POST request with file');
+    // const userId = request.userId;
+    const { user } = request;
+    winstonLogger.info(
+      `Post request 'uploadFile' from user: ${JSON.stringify(user.userId)}`,
+    );
     try {
-      const result = await this.imageService.processNewFile(file, description);
-      winstonLogger.info(result.uid);
+      const result = await this.imageService.processNewFile(
+        user.userId,
+        file,
+        description,
+      );
+      winstonLogger.info(`result.uid = ${result.uid}`);
+      winstonLogger.info(`result.fileName = ${result.fileName}`);
       return response.status(201).json({ uid: result.uid });
     } catch (error) {
       winstonLogger.error(error.message);

@@ -4,7 +4,8 @@ import { winstonLogger } from 'winston.logger';
 import { Image } from './schemas/image.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateImageDto } from './dto/сreateImageDto';
+import { CreateImageDto } from './dto/createImageDto';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class ImageService {
@@ -12,6 +13,7 @@ export class ImageService {
   constructor(
     @InjectModel(Image.name) private readonly imageModel: Model<Image>,
     private readonly handler: ImageHandler,
+    private readonly cloudinary: CloudinaryService,
   ) {}
 
   findAll() {
@@ -23,6 +25,7 @@ export class ImageService {
   }
 
   async processNewFile(
+    userId: string,
     file: Express.Multer.File,
     description: string,
   ): Promise<ImgFileProcessingResult> {
@@ -59,7 +62,8 @@ export class ImageService {
         })
         //sending to cloudinary api
         .then((result: ImgFileProcessingResult) => {
-          const someAsyncResult = this.someAsyncFunction(result);
+          winstonLogger.info(result);
+          const someAsyncResult = this.someAsyncFunction(userId, result);
           resolve(someAsyncResult);
         })
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -69,10 +73,16 @@ export class ImageService {
     });
   }
 
-  someAsyncFunction(
+  async someAsyncFunction(
+    userId: string,
     resource: ImgFileProcessingResult,
-  ): ImgFileProcessingResult {
-    // const _res = ...
+  ): Promise<ImgFileProcessingResult> {
+    const imageUrl = await this.cloudinary.upload(
+      userId,
+      resource.path,
+      resource.fileName,
+    );
+    resource.imageUrl = imageUrl;
     return resource;
   }
 }
