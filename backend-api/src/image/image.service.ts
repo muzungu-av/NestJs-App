@@ -4,7 +4,8 @@ import { winstonLogger } from 'winston.logger';
 import { Image } from './schemas/image.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateImageDto } from './dto/сreateImageDto';
+import { CreateImageDto } from './dto/createImageDto';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class ImageService {
@@ -12,6 +13,7 @@ export class ImageService {
   constructor(
     @InjectModel(Image.name) private readonly imageModel: Model<Image>,
     private readonly handler: ImageHandler,
+    private readonly cloudinary: CloudinaryService,
   ) {}
 
   findAll() {
@@ -23,20 +25,25 @@ export class ImageService {
   }
 
   async processNewFile(
+    userId: string,
     file: Express.Multer.File,
     description: string,
   ): Promise<ImgFileProcessingResult> {
     return new Promise((resolve, reject) => {
       this.handler
         .do(file)
+        //validation and creation of a miniature
         .then(async (result) => {
           if (result.success === true) {
             try {
               result.description = description;
               const createImageDto = new CreateImageDto(result);
               await this.imageModel.create(createImageDto);
-              winstonLogger.info(`A image is created: ${result}`);
-              resolve(result);
+              winstonLogger.info(`An image is created: ${result.uid}`);
+              //resolve(result);
+              return new Promise((resolve) => {
+                return resolve(result);
+              });
             } catch (error) {
               winstonLogger.error(
                 `Error creating image in DB: ${error.message}`,
@@ -53,11 +60,30 @@ export class ImageService {
             reject(new Error(`Failed to create image (Failed validation)`));
           }
         })
+        //sending to cloudinary api
+        .then((result: ImgFileProcessingResult) => {
+          winstonLogger.info(result);
+          const someAsyncResult = this.someAsyncFunction(userId, result);
+          resolve(someAsyncResult);
+        })
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .catch((error) => {
-          reject(new Error('Unknown file handling error'));
+          reject(new Error(`Unknown handling error: ${error}`));
         });
     });
+  }
+
+  async someAsyncFunction(
+    userId: string,
+    resource: ImgFileProcessingResult,
+  ): Promise<ImgFileProcessingResult> {
+    const imageUrl = await this.cloudinary.upload(
+      userId,
+      resource.path,
+      resource.fileName,
+    );
+    resource.imageUrl = imageUrl;
+    return resource;
   }
 }
 

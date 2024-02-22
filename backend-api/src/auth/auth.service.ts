@@ -27,8 +27,9 @@ export class AuthService {
   }
 
   async login(user: any) {
-    winstonLogger.info(`Try login User: ${user.email}`);
-    const payload = { email: user.email, sub: user.userId };
+    const { _id, email } = user._doc;
+    winstonLogger.info(`Try login User: ${email}, id: ${_id}`);
+    const payload = { userId: _id, email: email };
     return {
       access_token: this.jwtService.sign(payload),
     };

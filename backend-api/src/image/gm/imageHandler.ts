@@ -17,6 +17,7 @@ export interface ImgFileProcessingResult {
   sizeBytes?: number;
   createdAt?: Date;
   description?: string;
+  imageUrl?: string;
 }
 
 @Injectable()
