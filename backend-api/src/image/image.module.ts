@@ -8,6 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ImageSchema, Image } from './schemas/image.schema';
 import { CryptoHash } from './crypto/crypto';
 import { CloudinaryModule } from 'cloudinary/cloudinary.module';
+import { UserModule } from 'user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CloudinaryModule } from 'cloudinary/cloudinary.module';
       useClass: MulterConfigService,
     }),
     CloudinaryModule,
+    UserModule,
   ],
   controllers: [ImageController],
   providers: [ImageService, ImageHandler, CryptoHash, Image],

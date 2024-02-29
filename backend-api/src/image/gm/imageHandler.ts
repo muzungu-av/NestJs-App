@@ -6,6 +6,8 @@ import { promisify } from 'util';
 import { ConfigService } from '@nestjs/config';
 import { winstonLogger } from 'winston.logger';
 import { CryptoHash } from 'image/crypto/crypto';
+import { UserService } from 'user/user.service';
+import { User } from 'user/schemas/user.schema';
 
 export interface ImgFileProcessingResult {
   uid?: string;
@@ -21,6 +23,7 @@ export interface ImgFileProcessingResult {
   imageUrl?: string;
   miniImageUrl?: string;
   errorMessage?: string;
+  owner: User;
 }
 
 @Injectable()
@@ -31,11 +34,15 @@ export class ImageHandler {
   constructor(
     private configService: ConfigService,
     private crypto: CryptoHash,
+    private userService: UserService,
   ) {
     this.dest = this.configService.get<string>('MULTER_DEST');
   }
 
-  async do(file: Express.Multer.File): Promise<ImgFileProcessingResult> {
+  async do(
+    userId: string,
+    file: Express.Multer.File,
+  ): Promise<ImgFileProcessingResult> {
     const originalFileName = file.originalname; // see MulterConfigService
     const newFileName = file.filename;
     const filePath = path.join(process.cwd(), this.dest, newFileName); // from MulterConfigService
@@ -66,13 +73,21 @@ export class ImageHandler {
 
     const imageFileBuffer = await this.readFileAsync(filePath);
 
+    const owner = await this.userService
+      .findOneById(userId)
+      .then((user: User | null) => {
+        return user;
+      });
+    winstonLogger.info(
+      `The user uploading the picture was found: ${JSON.stringify(owner.email)}`,
+    );
     const result: ImgFileProcessingResult = {
+      owner: owner,
       success: false,
     };
 
     try {
       const identifyResult = await this.identify(imageFileBuffer);
-
       if (identifyResult.success) {
         winstonLogger.info(`Identification was successful`);
         await this.resize(identifyResult.buffer, miniFilePath);

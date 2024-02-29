@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       winstonLogger.warning(`Invalid token payload`);
       throw new UnauthorizedException('Invalid token payload');
     }
-    const user = await this.usersService.findOne(payload.email);
+    const user = await this.usersService.findOneByEmail(payload.email);
 
     if (!user) {
       winstonLogger.warning(`Invalid User.email: ${payload.email}`);

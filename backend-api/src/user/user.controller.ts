@@ -17,11 +17,12 @@ export class UserController {
   async findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
-  }
+  //todo этот клас пока не используется
+  //todo есть по email есть по id
+  // @Get(':id')
+  // async findOne(@Param('id') id: string): Promise<User> {
+  //   return this.userService.findOneById(id);
+  // }
 
   //   @Delete(':id')
   //   async delete(@Param('id') id: string) {

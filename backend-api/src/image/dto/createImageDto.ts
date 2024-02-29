@@ -1,4 +1,5 @@
 import { ImgFileProcessingResult } from 'image/gm/imageHandler';
+import { User } from 'user/schemas/user.schema';
 
 export class CreateImageDto {
   uid: string;
@@ -11,6 +12,7 @@ export class CreateImageDto {
   createdAt: string;
   description: string;
   imageUrl: string;
+  owner: User;
 
   constructor(imgFileProcessingResult: ImgFileProcessingResult) {
     this.uid = imgFileProcessingResult.uid;
@@ -22,5 +24,6 @@ export class CreateImageDto {
     this.sizeBytes = imgFileProcessingResult.sizeBytes?.toString() || '';
     this.createdAt = imgFileProcessingResult.createdAt?.toISOString() || '';
     this.description = imgFileProcessingResult.description || '';
+    this.owner = imgFileProcessingResult.owner;
   }
 }

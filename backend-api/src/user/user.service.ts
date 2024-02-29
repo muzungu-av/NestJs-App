@@ -26,8 +26,13 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  async findOne(email: string): Promise<User> {
-    winstonLogger.info(`Trying to find the user: ${email}`);
+  async findOneByEmail(email: string): Promise<User> {
+    winstonLogger.info(`Trying to find the user by email: ${email}`);
     return this.userModel.findOne({ email: email }).exec();
+  }
+
+  async findOneById(id: string): Promise<User> {
+    winstonLogger.info(`Trying to find the user by id: ${id}`);
+    return this.userModel.findOne({ _id: id }).exec();
   }
 }

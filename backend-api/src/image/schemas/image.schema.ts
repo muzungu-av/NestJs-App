@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { User } from 'user/schemas/user.schema';
 
 export type ImageDocument = Image & Document;
 
@@ -28,6 +29,9 @@ export class Image {
 
   @Prop({ required: true })
   description: string;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+  owner: User;
 }
 
 export const ImageSchema = SchemaFactory.createForClass(Image);

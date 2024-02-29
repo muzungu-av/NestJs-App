@@ -55,7 +55,7 @@ export class ImageService {
   ): Promise<ImgFileProcessingResult> {
     return new Promise((resolve, reject) => {
       this.handler
-        .do(file) //validation and creation of a miniature
+        .do(userId, file) //validation and creation of a miniature
         .then(async (result) => {
           if (result.success === true) {
             // save to mongo
