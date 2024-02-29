@@ -7,6 +7,30 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateImageDto } from './dto/createImageDto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
+interface CustomErrorOptions {
+  message: string;
+  uid?: string;
+  success?: any;
+  path?: string;
+  miniPath?: string;
+}
+
+class CustomError extends Error {
+  success?: any;
+  path?: any;
+  miniPath?: any;
+  uid?: string;
+
+  constructor(options: CustomErrorOptions) {
+    super(options.message);
+    this.name = 'CustomError';
+    this.success = options.success;
+    this.path = options.path;
+    this.miniPath = options.miniPath;
+    this.uid = options.uid;
+  }
+}
+
 @Injectable()
 export class ImageService {
   // private readonly createImageDto: CreateImageDto;
@@ -31,59 +55,131 @@ export class ImageService {
   ): Promise<ImgFileProcessingResult> {
     return new Promise((resolve, reject) => {
       this.handler
-        .do(file)
-        //validation and creation of a miniature
+        .do(file) //validation and creation of a miniature
         .then(async (result) => {
           if (result.success === true) {
+            // save to mongo
             try {
               result.description = description;
               const createImageDto = new CreateImageDto(result);
               await this.imageModel.create(createImageDto);
               winstonLogger.info(`An image is created: ${result.uid}`);
-              //resolve(result);
-              return new Promise((resolve) => {
-                return resolve(result);
-              });
+              return result;
             } catch (error) {
+              //No duplicates accepted
               winstonLogger.error(
                 `Error creating image in DB: ${error.message}`,
               );
-              //No duplicates accepted
-              this.handler.remove(result.path);
-              this.handler.removeDir(result.miniPath);
-              reject(
-                new Error(`Failed to create image (No duplicates accepted)`),
-              );
+              result.success = false;
+              result.errorMessage = `Error creating image in DB: ${error.message}`;
+              throw new CustomError({
+                message: 'Failed to create image (No duplicates accepted)',
+                success: false,
+                path: result.path,
+                miniPath: result.miniPath,
+              });
             }
           } else {
-            //Failed validation
-            reject(new Error(`Failed to create image (Failed validation)`));
+            result.success = false;
+            result.errorMessage = `Failed to create image (Failed validation)`;
+            throw new CustomError({
+              message: `Failed to create image (Failed validation)`,
+              success: false,
+              path: result.path,
+              miniPath: result.miniPath,
+              uid: result.uid,
+            });
           }
         })
-        //sending to cloudinary api
+        .catch((error) => {
+          throw error;
+        })
+        //sending to cloudinary
+        .then(async (result: ImgFileProcessingResult) => {
+          result.imageUrl = undefined;
+          if (result && result.success) {
+            try {
+              result.imageUrl = await this.cloudinary.upload(
+                userId,
+                result.path,
+                result.fileName,
+              );
+            } catch (error) {
+              winstonLogger.error(`Error during upload: ${error}`);
+              throw new CustomError({
+                message: 'Error during upload images',
+                success: false,
+                path: result.path,
+                miniPath: result.miniPath,
+                uid: result.uid,
+              });
+            }
+          }
+          return result;
+        })
+        .catch((result) => {
+          throw result;
+        })
+        .then(async (result: ImgFileProcessingResult) => {
+          result.miniImageUrl = undefined;
+          if (result && result.success) {
+            //успешно загруженна основная картинка
+            try {
+              result.miniImageUrl = await this.cloudinary.upload(
+                userId,
+                result.miniPath,
+                result.miniFileName,
+              );
+            } catch (error) {
+              winstonLogger.error(`Error during upload mini image: ${error}`);
+              throw new CustomError({
+                message: 'Error during upload mini image',
+                success: false,
+                path: result.path,
+                miniPath: result.miniPath,
+                uid: result.uid,
+              });
+            }
+          }
+          return result;
+        })
+        .catch((result) => {
+          throw result;
+        })
         .then((result: ImgFileProcessingResult) => {
-          winstonLogger.info(result);
-          const someAsyncResult = this.someAsyncFunction(userId, result);
-          resolve(someAsyncResult);
+          // в конце успешной работы удалим файлы из контейнера
+          if (result && result.success) {
+            this.handler.remove(result.path);
+            this.handler.removeDir(result.miniPath);
+            resolve(result);
+          }
+          return result;
         })
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .catch((error) => {
-          reject(new Error(`Unknown handling error: ${error}`));
+        .catch(async (result) => {
+          if (result && !result.success) {
+            result.path ? this.handler.remove(result.path) : !undefined;
+            result.miniPath
+              ? this.handler.removeDir(result.miniPath)
+              : !undefined;
+          }
+          if (result && result.uid) {
+            try {
+              const deletedImage = await this.imageModel.findOneAndDelete({
+                uid: result.uid,
+              });
+              if (deletedImage) {
+                winstonLogger.info(`Document deleted: ${deletedImage.uid}`);
+              } else {
+                winstonLogger.info('Document not found for deletion.');
+              }
+            } catch (error) {
+              winstonLogger.error('Error deleting document:', error);
+            }
+          }
+          reject(result.message);
         });
     });
-  }
-
-  async someAsyncFunction(
-    userId: string,
-    resource: ImgFileProcessingResult,
-  ): Promise<ImgFileProcessingResult> {
-    const imageUrl = await this.cloudinary.upload(
-      userId,
-      resource.path,
-      resource.fileName,
-    );
-    resource.imageUrl = imageUrl;
-    return resource;
   }
 }
 

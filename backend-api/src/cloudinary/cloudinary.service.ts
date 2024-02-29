@@ -31,7 +31,7 @@ export class CloudinaryService {
     fileName: string,
   ): Promise<string> {
     winstonLogger.info(
-      `Uploading images ${fileName} to Cloudinary, user id: ${userId}`,
+      `Uploading images ${file} to Cloudinary, user id: ${userId}`,
     );
     try {
       await this.cloudinary.uploader.upload(
@@ -53,8 +53,14 @@ export class CloudinaryService {
       throw error;
     }
   }
-}
 
+  public async delete(cloudinaryPath: string): Promise<any> {
+    return this.cloudinary.api.delete_resources([cloudinaryPath], {
+      type: 'upload',
+      resource_type: 'image',
+    });
+  }
+}
 // ОТВЕТ CLOUDINARY
 // {"api_key":"149313672292296",
 // "asset_id":"18e57281d0defff0d41a1e110fa73be7",

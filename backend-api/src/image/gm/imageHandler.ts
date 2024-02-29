@@ -13,11 +13,14 @@ export interface ImgFileProcessingResult {
   originalName?: string;
   fileName?: string;
   path?: string;
+  miniFileName?: string;
   miniPath?: string;
   sizeBytes?: number;
   createdAt?: Date;
   description?: string;
   imageUrl?: string;
+  miniImageUrl?: string;
+  errorMessage?: string;
 }
 
 @Injectable()
@@ -43,6 +46,8 @@ export class ImageHandler {
       this.mini_prefix + newFileName.replace(/\.[^/.]+$/, ''),
       this.mini_prefix + newFileName,
     );
+
+    const miniFileName = this.mini_prefix + newFileName;
 
     const fileSize = file.size;
 
@@ -77,17 +82,20 @@ export class ImageHandler {
         result.originalName = originalFileName;
         result.fileName = newFileName;
         result.path = filePath;
+        result.miniFileName = miniFileName;
         result.miniPath = miniFilePath;
         result.sizeBytes = fileSize;
         result.createdAt = new Date();
         result.success = true;
+        result.imageUrl = undefined; //Promises<string>
+        result.miniImageUrl = undefined; //Promises<string>
         return result;
       } else {
         winstonLogger.info(`Identification wasn't successful`);
         return result;
       }
     } catch (error) {
-      winstonLogger.info(`There's been an error: ${error.errorMsg}`);
+      winstonLogger.error(`There's been an error: ${error.errorMsg}`);
       winstonLogger.info(`Deleting the file: ${filePath}`);
       this.remove(filePath);
       return result;
@@ -147,6 +155,7 @@ export class ImageHandler {
       const directoryPath = path.dirname(filePath);
       // Delete directory synchronously and recursively
       fs.rmdirSync(directoryPath, { recursive: true });
+      // fs.rm(directoryPath, { recursive: true });
       winstonLogger.info(`Directory successfully deleted ${directoryPath}`);
     } catch (err) {
       winstonLogger.error(`Error when deleting a directory: ${err.message}`);

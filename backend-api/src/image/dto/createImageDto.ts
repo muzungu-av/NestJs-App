@@ -6,6 +6,7 @@ export class CreateImageDto {
   fileName: string;
   path: string;
   miniPath: string;
+  miniFileName: string;
   sizeBytes: string;
   createdAt: string;
   description: string;
@@ -16,6 +17,7 @@ export class CreateImageDto {
     this.originalName = imgFileProcessingResult.originalName || '';
     this.fileName = imgFileProcessingResult.fileName || '';
     this.path = imgFileProcessingResult.path || '';
+    this.miniFileName = imgFileProcessingResult.miniFileName || '';
     this.miniPath = imgFileProcessingResult.miniPath || '';
     this.sizeBytes = imgFileProcessingResult.sizeBytes?.toString() || '';
     this.createdAt = imgFileProcessingResult.createdAt?.toISOString() || '';

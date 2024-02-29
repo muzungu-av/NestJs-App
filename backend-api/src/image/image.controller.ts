@@ -40,11 +40,10 @@ export class ImageController {
         file,
         description,
       );
-      winstonLogger.info(`result.uid = ${result.uid}`);
-      winstonLogger.info(`result.fileName = ${result.fileName}`);
+      // winstonLogger.info(`result.uid = ${result.uid}`);
+      // winstonLogger.info(`result.fileName = ${result.fileName}`);
       return response.status(201).json({ uid: result.uid });
     } catch (error) {
-      winstonLogger.error(error.message);
       return response.status(500).json({ message: `${error}` });
     }
   }
