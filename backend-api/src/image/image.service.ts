@@ -48,6 +48,22 @@ export class ImageService {
     return `Это действие возвращает #${id} записи`;
   }
 
+  async updateImage(
+    uid: string,
+    updatedData: Partial<Image>,
+  ): Promise<Image | null> {
+    const result = await this.imageModel
+      .updateOne({ uid }, { $set: updatedData })
+      .exec();
+
+    if (result.modifiedCount === 1) {
+      return this.imageModel.findOne({ uid }).exec();
+    } else {
+      winstonLogger.error(`Failed to update the document ${uid}`);
+    }
+    return null;
+  }
+
   async processNewFile(
     userId: string,
     file: Express.Multer.File,
@@ -153,6 +169,12 @@ export class ImageService {
             this.handler.removeDir(result.miniPath);
             resolve(result);
           }
+          const updatedData = {
+            imageUrl: result.imageUrl,
+            miniImageUrl: result.miniImageUrl,
+          };
+          const n = this.updateImage(result.uid, updatedData);
+          winstonLogger.info(`Document update: ${n}`);
           return result;
         })
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

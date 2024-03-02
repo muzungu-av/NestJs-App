@@ -33,6 +33,7 @@ export class CloudinaryService {
     winstonLogger.info(
       `Uploading images ${file} to Cloudinary, user id: ${userId}`,
     );
+    let secure_url = undefined;
     try {
       await this.cloudinary.uploader.upload(
         file,
@@ -41,11 +42,13 @@ export class CloudinaryService {
           if (error) {
             winstonLogger.error(error);
           } else {
+            secure_url = result.secure_url;
             winstonLogger.info(`Succesful. URL = ${result.secure_url}`);
           }
         },
       );
-      return fileName;
+
+      return secure_url;
     } catch (error) {
       winstonLogger.error(
         `Error when loading an image: ${JSON.stringify(error)}`,

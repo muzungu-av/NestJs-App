@@ -21,6 +21,12 @@ export class Image {
   @Prop({ required: true })
   miniPath: string;
 
+  @Prop({ required: false })
+  imageUrl: string;
+
+  @Prop({ required: false })
+  miniImageUrl: string;
+
   @Prop({ required: true })
   sizeBytes: string;
 
