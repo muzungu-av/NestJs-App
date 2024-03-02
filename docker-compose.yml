@@ -11,13 +11,12 @@ services:
       context: .
       dockerfile: ./mongo/Dockerfile
     volumes:
-      - mongodata:/data/db
+      - paint_mongo_data:/var/lib/mongodb
       - ./mongo/mongod.conf:/etc/mongod.conf
       - ./mongo/mongod_log:/var/log/mongodb/
       - ./mongo/init-script.js:/docker-entrypoint-initdb.d/init-script.js
 
     command: mongod --logpath /var/log/mongodb/mongod.log --config /etc/mongod.conf --keyFile /var/lib/mongodb/mongodb-keyfile
-
     networks:
       pic_network:
         ipv4_address: 172.18.0.103
@@ -76,7 +75,8 @@ services:
 #       ipv4_address: 172.18.0.100
 
 volumes:
-  mongodata:
+  paint_mongo_data:
+    external: true
 
 networks:
   pic_network:
