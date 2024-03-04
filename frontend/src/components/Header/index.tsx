@@ -21,7 +21,7 @@ const Header = () => {
         <MenuLink to="/painting">Painting</MenuLink>
         <MenuLink to="/dibond">Dibond</MenuLink>
         <MenuLink to="/contacts">Contacts</MenuLink>
-        <MenuLink to="/login">Log in</MenuLink>
+        {/* <MenuLink to="/login">Log in</MenuLink> */}
       </nav>
     </div>
   );

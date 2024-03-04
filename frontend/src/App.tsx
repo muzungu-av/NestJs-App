@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import { Main } from "./pages/Main";
-import { SignIn } from "./pages/SignIn";
+// import { SignIn } from "./pages/SignIn";
 import { Paintings } from "./pages/Paintings";
 import { Dibond } from "./pages/Dibond";
 import { Contacts } from "./pages/Contacts";
@@ -43,7 +43,7 @@ const App: React.FC = () => {
         <Route path="/paintings" element={<Paintings />} />
         <Route path="/dibond" element={<Dibond />} />
         <Route path="/contacts" element={<Contacts />} />
-        <Route path="/login" element={<SignIn />} />
+        {/* <Route path="/login" element={<SignIn />} /> */}
         <Route path="/painting" element={<AboutPainting />} />
         <Route path="/" element={<Main />} />
       </Routes>
