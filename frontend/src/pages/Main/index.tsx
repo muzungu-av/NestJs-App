@@ -1,24 +1,38 @@
 import MainLayout from "../../Layouts/MainLayout";
 import React from "react";
 import { PaintingSlider } from "../../components/PaintingSlider";
-import Slide from "../../assets/images/slide.jpg";
+import SmallPic from "../../assets/images/SmallPicture.jpg";
+import BoatPic from "../../assets/images/BoatPicture.jpg";
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
 import Play from "../../assets/icons/Play.svg";
-
+import SpringSlider from "../../components/SpringSlider/index";
 export const Main: React.FC = () => {
-  const slidesArr = [Slide, Slide, Slide];
+  const slidesArr = [SmallPic, BoatPic, SmallPic];
 
   const AboutPainterSection: React.FC = () => {
     return (
       <div className="py-[5%] px-[5%]">
-        <div className="flex justify-between items-center gap-6 ">
-          <img src={ProfilePic} className="rounded-full w-[300px] h-[300px] " />
-          <p className="w-[50%]">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit quam
-            provident illum sapiente harum recusandae, atque et quisquam
-            consectetur cumque, nostrum, doloribus iure culpa consequuntur
-            aspernatur. Pariatur voluptate doloribus deleniti?
-          </p>
+        <h3 className="font-italiana text-6xl	text-center">Biografie</h3>
+        <div className="flex justify-around items-center ">
+          <div className="">
+            <img
+              src={ProfilePic}
+              className="rounded-full w-[300px] h-[300px] mb-4 "
+            />
+            <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
+          </div>
+          <div className="flex flex-col w-[50%] gap-8">
+            <p className="font-federo">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit
+              quam provident illum sapiente harum recusandae, atque et quisquam
+              consectetur cumque, nostrum, doloribus iure culpa consequuntur
+              aspernatur. Pariatur voluptate doloribus deleniti?
+            </p>
+            <p className="font-apple w-[60%] self-center">
+              “ Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry ”
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -29,7 +43,7 @@ export const Main: React.FC = () => {
         <div className="flex justify-between items-end px-[5%]">
           <div
             className="w-[600px] h-[300px] flex justify-center items-center"
-            style={{ backgroundImage: `url(${Slide})` }}
+            style={{ backgroundImage: `url(${SmallPic})` }}
           >
             <img src={Play} className="w-8 h-8" />
           </div>
@@ -72,6 +86,7 @@ export const Main: React.FC = () => {
       <VideoSection />
       <PaintingSlider slides={slidesArr} />
       <ContactSection />
+      <SpringSlider />
     </MainLayout>
   );
 };

@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./painting.module.scss";
-
+import MainPageBg from "../../assets/images/MainPageBg.jpg";
 type PaintingProps = {
   slides: string[];
 };
@@ -21,7 +21,7 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
         } else if (hoverDirection === "right") {
           slideNext();
         }
-      }, 700); // Adjust the interval time as needed
+      }, 300); // Adjust the interval time as needed
     }
 
     return () => {
@@ -46,21 +46,27 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
   };
 
   return (
-    <div className="py-[5%]">
+    <div
+      className="py-[10%]  bg-[#FFEDCB4A] "
+      style={{ backgroundImage: `url(${MainPageBg})` }}
+    >
       <div className={styles["slider-container"]}>
         <Slider
+          easing="ease"
           ref={slider}
           dots={false}
           infinite={true}
           speed={500}
           slidesToShow={3}
           slidesToScroll={1}
+          centerMode={true}
+          centerPadding="60px"
           className={styles["slick-track"]}
         >
           {slides.map((image: string) => {
             return (
               <div className="px-2 ">
-                <img src={image} className="w-[500px] h-[300px]" />
+                <img src={image} className=" border-[15px] border-[#240909]" />
               </div>
             );
           })}

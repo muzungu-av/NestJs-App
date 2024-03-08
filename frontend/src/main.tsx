@@ -12,7 +12,14 @@ root.render(
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
       />
-
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=""/>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap"
+        rel="stylesheet"
+      ></link>
+      <link href="https://fonts.googleapis.com/css2?family=Federo&display=swap" rel="stylesheet"/>
+      <link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet"/>
       <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
       {/* <script type="text/javascript">
         {`

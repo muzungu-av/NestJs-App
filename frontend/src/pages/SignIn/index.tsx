@@ -76,7 +76,7 @@ export const SignIn: React.FC = observer(() => {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white flex-none"
                   >
                     Your email
                   </label>
@@ -167,3 +167,8 @@ export const SignIn: React.FC = observer(() => {
     </MainLayout>
   );
 });
+
+<div className="bg-[] py-[5%]">
+
+
+</div>;
