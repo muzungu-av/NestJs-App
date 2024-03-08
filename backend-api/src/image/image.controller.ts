@@ -9,6 +9,7 @@ import {
   Body,
   Res,
   Req,
+  Query,
 } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { Express } from 'express';
@@ -46,13 +47,27 @@ export class ImageController {
     }
   }
 
+  @Get('count')
+  documentCount(): Promise<number> {
+    return this.imageService.getImageCount();
+  }
+
   @Get()
-  findAll(): string {
-    return this.imageService.findAll();
+  findAll(@Query('fields') fields: string): Promise<any> {
+    winstonLogger.info('Getting all Images');
+    if (fields) {
+      winstonLogger.info(`Query fields: ${fields}`);
+      return this.imageService.getAllImagesWithFields(fields);
+    } else {
+      return this.imageService.getAllImages();
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): string {
-    return this.imageService.findOne(id);
+  findOne(
+    @Param('id') id: string,
+    @Query('fields') fields: string,
+  ): Promise<any> {
+    return this.imageService.findOne(id, fields);
   }
 }
