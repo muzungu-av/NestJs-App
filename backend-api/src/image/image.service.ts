@@ -40,14 +40,60 @@ export class ImageService {
     private readonly cloudinary: CloudinaryService,
   ) {}
 
-  findAll() {
-    return `This action returns all image`;
+  /**
+   * Вернет количество изображений в Mongo
+   * @returns число
+   */
+  async getImageCount(): Promise<number> {
+    return await this.imageModel.countDocuments().exec();
   }
 
-  findOne(id: string): string {
-    return `Это действие возвращает #${id} записи`;
+  /**
+   * Вернет полный список документов об изображениях из Mongo
+   * @returns массив документов
+   */
+  async getAllImages(): Promise<any[]> {
+    let query = this.imageModel.find();
+    query = query.select(`-_id -__v`);
+    return await query.exec();
   }
 
+  async getAllImagesWithFields(fields: string): Promise<any[]> {
+    let query = this.imageModel.find();
+    if (fields) {
+      const selectedFields = fields.split(',').join(' ');
+      query = query.select(`-_id ${selectedFields}`);
+    } else {
+      query = query.select(`-_id -__v`);
+    }
+    return await query.exec();
+  }
+
+  /**
+   * Выдача одного документа об изображении по его ID
+   *
+   * @param id ID документа
+   * @param fields
+   * @returns
+   */
+  async findOne(id: string, fields: string): Promise<any> {
+    let query = this.imageModel.findById(id);
+    if (fields) {
+      const selectedFields = fields.split(',').join(' ');
+      query = query.select(`${selectedFields} -_id`);
+    } else {
+      query = query.select('-_id -__v');
+    }
+    return await query.lean().exec();
+  }
+
+  /**
+   * Обновление документа в базе данных.
+   *
+   * @param uid uid документа
+   * @param updatedData обновляемые данные
+   * @returns обновленный документ
+   */
   async updateImage(
     uid: string,
     updatedData: Partial<Image>,
@@ -64,6 +110,16 @@ export class ImageService {
     return null;
   }
 
+  /**
+   * Сложный процесс обслуживания нового файла-картинки.
+   * Будет выполнена валидация, создана миниатюра, они загруженны в Cloudinary,
+   * помещена информация о них в MongoDB.
+   *
+   * @param userId ID пользователя производящего загрузку.
+   * @param file Файл изображения.
+   * @param description Описание файла.
+   * @returns Структура ImgFileProcessingResult
+   */
   async processNewFile(
     userId: string,
     file: Express.Multer.File,
@@ -110,7 +166,7 @@ export class ImageService {
         .catch((error) => {
           throw error;
         })
-        //sending to cloudinary
+        //sending to cloudinary основной файл
         .then(async (result: ImgFileProcessingResult) => {
           result.imageUrl = undefined;
           if (result && result.success) {
@@ -136,6 +192,7 @@ export class ImageService {
         .catch((result) => {
           throw result;
         })
+        //sending to cloudinary файл миниатюры
         .then(async (result: ImgFileProcessingResult) => {
           result.miniImageUrl = undefined;
           if (result && result.success) {
