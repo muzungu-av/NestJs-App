@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-
+@layer components {
+  .btn-primary {
+    @apply bg-[#FFEDCB], w-[158px], h-[45px], rounded-[13px], color-[#000000],font-federo, text-md;
+  }
+}
