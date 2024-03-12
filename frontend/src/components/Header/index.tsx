@@ -15,14 +15,13 @@ const Header = () => {
     );
   };
   return (
-    <div className="header px-[5%] pt-[5%] pb-[3%] flex justify-between ">
-      <h5 className="font-apple text-3xl">Calvin Calva</h5>
-      <nav className="navLinks font-federo flex gap-6 text-xl">
-        <MenuLink to="/about-me">Biografie</MenuLink>
-        <MenuLink to="/painting">Gemälde</MenuLink>
-        <MenuLink to="/dibond">Atelier</MenuLink>
-        <MenuLink to="/contacts">Kopien</MenuLink>
-        <MenuLink to="/contacts">Kontakte</MenuLink>
+    <div className="header">
+      <nav className="navLinks">
+        <MenuLink to="/about-me">About me</MenuLink>
+        <MenuLink to="/painting">Painting</MenuLink>
+        <MenuLink to="/dibond">Dibond</MenuLink>
+        <MenuLink to="/contacts">Contacts</MenuLink>
+        <MenuLink to="/login">Log in</MenuLink>
       </nav>
     </div>
   );
