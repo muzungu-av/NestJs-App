@@ -2,10 +2,12 @@ import { Injectable, Scope } from '@nestjs/common';
 import { winstonLogger } from 'winston.logger';
 
 /**
+ * Slider memory service.
+ *
  * Scope.DEFAULT - this is a singleton
  */
 @Injectable({ scope: Scope.DEFAULT })
-export class SingletonService {
+export class SliderMemoryService {
   private sharedMap: Map<string, any> = new Map<string, any>();
 
   getSharedObject() {

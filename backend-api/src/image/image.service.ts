@@ -7,7 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateImageDto } from './dto/createImageDto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import FilterDocs from './utils/alg';
-import { SingletonService } from './utils/SingletonService';
+import { SliderMemoryService } from './utils/SliderMemoryService';
 
 interface CustomErrorOptions {
   message: string;
@@ -39,8 +39,8 @@ export class ImageService {
     @InjectModel(Image.name) private readonly imageModel: Model<Image>,
     private readonly handler: ImageHandler,
     private readonly cloudinary: CloudinaryService,
-    @Inject(SingletonService)
-    private singletonService: SingletonService,
+    @Inject(SliderMemoryService)
+    private sliderMemoryService: SliderMemoryService,
   ) {}
 
   /**
@@ -81,8 +81,8 @@ export class ImageService {
         message: 'Failed deirection',
       };
 
-    this.singletonService.setSharedObject(token);
-    this.singletonService.logMapContents();
+    this.sliderMemoryService.setSharedObject(token);
+    this.sliderMemoryService.logMapContents();
     return direction_sort_docs;
   }
 
@@ -265,7 +265,7 @@ export class ImageService {
         .catch((result) => {
           throw result;
         })
-        .then((result: ImgFileProcessingResult) => {
+        .then(async (result: ImgFileProcessingResult) => {
           // at the end of successful operation delete files from the container
           if (result && result.success) {
             this.handler.remove(result.path);
@@ -276,8 +276,8 @@ export class ImageService {
             imageUrl: result.imageUrl,
             miniImageUrl: result.miniImageUrl,
           };
-          const n = this.updateImage(result.uid, updatedData);
-          winstonLogger.info(`Document update: ${n}`);
+          await this.updateImage(result.uid, updatedData);
+          winstonLogger.info(`Document update (URLs)`);
           return result;
         })
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
