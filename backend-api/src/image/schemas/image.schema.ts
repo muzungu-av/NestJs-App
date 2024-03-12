@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { AllDimension } from 'image/dto/createImageDto';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { User } from 'user/schemas/user.schema';
 
@@ -38,6 +39,9 @@ export class Image {
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   owner: User;
+
+  @Prop({ type: MongooseSchema.Types.Mixed, required: false })
+  dimension: AllDimension;
 }
 
 export const ImageSchema = SchemaFactory.createForClass(Image);

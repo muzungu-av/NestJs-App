@@ -1,6 +1,16 @@
 import { ImgFileProcessingResult } from 'image/gm/imageHandler';
 import { User } from 'user/schemas/user.schema';
 
+export interface Dimension {
+  width: number;
+  height: number;
+}
+
+export interface AllDimension {
+  basic?: Dimension;
+  mini?: Dimension;
+}
+
 export class CreateImageDto {
   uid: string;
   originalName: string;
@@ -13,6 +23,7 @@ export class CreateImageDto {
   description: string;
   imageUrl: string;
   owner: User;
+  dimension: AllDimension;
 
   constructor(imgFileProcessingResult: ImgFileProcessingResult) {
     this.uid = imgFileProcessingResult.uid;
@@ -25,5 +36,6 @@ export class CreateImageDto {
     this.createdAt = imgFileProcessingResult.createdAt?.toISOString() || '';
     this.description = imgFileProcessingResult.description || '';
     this.owner = imgFileProcessingResult.owner;
+    this.dimension = imgFileProcessingResult.dimension;
   }
 }
