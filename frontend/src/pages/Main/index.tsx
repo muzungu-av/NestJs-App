@@ -4,8 +4,11 @@ import { PaintingSlider } from "../../components/PaintingSlider";
 import SmallPic from "../../assets/images/SmallPicture.jpg";
 import BoatPic from "../../assets/images/BoatPicture.jpg";
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import Play from "../../assets/icons/Play.svg";
+import Play from "../../assets/icons/play.svg";
 import SpringSlider from "../../components/SpringSlider/index";
+import videoPic from "../../assets/images/videoPic.jpg";
+import MainPageBg from "../../assets/images/MainPageBg.jpg";
+
 export const Main: React.FC = () => {
   const slidesArr = [SmallPic, BoatPic, SmallPic];
 
@@ -17,7 +20,7 @@ export const Main: React.FC = () => {
           <div className="">
             <img
               src={ProfilePic}
-              className="rounded-full w-[300px] h-[300px] mb-4 "
+              className="rounded-full w-[220px] h-[220px] mb-4 "
             />
             <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
           </div>
@@ -33,6 +36,7 @@ export const Main: React.FC = () => {
               industry ”
             </p>
           </div>
+          <button className="btn-primary self-end">Mehr erfahren</button>
         </div>
       </div>
     );
@@ -40,19 +44,25 @@ export const Main: React.FC = () => {
   const VideoSection: React.FC = () => {
     const VideoBlock = () => {
       return (
-        <div className="flex justify-between items-end px-[5%]">
+        <div className="flex justify-between  gap-10 px-[5%]">
           <div
             className="w-[600px] h-[300px] flex justify-center items-center"
-            style={{ backgroundImage: `url(${SmallPic})` }}
+            style={{ backgroundImage: `url(${videoPic})` }}
           >
-            <img src={Play} className="w-8 h-8" />
+            <div className="btn-play ">
+              <img src={Play} />
+            </div>
           </div>
-          <button
-            type="button"
-            className="px-8 py-2.5 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Watch
-          </button>
+          <div className="w-[50%] flex flex-col gap-4">
+            <h3 className="font-italiana text-2xl ">Videoname</h3>
+            <p className="font-federo text-lg">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book.
+            </p>
+            <button className="btn-primary	">Mehr erfahren</button>
+          </div>
         </div>
       );
     };
@@ -61,6 +71,13 @@ export const Main: React.FC = () => {
       <div className="py-[5%] flex flex-col gap-6">
         <VideoBlock />
         <VideoBlock />
+      </div>
+    );
+  };
+  const GallerySection: React.FC = () => {
+    return (
+      <div className="" style={{ backgroundImage: `url(${MainPageBg})` }}>
+        <div className="py-[5%] px-[5%] "></div>
       </div>
     );
   };
@@ -84,6 +101,7 @@ export const Main: React.FC = () => {
       <PaintingSlider slides={slidesArr} />
       <AboutPainterSection />
       <VideoSection />
+      <GallerySection />
       <PaintingSlider slides={slidesArr} />
       <ContactSection />
       <SpringSlider />
