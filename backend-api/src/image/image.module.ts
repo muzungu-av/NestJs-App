@@ -9,6 +9,7 @@ import { ImageSchema, Image } from './schemas/image.schema';
 import { CryptoHash } from './crypto/crypto';
 import { CloudinaryModule } from 'cloudinary/cloudinary.module';
 import { UserModule } from 'user/user.module';
+import { SingletonService } from './utils/SingletonService';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { UserModule } from 'user/user.module';
     UserModule,
   ],
   controllers: [ImageController],
-  providers: [ImageService, ImageHandler, CryptoHash, Image],
+  providers: [ImageService, ImageHandler, CryptoHash, Image, SingletonService],
 })
 export class ImageModule {}
