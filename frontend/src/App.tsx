@@ -17,6 +17,7 @@ import { AboutPainting } from "./pages/AboutPainting";
 import { ReactNode } from "react";
 import "./App.css";
 import "./output.css";
+import { SignIn } from "./pages/SignIn";
 
 const App: React.FC = () => {
   const PrivateRoute = ({ children }: { children: ReactNode }) => {
@@ -43,7 +44,7 @@ const App: React.FC = () => {
         <Route path="/paintings" element={<Paintings />} />
         <Route path="/dibond" element={<Dibond />} />
         <Route path="/contacts" element={<Contacts />} />
-        {/* <Route path="/login" element={<SignIn />} /> */}
+        <Route path="/login" element={<SignIn />} />
         <Route path="/painting" element={<AboutPainting />} />
         <Route path="/" element={<Main />} />
       </Routes>
