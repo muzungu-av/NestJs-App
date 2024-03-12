@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ImageHandler, ImgFileProcessingResult } from './gm/imageHandler';
 import { winstonLogger } from 'winston.logger';
 import { Image } from './schemas/image.schema';
@@ -6,6 +6,8 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateImageDto } from './dto/createImageDto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import FilterDocs from './utils/alg';
+import { SingletonService } from './utils/SingletonService';
 
 interface CustomErrorOptions {
   message: string;
@@ -33,32 +35,75 @@ class CustomError extends Error {
 
 @Injectable()
 export class ImageService {
-  // private readonly createImageDto: CreateImageDto;
   constructor(
     @InjectModel(Image.name) private readonly imageModel: Model<Image>,
     private readonly handler: ImageHandler,
     private readonly cloudinary: CloudinaryService,
+    @Inject(SingletonService)
+    private singletonService: SingletonService,
   ) {}
 
   /**
-   * Вернет количество изображений в Mongo
-   * @returns число
+   * Returns the number of images in Mongo
+   *
+   * @returns Promise<number> number of docs
    */
   async getImageCount(): Promise<number> {
     return await this.imageModel.countDocuments().exec();
   }
 
   /**
-   * Вернет полный список документов об изображениях из Mongo
-   * @returns массив документов
+   * Returns a portion of the image documents
    */
-  async getAllImages(): Promise<any[]> {
+  async getNextBatch(
+    token,
+    fields: string,
+    quantity: number,
+    direction: string,
+  ): Promise<any> {
+    let query = this.imageModel.find().sort({ ['createdAt']: -1 });
+
+    if (fields) {
+      const selectedFields = fields.split(',').join(' ');
+      query = query.select(`-_id ${selectedFields}`);
+    } else {
+      query = query.select(`-_id -__v`);
+    }
+
+    const sort_docs = await query.exec();
+    let direction_sort_docs = {};
+    if (direction && direction == 'right') {
+      direction_sort_docs = FilterDocs.getEven(sort_docs);
+    } else if (direction && direction == 'left') {
+      direction_sort_docs = FilterDocs.getOdd(sort_docs);
+    } else
+      return {
+        message: 'Failed deirection',
+      };
+
+    this.singletonService.setSharedObject(token);
+    this.singletonService.logMapContents();
+    return direction_sort_docs;
+  }
+
+  /**
+   * Returns a complete list of the image documents from Mongo
+   *
+   * @returns  Promise<any[]> document array
+   */
+  async getAllImages(): Promise<Image[]> {
     let query = this.imageModel.find();
     query = query.select(`-_id -__v`);
     return await query.exec();
   }
 
-  async getAllImagesWithFields(fields: string): Promise<any[]> {
+  /**
+   * Returns a complete list of image documents from Mongo, taking into account the specified fields
+   *
+   * @param fields set of requested fields
+   * @returns Promise<any[]> document array
+   */
+  async getAllImagesWithFields(fields: string): Promise<Partial<Image>[]> {
     let query = this.imageModel.find();
     if (fields) {
       const selectedFields = fields.split(',').join(' ');
@@ -70,14 +115,14 @@ export class ImageService {
   }
 
   /**
-   * Выдача одного документа об изображении по его ID
+   * Issuance of one image document by image ID
    *
-   * @param id ID документа
-   * @param fields
-   * @returns
+   * @param uid document's UID
+   * @param fields set of requested fields
+   * @returns Promise<any> one document
    */
-  async findOne(id: string, fields: string): Promise<any> {
-    let query = this.imageModel.findById(id);
+  async findOne(uid: string, fields: string): Promise<Image> {
+    let query = this.imageModel.findOne({ uid: uid });
     if (fields) {
       const selectedFields = fields.split(',').join(' ');
       query = query.select(`${selectedFields} -_id`);
@@ -88,11 +133,11 @@ export class ImageService {
   }
 
   /**
-   * Обновление документа в базе данных.
+   * Updating the document in the database.
    *
-   * @param uid uid документа
-   * @param updatedData обновляемые данные
-   * @returns обновленный документ
+   * @param uid document uid
+   * @param updatedData updated data
+   * @returns updated document
    */
   async updateImage(
     uid: string,
@@ -111,14 +156,14 @@ export class ImageService {
   }
 
   /**
-   * Сложный процесс обслуживания нового файла-картинки.
-   * Будет выполнена валидация, создана миниатюра, они загруженны в Cloudinary,
-   * помещена информация о них в MongoDB.
+   * The complex process of serving a new image file.
+   * Validation will be done, a thumbnail will be created,
+   * they will be uploaded to Cloudinary, information about them will be placed in MongoDB
    *
-   * @param userId ID пользователя производящего загрузку.
-   * @param file Файл изображения.
-   * @param description Описание файла.
-   * @returns Структура ImgFileProcessingResult
+   * @param userId User ID of the user performing the download.
+   * @param file Image file.
+   * @param description File Description.
+   * @returns Structure ImgFileProcessingResult
    */
   async processNewFile(
     userId: string,
@@ -133,6 +178,7 @@ export class ImageService {
             // save to mongo
             try {
               result.description = description;
+              winstonLogger.info(`${JSON.stringify(result)}`);
               const createImageDto = new CreateImageDto(result);
               await this.imageModel.create(createImageDto);
               winstonLogger.info(`An image is created: ${result.uid}`);
@@ -166,7 +212,7 @@ export class ImageService {
         .catch((error) => {
           throw error;
         })
-        //sending to cloudinary основной файл
+        //sending to cloudinary basic file
         .then(async (result: ImgFileProcessingResult) => {
           result.imageUrl = undefined;
           if (result && result.success) {
@@ -192,11 +238,11 @@ export class ImageService {
         .catch((result) => {
           throw result;
         })
-        //sending to cloudinary файл миниатюры
+        //sending to cloudinary mini file
         .then(async (result: ImgFileProcessingResult) => {
           result.miniImageUrl = undefined;
           if (result && result.success) {
-            //успешно загруженна основная картинка
+            //main picture successfully uploaded
             try {
               result.miniImageUrl = await this.cloudinary.upload(
                 userId,
@@ -220,7 +266,7 @@ export class ImageService {
           throw result;
         })
         .then((result: ImgFileProcessingResult) => {
-          // в конце успешной работы удалим файлы из контейнера
+          // at the end of successful operation delete files from the container
           if (result && result.success) {
             this.handler.remove(result.path);
             this.handler.removeDir(result.miniPath);
@@ -261,10 +307,6 @@ export class ImageService {
     });
   }
 }
-
-// update(id: number, updateImageDto: UpdateImageDto) {
-//   return `This action updates a #${id} image`;
-// }
 
 // remove(id: number) {
 //   return `This action removes a #${id} image`;
