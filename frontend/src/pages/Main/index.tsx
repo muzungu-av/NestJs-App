@@ -69,7 +69,6 @@ export const Main: React.FC = () => {
       </div>
     );
   };
-
   return (
     <MainLayout>
       <PaintingSlider slides={slidesArr} />
