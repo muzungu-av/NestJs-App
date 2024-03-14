@@ -1,6 +1,6 @@
 import MainLayout from "../../Layouts/MainLayout";
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import Play from "../../assets/icons/Play.svg";
+import Play from "../../assets/icons/play.svg";
 import Slide from "../../assets/images/slide.jpg";
 export const AboutMe: React.FC = () => {
   const VideoSection: React.FC = () => {
