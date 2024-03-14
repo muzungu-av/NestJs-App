@@ -32,7 +32,7 @@ export const Main: React.FC = () => {
             />
             <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
           </div>
-          <div className="flex flex-col w-[50%] gap-8">
+          <div className="flex flex-col w-1/2 gap-8">
             <p className="font-federo">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit
               quam provident illum sapiente harum recusandae, atque et quisquam
@@ -61,7 +61,7 @@ export const Main: React.FC = () => {
               <img src={play} />
             </div>
           </div>
-          <div className="w-[50%] flex flex-col gap-4">
+          <div className="w-1/2 flex flex-col gap-4">
             <h3 className="font-italiana text-2xl ">Videoname</h3>
             <p className="font-federo text-lg">
               Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -136,7 +136,7 @@ export const Main: React.FC = () => {
           <h2 className="font-italiana text-6xl">Kontaktdaten</h2>
           <div className="border-t-4 border-black flex gap-10">
             <div
-              className="w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover"
+              className="w-1/2 px-[5%] py-[5%] bg-no-repeat bg-cover"
               style={{ backgroundImage: `url(${ContactPic})` }}
             >
               <div className="flex flex-col items-start px-[5%] mb-8">
@@ -160,13 +160,13 @@ export const Main: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="w-[50%]">
+            <div className="w-1/2">
               <h3 className="font-federo text-2xl py-10">
                 Oder schreiben Sie mir
               </h3>
               <div className="flex flex-col gap-5 font-poppins text-sm font-medium">
                 <div className="flex gap-10">
-                  <div className="flex flex-col w-[50%]">
+                  <div className="flex flex-col w-1/2">
                     <label htmlFor="name">Name</label>
                     <input
                       className="border-t-0 border-x-0 border-b-[1px]"
@@ -174,7 +174,7 @@ export const Main: React.FC = () => {
                       name="name"
                     ></input>
                   </div>
-                  <div className="flex flex-col w-[50%]">
+                  <div className="flex flex-col w-1/2">
                     <label htmlFor="vorname">Vorname</label>
                     <input
                       className="border-t-0 border-x-0 border-b-[1px]"
