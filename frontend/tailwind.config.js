@@ -10,7 +10,7 @@ module.exports = {
       colors: {
         primary: {
           50: "#FFEDCB",
-          100: "#dbeafe",
+          100: "#E2E2E2",
           200: "#bfdbfe",
           300: "#93c5fd",
           400: "#60a5fa",
@@ -61,6 +61,7 @@ module.exports = {
       italiana: ["Italiana"],
       apple: ['"Homemade Apple"'],
       federo: ["Federo"],
+      poppins: ["Poppins"],
     },
   },
   plugins: [require("flowbite/plugin")],

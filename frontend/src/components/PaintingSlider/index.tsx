@@ -46,10 +46,7 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
   };
 
   return (
-    <div
-      className="py-[10%]  bg-[#FFEDCB4A] "
-      style={{ backgroundImage: `url(${MainPageBg})` }}
-    >
+    <div className="py-[5%]">
       <div className={styles["slider-container"]}>
         <Slider
           easing="ease"

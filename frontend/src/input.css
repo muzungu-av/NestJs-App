@@ -10,3 +10,7 @@
     @apply bg-white rounded-full w-16 h-16 flex justify-center items-center;
   }
 }
+
+[type="text"]:focus {
+  box-shadow: none;
+}
