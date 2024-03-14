@@ -1,4 +1,4 @@
-import MainLayout from "../../Layouts/MainLayout";
+// import MainLayout from "../../Layouts/MainLayout";
 import ContactPic from "../../assets/images/contactPic.jpg";
 import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";

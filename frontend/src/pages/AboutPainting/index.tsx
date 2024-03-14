@@ -1,5 +1,5 @@
 import MainLayout from "../../Layouts/MainLayout";
-import Slide from "../../assets/images/slide.jpg";
+// import Slide from "../../assets/images/slide.jpg";
 import React, { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -18,7 +18,7 @@ import boatManPic from "../../assets/images/5.png";
 import womanPic from "../../assets/images/6.png";
 import cityPic from "../../assets/images/7.png";
 
-import { AxiosInstance } from "../../api/axiosInstance";
+// import { AxiosInstance } from "../../api/axiosInstance";
 
 const slidesArr = [
   boatPic,
@@ -27,25 +27,25 @@ const slidesArr = [
   autumnPic,
   boatManPic,
   womanPic,
-  cityPic
+  cityPic,
 ];
 const objPaint = {
   img: boatPic,
   isLandscape: false,
   miniatures: [
     { img: mini1, isMain: false },
-    { img: mini2, isMain: false }
-  ]
+    { img: mini2, isMain: false },
+  ],
 };
 const miniatureArr1 = [
   { isMain: true, img: boatPic, w: 320, h: 479 },
   { img: mini1, isMain: false },
-  { img: mini2, isMain: false }
+  { img: mini2, isMain: false },
 ];
 
-type PaintingProps = {
-  slides: string[];
-};
+// type PaintingProps = {
+//   slides: string[];
+// };
 type Paint = { isMain: boolean; img: any; w?: number; h?: number };
 
 export const AboutPainting: React.FC = () => {
@@ -115,7 +115,7 @@ export const AboutPainting: React.FC = () => {
                       border: "15px solid #240909",
                       borderRadius: "3px",
 
-                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
+                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)",
                     }}
                     className={objPaint.isLandscape ? "w-full" : "h-full"}
                   />
@@ -263,7 +263,7 @@ export const AboutPainting: React.FC = () => {
                       border: "15px solid #240909",
                       borderRadius: "3px",
 
-                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
+                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)",
                     }}
                     className=" border-[15px] border-[#240909] shadow-lg"
                   />

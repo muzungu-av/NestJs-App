@@ -1,10 +1,10 @@
-import MainLayout from "../../Layouts/MainLayout";
+// import MainLayout from "../../Layouts/MainLayout";
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import play from "../../assets/icons/play.svg";
-import SpringSlider from "../../components/SpringSlider/index";
+import play from "../../assets/icons/Play.svg";
+// import SpringSlider from "../../components/SpringSlider/index";
 import videoPic from "../../assets/images/videoPic.jpg";
 import videoPic2 from "../../assets/images/videoPic2.jpg";
-import Slide from "../../assets/images/slide.jpg";
+// import Slide from "../../assets/images/slide.jpg";
 export const AboutMe: React.FC = () => {
   const AboutPainterSection: React.FC = () => {
     return (
