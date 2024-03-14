@@ -4,7 +4,7 @@ import { PaintingSlider } from "../../components/PaintingSlider";
 import SmallPic from "../../assets/images/SmallPicture.jpg";
 import BoatPic from "../../assets/images/BoatPicture.jpg";
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import play from "../../assets/icons/Play.svg";
+import play from "../../assets/icons/play.svg";
 import SpringSlider from "../../components/SpringSlider/index";
 import videoPic from "../../assets/images/videoPic.jpg";
 import videoPic2 from "../../assets/images/videoPic2.jpg";
@@ -58,7 +58,7 @@ export const Main: React.FC = () => {
             style={{ backgroundImage: `url(${picture})` }}
           >
             <div className="btn-play ">
-              <img src={Play} />
+              <img src={play} />
             </div>
           </div>
           <div className="w-[50%] flex flex-col gap-4">
