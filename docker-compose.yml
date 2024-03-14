@@ -12,9 +12,9 @@ services:
       dockerfile: ./mongo/Dockerfile
     volumes:
       - paint_mongo_data:/var/lib/mongodb
-      - ./mongo/mongod.conf:/etc/mongod.conf
       - ./mongo/mongod_log:/var/log/mongodb/
-      - ./mongo/init-script.js:/docker-entrypoint-initdb.d/init-script.js
+      # - ./mongo/mongod.conf:/etc/mongod.conf
+      # - ./mongo/init-script.js:/docker-entrypoint-initdb.d/init-script.js
 
     command: mongod --logpath /var/log/mongodb/mongod.log --config /etc/mongod.conf --keyFile /var/lib/mongodb/mongodb-keyfile
     networks:
@@ -56,7 +56,25 @@ services:
       dockerfile: ./frontend/Dockerfile
     networks:
       pic_network:
-        ipv4_address: 172.18.0.101
+        ipv4_address: 172.18.0.101 #http://art.com:8080
+
+  art-config:
+    image: art-config-img
+    container_name: "art-config"
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      - paint-back-api
+    env_file:
+      - ./artConfigurator/.env
+    ports:
+      - 8085:8085
+    build:
+      context: .
+      dockerfile: ./artConfigurator/Dockerfile
+    networks:
+      pic_network:
+        ipv4_address: 172.18.0.100 #http://config.art.com:8085
 
 #https://github.com/arunbandari/mongo-gui/tree/master
 
