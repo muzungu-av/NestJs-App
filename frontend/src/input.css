@@ -9,6 +9,16 @@
   .btn-play {
     @apply bg-white rounded-full w-16 h-16 flex justify-center items-center;
   }
+  .btn-size {
+    @apply rounded-[13px] font-federo text-black text-[24px]  w-[100%] h-[54px]  border-[#000000];
+    border: 2px solid #000000;
+    &:hover,
+    &:focus,
+    &:active {
+      /* border: 1px solid #000000; */
+      @apply border-[#895C06] bg-[#FFEDCB];
+    }
+  }
 }
 
 [type="text"]:focus {

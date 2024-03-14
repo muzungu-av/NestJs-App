@@ -1,119 +1,288 @@
 import MainLayout from "../../Layouts/MainLayout";
 import Slide from "../../assets/images/slide.jpg";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./painting.module.scss";
-import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import mobileAppBg from "../../assets/images/MobileAppBg.jpg";
-import { PaintingSlider } from "../../components/PaintingSlider";
+import ShoppingCart from "../../assets/icons/ShoppingCart.svg";
 
-const slidesArr = [Slide, mobileAppBg, ProfilePic];
+import mini1 from "../../assets/images/Group_1000001764.png";
+import mini2 from "../../assets/images/photo_2024-02-10_18-54-36.png";
+
+import boatPic from "../../assets/images/1.png";
+import lighthousePic from "../../assets/images/2.png";
+import seaPic from "../../assets/images/3.png";
+import autumnPic from "../../assets/images/4.png";
+import boatManPic from "../../assets/images/5.png";
+import womanPic from "../../assets/images/6.png";
+import cityPic from "../../assets/images/7.png";
+
+import { AxiosInstance } from "../../api/axiosInstance";
+
+const slidesArr = [
+  boatPic,
+  lighthousePic,
+  seaPic,
+  autumnPic,
+  boatManPic,
+  womanPic,
+  cityPic
+];
+const objPaint = {
+  img: boatPic,
+  isLandscape: false,
+  miniatures: [
+    { img: mini1, isMain: false },
+    { img: mini2, isMain: false }
+  ]
+};
+const miniatureArr1 = [
+  { isMain: true, img: boatPic, w: 320, h: 479 },
+  { img: mini1, isMain: false },
+  { img: mini2, isMain: false }
+];
 
 type PaintingProps = {
   slides: string[];
 };
+type Paint = { isMain: boolean; img: any; w?: number; h?: number };
 
 export const AboutPainting: React.FC = () => {
-  const PaintSlider = ({ slides }: PaintingProps) => {
-    const slider1 = useRef<Slider | null>(null);
-    const slider2 = useRef<Slider | null>(null);
-    const [slider1Index, setSlider1Index] = useState<number>(0);
-    const [slider2Index, setSlider2Index] = useState<number>(0);
-    const topSliderSettings = {
-      infinite: true,
-      dots: false,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      beforeChange: (_current: number, next: number) => {
-        // Synchronize slider2 with slider1
-        setSlider2Index(next);
-        slider2.current?.slickGoTo(next);
-      },
-    };
-    const bottomSliderSettings = {
-      dots: false,
-      speed: 500,
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      initialSlide: Math.floor(slides.length / 2), // Select the center slide initially
-      beforeChange: (_current: number, next: number) => {
-        // Synchronize slider1 with slider2
-        setSlider1Index(next);
-        slider1.current?.slickGoTo(next);
-      },
-    };
+  const slider = useRef<Slider | null>(null);
+  const [hoverDirection, setHoverDirection] = useState<string | null>(null);
 
-    return (
-      <div className="w-[500px]">
-        <div className={styles["slider-container"]}>
-          <Slider
-            ref={slider1}
-            {...topSliderSettings}
-            initialSlide={slider1Index}
-            afterChange={setSlider1Index}
-          >
-            {slides.map((image: string, index: number) => {
-              return (
-                <div
-                  className="px-2 outline-none"
-                  onClick={() => slider2.current?.slickGoTo(index)}
-                >
-                  <img src={image} className="w-[500px] h-[300px]" />
-                </div>
-              );
-            })}
-          </Slider>
-        </div>
-        <div className="w-[100%]">
-          <div className={styles["slider-container"]}>
-            <Slider
-              ref={slider2}
-              {...bottomSliderSettings}
-              initialSlide={slider2Index}
-              afterChange={setSlider2Index}
-            >
-              {slides.map((image: string, index: number) => {
-                return (
-                  <div
-                    className="px-2 translate-x-[200px] outline-none"
-                    onClick={() => slider1.current?.slickGoTo(index)}
-                  >
-                    <img src={image} className="w-[100px] h-[100px]" />
-                  </div>
-                );
-              })}
-            </Slider>
-          </div>
-        </div>
-      </div>
-    );
+  useEffect(() => {
+    let intervalId: number | null = null;
+    if (hoverDirection) {
+      intervalId = setInterval(() => {
+        if (hoverDirection === "left") {
+          slidePrev();
+        } else if (hoverDirection === "right") {
+          slideNext();
+        }
+      }, 300); // Adjust the interval time as needed
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [hoverDirection]);
+
+  const slidePrev = () => {
+    if (slider.current) {
+      slider.current.slickPrev();
+    }
   };
+
+  const slideNext = () => {
+    if (slider.current) {
+      slider.current.slickNext();
+    }
+  };
+
+  const handleHover = (direction: string) => {
+    setHoverDirection(direction);
+  };
+
   const PaintingSection = () => {
     return (
-      <div className="py-[5%]">
-        <div className="flex gap-[50px]">
-          <PaintSlider slides={slidesArr} />
-          <div className="w-[30%] flex flex-col gap-6">
-            <h3>Paining Name</h3>
-            <p>Painting Description</p>
-            <button
-              type="button"
-              className="px-8 py-2.5 w-24 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Buy
-            </button>
+      <>
+        <div>
+          <div className="font-italiana flex justify-center text-[64px] ">
+            Kopien der Gemälde
+          </div>{" "}
+          <div className=" flex justify-center font-italiana text-[24px] p-10">
+            Bildname
           </div>
-        </div>
-      </div>
+          <div className="flex gap-[40px]">
+            <div className="w-[50%]">
+              <div
+                className={
+                  objPaint.isLandscape ? "" : "flex flex-col md:flex-row"
+                }
+              >
+                {/* Главное изображение */}
+                <div
+                  className={
+                    objPaint.isLandscape ? "md:w-full" : "md:w-1/2 ml-20"
+                  }
+                >
+                  <img
+                    src={miniatureArr1[0].img}
+                    alt="Main"
+                    style={{
+                      border: "15px solid #240909",
+                      borderRadius: "3px",
+
+                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
+                    }}
+                    className={objPaint.isLandscape ? "w-full" : "h-full"}
+                  />
+                </div>
+                {/* Две маленькие миниатюры */}{" "}
+                <div
+                  className={
+                    objPaint.isLandscape
+                      ? "md:flex md:w-full md:pl-2"
+                      : "md:w-1/2 md:pl-2"
+                  }
+                >
+                  {objPaint.miniatures.map((v: Paint) => {
+                    return (
+                      <img
+                        src={v.img}
+                        alt="Thumbnail 1"
+                        className="w-full md:w-1/2 m-10"
+                      />
+                    );
+                  })}{" "}
+                </div>
+              </div>
+            </div>
+
+            <div className="  w-[40%] flex flex-col gap-6">
+              <div className=" relative py-[15px]">
+                <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
+                <h3 className=" text-[24px] font-federo ml-3">
+                  6 verfügbare Formate{" "}
+                </h3>{" "}
+                <h3 className=" text-[24px] font-federo ml-3">
+                  von 99,00€ bis 4.700,00€
+                </h3>
+              </div>
+              <p className="text-[24px] font-federo">Wählen Sie Bildgröße</p>{" "}
+              <div className="grid grid-cols-2 gap-4 justify-start w-[60%]">
+                <button className="btn-size">40 х 60 cm</button>
+                <button className="btn-size">50 х 70 cm</button>
+                <button className="btn-size">50 х 70 cm</button>
+                <button className="btn-size">110 х 133 cm</button>
+                <button className="btn-size">120 х 160 cm</button>{" "}
+                <button className="btn-size">150 х 200 cm</button>
+              </div>{" "}
+              <div className=" relative py-[10px]">
+                <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
+                <h3 className=" font-federo  text-[24px] ml-5">
+                  Gesamtbetrag : 1.230,00€
+                </h3>{" "}
+                <button
+                  type="button"
+                  className="w-[140px] w-30 h-10 ml-5 mt-2 font-federo rounded-[6px] text-#000 bg-[#FFEDCB]"
+                >
+                  <div className=" flex justify-center items-center flex-row ">
+                    {" "}
+                    Kaufen <img className=" p-[5px]" src={ShoppingCart} />
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="m-[100px]">
+            <p className="  font-federo text-[20px] m-2">
+              Wie funktioniert das Kopieren von Bildern auf Dibond. Hier sind
+              einige gängige Schritte:
+            </p>
+            <p className="  font-federo text-[16px] m-2">Bildauswahl: </p>
+            <p className="  font-federo text-[16px] m-2">
+              {" "}
+              Der Künstler oder Fotograf wählt das zu kopierende Bild auf Dibond
+              aus.
+            </p>
+            <p className="  font-federo text-[16px] m-2">Bildvorbereitung: </p>
+            <p className="  font-federo text-[16px] m-2">
+              Das Bild muss möglicherweise entsprechend der Größe der
+              Dibond-Platte vorbereitet, bearbeitet oder skaliert werden.
+            </p>
+            <p className="  font-federo text-[16px] m-2">
+              Bildübertragung auf Dibond:{" "}
+            </p>
+            <p className="  font-federo text-[16px] m-2">
+              {" "}
+              Es gibt mehrere Möglichkeiten, ein Bild auf Dibond zu übertragen.
+              Beispielsweise kann ein Bild auf eine spezielle Selbstklebefolie
+              gedruckt werden, die dann auf die Dibond-Oberfläche geklebt wird.
+              Eine weitere Methode ist der direkte Druck des Bildes auf die
+              Dibond-Oberfläche mittels UV-Drucktechnologie.
+            </p>
+            <p className="  font-federo text-[16px] m-2">Bildfixierung: </p>
+            <p className="  font-federo text-[16px] m-2">
+              Nach der Übertragung des Bildes auf Dibond kann es fixiert oder
+              mit einer Schutzschicht beschichtet werden, um die Kratzfestigkeit
+              und die Umweltbelastung zu verbessern.
+            </p>{" "}
+            <p className="  font-federo text-[16px] m-2">Kantenbearbeitung: </p>
+            <p className="  font-federo text-[16px] m-2">
+              Auf Wunsch des Künstlers können die Kanten der Dibond-Platte
+              bearbeitet werden, um ihnen ein komplettes und professionelles
+              Aussehen zu verleihen.
+            </p>{" "}
+            <p className="  font-federo text-[16px] m-2">
+              Aufhängung oder Montage:{" "}
+            </p>
+            <p className="  font-federo text-[16px] m-2">
+              Wenn Dibond als Kunstplatte verwendet wird, kann es nach Ihren
+              Wünschen aufgehängt oder installiert werden.
+            </p>{" "}
+            <p className="  font-federo text-[16px] m-2">
+              Solche Techniken ermöglichen die Erstellung von stilvollen und
+              modernen künstlerischen Werken, die dank der Verwendung von Dibond
+              langlebig und langlebig sind.
+            </p>
+          </div>
+        </div>{" "}
+        <div className="font-italiana flex justify-center text-[64px] mb-5 ">
+          Ähnliche Angebote
+        </div>{" "}
+      </>
     );
   };
   return (
     <MainLayout>
       <PaintingSection />
-      <PaintingSlider slides={slidesArr} />
+
+      <div>
+        <div className={styles["slider-container"]}>
+          <Slider
+            easing="ease"
+            ref={slider}
+            dots={false}
+            infinite={true}
+            speed={500}
+            slidesToShow={3}
+            slidesToScroll={1}
+            centerMode={true}
+            centerPadding="60px"
+            className={styles["slick-track"]}
+          >
+            {slidesArr.map((image: string) => {
+              return (
+                <div className="px-2 ">
+                  <img
+                    src={image}
+                    style={{
+                      border: "15px solid #240909",
+                      borderRadius: "3px",
+
+                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
+                    }}
+                    className=" border-[15px] border-[#240909] shadow-lg"
+                  />
+                </div>
+              );
+            })}
+          </Slider>
+          <div
+            className={`${styles["hover-area"]} ${styles["hover-area-left"]}`}
+            onMouseEnter={() => handleHover("left")}
+            onMouseLeave={() => setHoverDirection(null)}
+          />
+          <div
+            className={`${styles["hover-area"]} ${styles["hover-area-right"]}`}
+            onMouseEnter={() => handleHover("right")}
+            onMouseLeave={() => setHoverDirection(null)}
+          />
+        </div>
+      </div>
     </MainLayout>
   );
 };
