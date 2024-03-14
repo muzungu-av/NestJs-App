@@ -8,6 +8,7 @@ import { winstonLogger } from 'winston.logger';
 import { CryptoHash } from 'image/crypto/crypto';
 import { UserService } from 'user/user.service';
 import { User } from 'user/schemas/user.schema';
+import { AllDimension, Dimension } from 'image/dto/createImageDto';
 
 export interface ImgFileProcessingResult {
   uid?: string;
@@ -24,6 +25,7 @@ export interface ImgFileProcessingResult {
   miniImageUrl?: string;
   errorMessage?: string;
   owner: User;
+  dimension?: AllDimension;
 }
 
 @Injectable()
@@ -38,6 +40,18 @@ export class ImageHandler {
   ) {
     this.dest = this.configService.get<string>('MULTER_DEST');
   }
+
+  private getImageSize = (path): Promise<Dimension> => {
+    return new Promise((resolve, reject) => {
+      gm(path).size((err, size) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(size);
+        }
+      });
+    });
+  };
 
   async do(
     userId: string,
@@ -86,12 +100,32 @@ export class ImageHandler {
       success: false,
     };
 
+    const basicDimension: Dimension = (await this.getImageSize(filePath)
+      .then((size) => {
+        return { width: size.width, height: size.height };
+      })
+      .catch((err) => {
+        winstonLogger.error(`Error when retrieving image dimensions: ${err}`);
+      })) as Dimension;
+
     try {
       const identifyResult = await this.identify(imageFileBuffer);
       if (identifyResult.success) {
         winstonLogger.info(`Identification was successful`);
+
         await this.resize(identifyResult.buffer, miniFilePath);
-        winstonLogger.info(`The resysis was a success`);
+
+        const mini_size = (await this.getImageSize(miniFilePath)
+          .then((size) => {
+            return { width: size.width, height: size.height };
+          })
+          .catch((err) => {
+            winstonLogger.error(
+              `Error when retrieving image dimensions: ${err}`,
+            );
+          })) as Dimension;
+
+        winstonLogger.info(`The resizing was successful`);
 
         result.uid = uid;
         result.originalName = originalFileName;
@@ -104,6 +138,7 @@ export class ImageHandler {
         result.success = true;
         result.imageUrl = undefined; //Promises<string>
         result.miniImageUrl = undefined; //Promises<string>
+        result.dimension = { basic: basicDimension, mini: mini_size };
         return result;
       } else {
         winstonLogger.info(`Identification wasn't successful`);
@@ -170,7 +205,6 @@ export class ImageHandler {
       const directoryPath = path.dirname(filePath);
       // Delete directory synchronously and recursively
       fs.rmdirSync(directoryPath, { recursive: true });
-      // fs.rm(directoryPath, { recursive: true });
       winstonLogger.info(`Directory successfully deleted ${directoryPath}`);
     } catch (err) {
       winstonLogger.error(`Error when deleting a directory: ${err.message}`);

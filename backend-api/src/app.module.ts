@@ -37,6 +37,6 @@ console.log(`${process.cwd()}/.env.${process.env.NODE_ENV}`);
     CloudinaryModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AppService],
+  providers: [AppService],
 })
 export class AppModule {}

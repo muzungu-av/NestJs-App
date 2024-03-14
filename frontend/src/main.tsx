@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
-    <Helmet>
+    {/* <Helmet>
       <link href="./output.css" rel="stylesheet" />
       <link
         rel="stylesheet"
@@ -21,7 +21,7 @@ root.render(
       <link href="https://fonts.googleapis.com/css2?family=Federo&display=swap" rel="stylesheet"/>
       <link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet"/>
       <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-      {/* <script type="text/javascript">
+      <script type="text/javascript">
         {`
          document.ondragstart = test;
          document.onselectstart = test;
@@ -39,8 +39,8 @@ root.render(
             }
         });
         `}
-      </script> */}
-    </Helmet>
+      </script>
+    </Helmet> */}
     <App />
   </React.StrictMode>
 );
