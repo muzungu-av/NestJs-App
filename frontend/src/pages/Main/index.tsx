@@ -3,108 +3,81 @@ import React from "react";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import SmallPic from "../../assets/images/SmallPicture.jpg";
 import BoatPic from "../../assets/images/BoatPicture.jpg";
-import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import Play from "../../assets/icons/Play.svg";
-import SpringSlider from "../../components/SpringSlider/index";
-import videoPic from "../../assets/images/videoPic.jpg";
+// import ProfilePic from "../../assets/images/ProfilePic.jpg";
+// import play from "../../assets/icons/play.svg";
+// import SpringSlider from "../../components/SpringSlider/index";
+// import videoPic from "../../assets/images/videoPic.jpg";
+// import videoPic2 from "../../assets/images/videoPic2.jpg";
 import MainPageBg from "../../assets/images/MainPageBg.jpg";
+import GalleryPic1 from "../../assets/images/galleryPic1.jpg";
+import GalleryPic2 from "../../assets/images/galleryPic2.jpg";
+import GalleryPic3 from "../../assets/images/galleryPic3.jpg";
+// import ContactPic from "../../assets/images/contactPic.jpg";
+// import Gmail from "../../assets/icons/Gmail.svg";
+// import Instagram from "../../assets/icons/Instagram.svg";
+// import FaceBook from "../../assets/icons/Facebook.svg";
+import { Contacts } from "../Contacts";
+import { AboutMe } from "../AboutMe";
 
 export const Main: React.FC = () => {
   const slidesArr = [SmallPic, BoatPic, SmallPic];
 
-  const AboutPainterSection: React.FC = () => {
-    return (
-      <div className="py-[5%] px-[5%]">
-        <h3 className="font-italiana text-6xl	text-center">Biografie</h3>
-        <div className="flex justify-around items-center ">
-          <div className="">
-            <img
-              src={ProfilePic}
-              className="rounded-full w-[220px] h-[220px] mb-4 "
-            />
-            <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
-          </div>
-          <div className="flex flex-col w-[50%] gap-8">
-            <p className="font-federo">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit
-              quam provident illum sapiente harum recusandae, atque et quisquam
-              consectetur cumque, nostrum, doloribus iure culpa consequuntur
-              aspernatur. Pariatur voluptate doloribus deleniti?
-            </p>
-            <p className="font-apple w-[60%] self-center">
-              “ Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry ”
-            </p>
-          </div>
-          <button className="btn-primary self-end">Mehr erfahren</button>
-        </div>
-      </div>
-    );
-  };
-  const VideoSection: React.FC = () => {
-    const VideoBlock = () => {
-      return (
-        <div className="flex justify-between  gap-10 px-[5%]">
-          <div
-            className="w-[600px] h-[300px] flex justify-center items-center"
-            style={{ backgroundImage: `url(${videoPic})` }}
-          >
-            <div className="btn-play ">
-              <img src={Play} />
-            </div>
-          </div>
-          <div className="w-[50%] flex flex-col gap-4">
-            <h3 className="font-italiana text-2xl ">Videoname</h3>
-            <p className="font-federo text-lg">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.
-            </p>
-            <button className="btn-primary	">Mehr erfahren</button>
-          </div>
-        </div>
-      );
-    };
-
-    return (
-      <div className="py-[5%] flex flex-col gap-6">
-        <VideoBlock />
-        <VideoBlock />
-      </div>
-    );
-  };
   const GallerySection: React.FC = () => {
     return (
       <div className="" style={{ backgroundImage: `url(${MainPageBg})` }}>
-        <div className="py-[5%] px-[5%] "></div>
+        <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
+          <div className="self-end">
+            <img
+              className=" border-[15px] border-[#240909]"
+              src={GalleryPic1}
+            />
+          </div>
+          <div>
+            <img
+              className=" border-[15px] border-[#240909]"
+              src={GalleryPic2}
+            />
+          </div>
+          <div className="flex flex-col justify-between">
+            <div className="flex flex-col gap-4">
+              <h3 className="font-federo text-5xl whitespace-nowrap">
+                Meine Galerie
+              </h3>
+              <button className="btn-primary">Mehr erfahren</button>
+            </div>
+            <img
+              className=" border-[15px] border-[#240909]"
+              src={GalleryPic3}
+            />
+          </div>
+        </div>
       </div>
     );
   };
-  const ContactSection: React.FC = () => {
+  const BeforeSliderSection: React.FC = () => {
     return (
-      <div className="py-[5%] px-[5%]">
-        <div className="flex justify-between gap-6">
-          <h2>Kontaktdaten</h2>
-          <p className="w-[50%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
-            deserunt placeat, beatae accusantium iusto corrupti, nemo cupiditate
-            delectus officiis vitae optio quibusdam consectetur nobis
-            consequuntur, natus sunt amet expedita nostrum!
-          </p>
-        </div>
+      <div className="py-[5%] px-[5%] flex flex-col items-center gap-10">
+        <h3 className="font-italiana text-6xl">Dibond</h3>
+        <p className="font-federo text-xl">
+          Die Technologie des Kopierens von Gemälden auf Dibond. "Dibond" ist
+          ein Markenzeichen von Verbundwerkstoffen, das in verschiedenen
+          industriellen und künstlerischen Anwendungen verwendet wird. Dibond
+          ist eine Verbundplatte, die aus zwei dünnen Aluminiumschichten
+          besteht, zwischen denen sich eine Schicht aus Polyethylen befindet.
+          Dieses Material ist leicht, langlebig und umweltfreundlich.
+        </p>
       </div>
     );
   };
   return (
     <MainLayout>
       <PaintingSlider slides={slidesArr} />
-      <AboutPainterSection />
-      <VideoSection />
+      <AboutMe />
+
       <GallerySection />
+      <BeforeSliderSection />
       <PaintingSlider slides={slidesArr} />
-      <ContactSection />
-      <SpringSlider />
+      <Contacts />
     </MainLayout>
   );
 };

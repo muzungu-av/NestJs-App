@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./painting.module.scss";
-import MainPageBg from "../../assets/images/MainPageBg.jpg";
+// import MainPageBg from "../../assets/images/MainPageBg.jpg";
 type PaintingProps = {
   slides: string[];
 };
@@ -46,10 +46,7 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
   };
 
   return (
-    <div
-      className="py-[10%]  bg-[#FFEDCB4A] "
-      style={{ backgroundImage: `url(${MainPageBg})` }}
-    >
+    <div className="py-[5%]">
       <div className={styles["slider-container"]}>
         <Slider
           easing="ease"
