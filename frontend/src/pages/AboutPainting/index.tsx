@@ -141,7 +141,7 @@ export const AboutPainting: React.FC = () => {
               </div>
             </div>
 
-            <div className="  w-[40%] flex flex-col gap-6">
+            <div className="  w-[50%] flex flex-col gap-6">
               <div className=" relative py-[15px]">
                 <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
                 <h3 className=" text-[24px] font-federo ml-3">
@@ -256,7 +256,7 @@ export const AboutPainting: React.FC = () => {
           >
             {slidesArr.map((image: string) => {
               return (
-                <div className="px-2 ">
+                <div className="px-5 py-7 ">
                   <img
                     src={image}
                     style={{

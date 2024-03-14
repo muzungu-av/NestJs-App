@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  useNavigate,
+  useNavigate
 } from "react-router-dom";
 
 import { Main } from "./pages/Main";
@@ -18,6 +18,7 @@ import { ReactNode } from "react";
 import "./App.css";
 import "./output.css";
 import { SignIn } from "./pages/SignIn";
+import MainLayout from "./Layouts/MainLayout";
 
 const App: React.FC = () => {
   const PrivateRoute = ({ children }: { children: ReactNode }) => {
@@ -36,14 +37,21 @@ const App: React.FC = () => {
         <Route
           path="/about-me"
           element={
-            <PrivateRoute>
+            <MainLayout>
               <AboutMe />
-            </PrivateRoute>
+            </MainLayout>
           }
         />
         <Route path="/paintings" element={<Paintings />} />
         <Route path="/dibond" element={<Dibond />} />
-        <Route path="/contacts" element={<Contacts />} />
+        <Route
+          path="/contacts"
+          element={
+            <MainLayout>
+              <Contacts />
+            </MainLayout>
+          }
+        />
         <Route path="/login" element={<SignIn />} />
         <Route path="/painting" element={<AboutPainting />} />
         <Route path="/" element={<Main />} />
