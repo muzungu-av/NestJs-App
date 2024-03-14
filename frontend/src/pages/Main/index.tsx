@@ -4,7 +4,7 @@ import { PaintingSlider } from "../../components/PaintingSlider";
 import SmallPic from "../../assets/images/SmallPicture.jpg";
 import BoatPic from "../../assets/images/BoatPicture.jpg";
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import Play from "../../assets/icons/play.svg";
+import Play from "../../assets/icons/Play.svg";
 import SpringSlider from "../../components/SpringSlider/index";
 import videoPic from "../../assets/images/videoPic.jpg";
 import MainPageBg from "../../assets/images/MainPageBg.jpg";
