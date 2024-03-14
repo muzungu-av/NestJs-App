@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-// import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
-    {/* <Helmet>
+   <Helmet>
       <link href="./output.css" rel="stylesheet" />
       <link
         rel="stylesheet"
