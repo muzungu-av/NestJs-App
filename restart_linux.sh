@@ -4,9 +4,9 @@ cd ./backend-api
 echo "************ Backend *************"
 yarn build
 
-#cd .. && cd ./frontend
-#echo "************ Frontend ************"
-#yarn build
+cd .. && cd ./frontend
+echo "************ Frontend ************"
+yarn build
 
 #cd .. && cd ./artConfigurator
 #echo "************ Art Config ************"
