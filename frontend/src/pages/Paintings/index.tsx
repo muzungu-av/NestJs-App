@@ -11,37 +11,37 @@ import cityPic from "../../assets/images/7.png";
 import ShoppingCart from "../../assets/icons/ShoppingCart.svg";
 export const Paintings: React.FC = () => {
   const text =
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type... ";
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when a100";
 
   const data = [
     {
       text,
-      img: boatPic
+      img: boatPic,
     },
     {
       text,
-      img: lighthousePic
+      img: lighthousePic,
     },
     {
       text,
-      img: seaPic
+      img: seaPic,
     },
     {
       text,
-      img: autumnPic
+      img: autumnPic,
     },
     {
       text,
-      img: boatManPic
+      img: boatManPic,
     },
     {
       text,
-      img: womanPic
+      img: womanPic,
     },
     {
       text,
-      img: cityPic
-    }
+      img: cityPic,
+    },
   ];
   const PaintingSection = ({ text, img }: { text: string; img: any }) => {
     return (
@@ -52,7 +52,7 @@ export const Paintings: React.FC = () => {
             style={{
               border: "15px solid #240909",
               borderRadius: "3px",
-              boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
+              boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)",
             }}
             className="flex flex-col gap-6 w-[40%] "
           />
@@ -78,7 +78,7 @@ export const Paintings: React.FC = () => {
   return (
     <MainLayout>
       {" "}
-      <div className="font-['Italiana'] flex justify-center text-[64px] ">
+      <div className="font-['Italiana'] flex justify-center text-6xl mb-">
         Gemälde
       </div>
       <div

@@ -13,23 +13,43 @@ import GalleryPic1 from "../../assets/images/galleryPic1.jpg";
 import GalleryPic2 from "../../assets/images/galleryPic2.jpg";
 import GalleryPic3 from "../../assets/images/galleryPic3.jpg";
 import ContactPic from "../../assets/images/contactPic.jpg";
+import SitPic from "../../assets/images/SitPic.jpg";
 import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
+import LonelyBoat from "../../assets/images/contactPic.jpg";
 
 export const Main: React.FC = () => {
   const slidesArr = [SmallPic, BoatPic, SmallPic];
+
+  const HeroSection = () => {
+    return (
+      <div style={{ backgroundImage: `url(${MainPageBg})` }}>
+        <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
+          <div className="self-center">
+            <img className=" border-[15px] border-[#240909]" src={SmallPic} />
+          </div>
+          <div>
+            <img
+              className=" border-[15px] border-[#240909]"
+              src={GalleryPic2}
+            />
+          </div>
+          <div className="flex flex-col justify-between">
+            <img className=" border-[15px] border-[#240909]" src={SitPic} />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const AboutPainterSection: React.FC = () => {
     return (
       <div className="py-[5%] px-[5%]">
         <h3 className="font-italiana text-6xl	text-center">Biografie</h3>
         <div className="flex justify-around items-center ">
-          <div className="">
-            <img
-              src={ProfilePic}
-              className="rounded-full w-[220px] h-[220px] mb-4 "
-            />
+          <div className="rounded-full w-[220px] h-[220px] mb-4 ">
+            <div className="rounded-full w-[220px] h-[220px] mb-4 bg-primary-100" />
             <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
           </div>
           <div className="flex flex-col w-1/2 gap-8">
@@ -220,7 +240,7 @@ export const Main: React.FC = () => {
   };
   return (
     <MainLayout>
-      <PaintingSlider slides={slidesArr} />
+      <HeroSection />
       <AboutPainterSection />
       <VideoSection />
       <GallerySection />

@@ -49,14 +49,16 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
     <div className="py-[5%]">
       <div className={styles["slider-container"]}>
         <Slider
-          easing="ease"
           ref={slider}
           dots={false}
           infinite={true}
-          speed={500}
+          speed={800}
           slidesToShow={3}
+          autoplay={true}
+          autoplaySpeed={100}
           slidesToScroll={1}
           centerMode={true}
+          easing="ease"
           centerPadding="60px"
           className={styles["slick-track"]}
         >

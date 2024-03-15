@@ -33,20 +33,20 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route
+        {/* <Route
           path="/about-me"
           element={
             <PrivateRoute>
               <AboutMe />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route path="/paintings" element={<Paintings />} />
         <Route path="/dibond" element={<Dibond />} />
         <Route path="/contacts" element={<Contacts />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/painting" element={<AboutPainting />} />
-        <Route path="/" element={<Main />} />
+        <Route path="/about-me" element={<Main />} />
       </Routes>
     </Router>
   );
