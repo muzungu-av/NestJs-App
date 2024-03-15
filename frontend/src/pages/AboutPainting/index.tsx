@@ -1,5 +1,4 @@
 import MainLayout from "../../Layouts/MainLayout";
-// import Slide from "../../assets/images/slide.jpg";
 import React, { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -27,20 +26,20 @@ const slidesArr = [
   autumnPic,
   boatManPic,
   womanPic,
-  cityPic,
+  cityPic
 ];
 const objPaint = {
   img: boatPic,
   isLandscape: false,
   miniatures: [
     { img: mini1, isMain: false },
-    { img: mini2, isMain: false },
-  ],
+    { img: mini2, isMain: false }
+  ]
 };
 const miniatureArr1 = [
   { isMain: true, img: boatPic, w: 320, h: 479 },
   { img: mini1, isMain: false },
-  { img: mini2, isMain: false },
+  { img: mini2, isMain: false }
 ];
 
 // type PaintingProps = {
@@ -92,11 +91,11 @@ export const AboutPainting: React.FC = () => {
           <div className="font-italiana flex justify-center text-[64px] ">
             Kopien der Gemälde
           </div>{" "}
-          <div className=" flex justify-center font-italiana text-[24px] p-10">
+          <div className=" flex justify-center font-italiana text-2xl p-10">
             Bildname
           </div>
-          <div className="flex gap-[40px]">
-            <div className="w-[50%]">
+          <div className="flex gap-[40px] px-[5%]">
+            <div className="w-[60%]">
               <div
                 className={
                   objPaint.isLandscape ? "" : "flex flex-col md:flex-row"
@@ -115,7 +114,7 @@ export const AboutPainting: React.FC = () => {
                       border: "15px solid #240909",
                       borderRadius: "3px",
 
-                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)",
+                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
                     }}
                     className={objPaint.isLandscape ? "w-full" : "h-full"}
                   />
@@ -141,18 +140,18 @@ export const AboutPainting: React.FC = () => {
               </div>
             </div>
 
-            <div className="  w-[50%] flex flex-col gap-6">
+            <div className="  w-[40%] flex flex-col gap-6">
               <div className=" relative py-[15px]">
                 <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
-                <h3 className=" text-[24px] font-federo ml-3">
+                <h3 className=" text-2xl font-federo ml-3">
                   6 verfügbare Formate{" "}
                 </h3>{" "}
-                <h3 className=" text-[24px] font-federo ml-3">
+                <h3 className=" text-2xl font-federo ml-3">
                   von 99,00€ bis 4.700,00€
                 </h3>
               </div>
-              <p className="text-[24px] font-federo">Wählen Sie Bildgröße</p>{" "}
-              <div className="grid grid-cols-2 gap-4 justify-start w-[60%]">
+              <p className="text-2xl font-federo">Wählen Sie Bildgröße</p>{" "}
+              <div className="grid grid-cols-2 gap-4 justify-start w-[80%]">
                 <button className="btn-size">40 х 60 cm</button>
                 <button className="btn-size">50 х 70 cm</button>
                 <button className="btn-size">50 х 70 cm</button>
@@ -162,7 +161,7 @@ export const AboutPainting: React.FC = () => {
               </div>{" "}
               <div className=" relative py-[10px]">
                 <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
-                <h3 className=" font-federo  text-[24px] ml-5">
+                <h3 className=" font-federo  text-2xl ml-5">
                   Gesamtbetrag : 1.230,00€
                 </h3>{" "}
                 <button
@@ -177,26 +176,26 @@ export const AboutPainting: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="m-[100px]">
-            <p className="  font-federo text-[20px] m-2">
+          <div className="m-[5%]">
+            <p className="  font-federo text-xl m-2">
               Wie funktioniert das Kopieren von Bildern auf Dibond. Hier sind
               einige gängige Schritte:
             </p>
-            <p className="  font-federo text-[16px] m-2">Bildauswahl: </p>
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">Bildauswahl: </p>
+            <p className="  font-federo text-base m-2">
               {" "}
               Der Künstler oder Fotograf wählt das zu kopierende Bild auf Dibond
               aus.
             </p>
-            <p className="  font-federo text-[16px] m-2">Bildvorbereitung: </p>
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">Bildvorbereitung: </p>
+            <p className="  font-federo text-base m-2">
               Das Bild muss möglicherweise entsprechend der Größe der
               Dibond-Platte vorbereitet, bearbeitet oder skaliert werden.
             </p>
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">
               Bildübertragung auf Dibond:{" "}
             </p>
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">
               {" "}
               Es gibt mehrere Möglichkeiten, ein Bild auf Dibond zu übertragen.
               Beispielsweise kann ein Bild auf eine spezielle Selbstklebefolie
@@ -204,26 +203,26 @@ export const AboutPainting: React.FC = () => {
               Eine weitere Methode ist der direkte Druck des Bildes auf die
               Dibond-Oberfläche mittels UV-Drucktechnologie.
             </p>
-            <p className="  font-federo text-[16px] m-2">Bildfixierung: </p>
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">Bildfixierung: </p>
+            <p className="  font-federo text-base m-2">
               Nach der Übertragung des Bildes auf Dibond kann es fixiert oder
               mit einer Schutzschicht beschichtet werden, um die Kratzfestigkeit
               und die Umweltbelastung zu verbessern.
             </p>{" "}
-            <p className="  font-federo text-[16px] m-2">Kantenbearbeitung: </p>
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">Kantenbearbeitung: </p>
+            <p className="  font-federo text-base m-2">
               Auf Wunsch des Künstlers können die Kanten der Dibond-Platte
               bearbeitet werden, um ihnen ein komplettes und professionelles
               Aussehen zu verleihen.
             </p>{" "}
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">
               Aufhängung oder Montage:{" "}
             </p>
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">
               Wenn Dibond als Kunstplatte verwendet wird, kann es nach Ihren
               Wünschen aufgehängt oder installiert werden.
             </p>{" "}
-            <p className="  font-federo text-[16px] m-2">
+            <p className="  font-federo text-base m-2">
               Solche Techniken ermöglichen die Erstellung von stilvollen und
               modernen künstlerischen Werken, die dank der Verwendung von Dibond
               langlebig und langlebig sind.
@@ -263,7 +262,7 @@ export const AboutPainting: React.FC = () => {
                       border: "15px solid #240909",
                       borderRadius: "3px",
 
-                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)",
+                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
                     }}
                     className=" border-[15px] border-[#240909] shadow-lg"
                   />
