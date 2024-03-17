@@ -28,7 +28,9 @@ services:
     depends_on:
       - mongodb
     env_file:
-      - ./backend-api/.env.development
+      - ./backend-api/.env.$ENVIRONMENT
+    environment:
+      - NODE_ENV=$ENVIRONMENT
     ports:
       - 3000:3000
     build:
