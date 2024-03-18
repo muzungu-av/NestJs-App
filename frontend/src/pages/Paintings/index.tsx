@@ -1,5 +1,5 @@
 import MainLayout from "../../Layouts/MainLayout";
-// import Slide from "../../assets/images/slide.jpg";
+
 import bgImg from "../../assets/images/GroupBg.jpg";
 import boatPic from "../../assets/images/1.png";
 import lighthousePic from "../../assets/images/2.png";
@@ -58,8 +58,8 @@ export const Paintings: React.FC = () => {
           />
 
           <div className=" relative flex flex-col gap-6 w-[60%]">
-            <div className="font-['Italiana'] text-[24px]">Bildname</div>
-            <p className="font-['Federo'] text-[20px]">{text}</p>{" "}
+            <div className="font-italiana  text-2xl">Bildname</div>
+            <p className="font-federo text-xl">{text}</p>{" "}
             <button
               type="button"
               className=" absolute h-[45px] bottom-0 right-0 w-[140px] font-federo rounded-[6px] text-#000 bg-[#FFEDCB]"
@@ -78,14 +78,14 @@ export const Paintings: React.FC = () => {
   return (
     <MainLayout>
       {" "}
-      <div className="font-['Italiana'] flex justify-center text-[64px] ">
+      <div className="font-italiana  flex justify-center text-[64px] ">
         Gemälde
       </div>
       <div
         className="min-h-[335px] flex items-center justify-center"
         style={{ backgroundImage: `url(${bgImg})` }}
       >
-        <div className=" text-white text-center font-apple text-[24px] color-[#fff]">
+        <div className=" text-white text-center font-apple text-2xl color-[#fff]">
           {" "}
           “ Die Farben sind die Tasten, die die <br />
           Künstler auf der Seele spielen ”

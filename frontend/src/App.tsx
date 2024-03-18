@@ -1,20 +1,14 @@
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  // useNavigate
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { Main } from "./pages/Main";
-// import { SignIn } from "./pages/SignIn";
+
 import { Paintings } from "./pages/Paintings";
 import { Dibond } from "./pages/Dibond";
 import { Contacts } from "./pages/Contacts";
 import { AboutMe } from "./pages/AboutMe";
 import { AboutPainting } from "./pages/AboutPainting";
 
-// import { ReactNode } from "react";
 import "./App.css";
 import "./output.css";
 import { SignIn } from "./pages/SignIn";
@@ -38,7 +32,7 @@ const App: React.FC = () => {
           path="/about-me"
           element={
             <MainLayout>
-              <AboutMe />
+              <AboutMe isMain={false} />
             </MainLayout>
           }
         />
