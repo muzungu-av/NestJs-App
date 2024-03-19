@@ -1,6 +1,6 @@
 // import MainLayout from "../../Layouts/MainLayout";
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import play from "../../assets/icons/Play.svg";
+import play from "../../assets/icons/play.svg";
 // import SpringSlider from "../../components/SpringSlider/index";
 import videoPic from "../../assets/images/videoPic.jpg";
 import videoPic2 from "../../assets/images/videoPic2.jpg";
@@ -12,10 +12,7 @@ export const AboutMe: React.FC = () => {
         <h3 className="font-italiana text-6xl	text-center">Biografie</h3>
         <div className="flex justify-around items-center ">
           <div className="">
-            <img
-              src={ProfilePic}
-              className="rounded-full w-[220px] h-[220px] mb-4 "
-            />
+            <div className="rounded-full w-[220px] h-[220px] mb-4 bg-[#D9D9D9]" />
             <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
           </div>
           <div className="flex flex-col w-[50%] gap-8">
