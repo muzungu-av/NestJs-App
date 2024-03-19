@@ -128,4 +128,19 @@ export class ImageController {
   ): Promise<any> {
     return this.imageService.findOne(uid, fields);
   }
+
+  /**
+   * OIbtaining a limited number of images from the storage with specifying the required fields
+   *
+   * @param count Number of pictures
+   * @param fields Desired document fields
+   * @returns Array of documents
+   */
+  @Get('/block/:count')
+  getForBlock(
+    @Param('count') count: number,
+    @Query('fields') fields: string,
+  ): Promise<any> {
+    return this.imageService.findBlock(count, fields);
+  }
 }
