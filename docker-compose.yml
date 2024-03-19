@@ -50,7 +50,7 @@ services:
       - mongodb
       - paint-back-api
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env.$ENVIRONMENT
     ports:
       - 8080:8080
     build:
@@ -58,7 +58,7 @@ services:
       dockerfile: ./frontend/Dockerfile
     networks:
       pic_network:
-        ipv4_address: 172.18.0.101 #http://art.com:8080
+        ipv4_address: 172.18.0.101
 
   art-config:
     image: art-config-img

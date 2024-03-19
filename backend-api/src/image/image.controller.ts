@@ -10,33 +10,33 @@ import {
   Res,
   Req,
   Query,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { winstonLogger } from 'winston.logger';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
-import { batchQuerySchema } from './schemas/batch-query.schema';
-import { JoiValidationPipe } from './validators/JoiValidationPipe';
 
 /**
  * Controller for image manipulation.
- * Access to authorised users by JWT token
+ *
  */
-@UseGuards(JwtAuthGuard)
+
 @Controller('/api/image')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
   /**
    * Uploading a picture to the system
+   * Access to authorised users by JWT token
+   *
    * @param file The File with image
    * @param description Text description
    * @param request automatic field (not used in the query)
    * @param response automatic field (not used in the query)
    * @returns Document UID from MongoDB
    */
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async uploadFileAndPassValidation(
@@ -98,25 +98,25 @@ export class ImageController {
    * @param quantity requested quantity
    * @returns Array of documents
    */
-  @Get('/batch')
-  async nextBatch(
-    @Query(new JoiValidationPipe(batchQuerySchema)) query: any,
-    @Req() request: Request,
-  ): Promise<any> {
-    const authorizationHeader = request.headers['authorization'];
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException(
-        'Invalid or missing authorization header',
-      );
-    }
-    const token = authorizationHeader.split(' ')[1];
-    return await this.imageService.getNextBatch(
-      token,
-      query.fields,
-      query.quantity,
-      query.direction,
-    );
-  }
+  // @Get('/batch')
+  // async nextBatch(
+  //   @Query(new JoiValidationPipe(batchQuerySchema)) query: any,
+  //   @Req() request: Request,
+  // ): Promise<any> {
+  //   const authorizationHeader = request.headers['authorization'];
+  //   if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+  //     throw new UnauthorizedException(
+  //       'Invalid or missing authorization header',
+  //     );
+  //   }
+  //   const token = authorizationHeader.split(' ')[1];
+  //   return await this.imageService.getNextBatch(
+  //     token,
+  //     query.fields,
+  //     query.quantity,
+  //     query.direction,
+  //   );
+  // }
 
   /**
    * Search for a single document by its UID
