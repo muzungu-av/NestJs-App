@@ -3,7 +3,6 @@ import React from "react";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import SmallPic from "../../assets/images/SmallPicture.jpg";
 import BoatPic from "../../assets/images/BoatPicture.jpg";
-
 import { Contacts } from "../Contacts";
 import { AboutMe } from "../AboutMe";
 
