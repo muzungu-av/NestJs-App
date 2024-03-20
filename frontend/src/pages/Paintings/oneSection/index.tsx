@@ -19,7 +19,6 @@ export const OnePaintingSection = ({
           }}
           className="flex flex-col gap-6 w-[40%] "
         />
-
         <div className=" relative flex flex-col gap-6 w-[60%]">
           <div className="font-['Italiana'] text-[24px]">Bildname</div>
           <p className="font-['Federo'] text-[20px]">{text}</p>{" "}
