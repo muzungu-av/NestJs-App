@@ -1,8 +1,4 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import styles from "./painting.module.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -11,12 +7,14 @@ import SwiperArrow from "../../assets/icons/SwiperArrow.svg";
 type PaintingProps = {
   slides: string[];
 };
+type SwiperRef = any | null;
 
 export const PaintingSlider = ({ slides }: PaintingProps) => {
-  const sliderRef = useRef(null);
+  const sliderRef = useRef<SwiperRef>(null); 
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
+
     sliderRef?.current?.swiper.slidePrev();
   }, []);
 

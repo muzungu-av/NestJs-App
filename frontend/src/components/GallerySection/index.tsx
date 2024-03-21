@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MainPageBg from "../../../assets/images/MainPageBg.jpg";
-import { get } from "../../../api/axiosInstance";
+import { get } from "../../api/axiosInstance";
 
 export const GallerySection = () => {
   const sc = import.meta.env.VITE_SCHEME;

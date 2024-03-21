@@ -1,4 +1,4 @@
-import MainLayout from "../../Layouts/MainLayout";
+import MainLayout from "../../layouts/MainLayout";
 import React, { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -15,25 +15,19 @@ import womanPic from "../../assets/images/6.png";
 import cityPic from "../../assets/images/7.png";
 import { PaintingSlider } from "../../components/PaintingSlider";
 
-const slidesArr = [
-  autumnPic,
-  autumnPic,
-  autumnPic,
-  autumnPic,
-  autumnPic,
-];
+const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
 const objPaint = {
   img: boatPic,
   isLandscape: false,
   miniatures: [
     { img: mini1, isMain: false },
-    { img: mini2, isMain: false }
-  ]
+    { img: mini2, isMain: false },
+  ],
 };
 const miniatureArr1 = [
   { isMain: true, img: boatPic, w: 320, h: 479 },
   { img: mini1, isMain: false },
-  { img: mini2, isMain: false }
+  { img: mini2, isMain: false },
 ];
 
 // type PaintingProps = {
@@ -108,7 +102,7 @@ export const AboutPainting: React.FC = () => {
                       border: "15px solid #240909",
                       borderRadius: "3px",
 
-                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
+                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)",
                     }}
                     className={objPaint.isLandscape ? "w-full" : "h-full"}
                   />

@@ -1,4 +1,4 @@
-import MainLayout from "../../Layouts/MainLayout";
+import MainLayout from "../../layouts/MainLayout";
 import { get } from "../../api/axiosInstance";
 import bgImg from "../../assets/images/GroupBg.jpg";
 import { OnePaintingSection } from "./oneSection";
