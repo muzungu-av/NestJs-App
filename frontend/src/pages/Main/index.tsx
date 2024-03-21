@@ -36,15 +36,12 @@ export const Main: React.FC = () => {
     );
   };
 
-  const GallerySection: React.FC = () => {
+  const HeroSection = () => {
     return (
-      <div className="" style={{ backgroundImage: `url(${MainPageBg})` }}>
+      <div style={{ backgroundImage: `url(${MainPageBg})` }}>
         <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
-          <div className="self-end">
-            <img
-              className=" border-[15px] border-[#240909]"
-              src={GalleryPic1}
-            />
+          <div className="self-center">
+            <img className=" border-[15px] border-[#240909]" src={SmallPic} />
           </div>
           <div>
             <img
@@ -53,21 +50,13 @@ export const Main: React.FC = () => {
             />
           </div>
           <div className="flex flex-col justify-between">
-            <div className="flex flex-col gap-4">
-              <h3 className="font-federo text-5xl whitespace-nowrap">
-                Meine Galerie
-              </h3>
-              <button className="btn-primary">Mehr erfahren</button>
-            </div>
-            <img
-              className=" border-[15px] border-[#240909]"
-              src={GalleryPic3}
-            />
+            <img className=" border-[15px] border-[#240909]" src={SitPic} />
           </div>
         </div>
       </div>
     );
   };
+
   const BeforeSliderSection: React.FC = () => {
     return (
       <div className="py-[5%] px-[5%] flex flex-col items-center gap-10">
@@ -89,6 +78,7 @@ export const Main: React.FC = () => {
       <HeroSection />
       <AboutMe />
       <GallerySection />
+      <AboutMe isMain={true} />
       <BeforeSliderSection />
       <PaintingSlider slides={slidesArr} />
       <Contacts />

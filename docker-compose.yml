@@ -13,13 +13,10 @@ services:
     volumes:
       - paint_mongo_data:/var/lib/mongodb
       - ./mongo/mongod_log:/var/log/mongodb/
-      # - ./mongo/mongod.conf:/etc/mongod.conf
-      # - ./mongo/init-script.js:/docker-entrypoint-initdb.d/init-script.js
-
     command: mongod --logpath /var/log/mongodb/mongod.log --config /etc/mongod.conf --keyFile /var/lib/mongodb/mongodb-keyfile
     networks:
       pic_network:
-        ipv4_address: 172.18.0.103
+        ipv4_address: 172.18.0.103 # IP кешируется в Docker после смены нужно сделать `docker network prune`
 
   paint-back-api:
     image: paint-back-api-img
@@ -28,7 +25,9 @@ services:
     depends_on:
       - mongodb
     env_file:
-      - ./backend-api/.env.development
+      - ./backend-api/.env.$ENVIRONMENT
+    environment:
+      - NODE_ENV=$ENVIRONMENT
     ports:
       - 3000:3000
     build:
@@ -38,7 +37,7 @@ services:
       - ./backend-api/logs:/app/logs
     networks:
       pic_network:
-        ipv4_address: 172.18.0.102
+        ipv4_address: 172.18.0.102 # IP кешируется в Docker после смены нужно сделать `docker network prune`
 
   paint-front:
     image: paint-front-img
@@ -48,7 +47,7 @@ services:
       - mongodb
       - paint-back-api
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env.$ENVIRONMENT
     ports:
       - 8080:8080
     build:
@@ -56,7 +55,7 @@ services:
       dockerfile: ./frontend/Dockerfile
     networks:
       pic_network:
-        ipv4_address: 172.18.0.101 #http://art.com:8080
+        ipv4_address: 172.18.0.101 # IP кешируется в Docker после смены нужно сделать `docker network prune`
 
   art-config:
     image: art-config-img
@@ -72,9 +71,9 @@ services:
     build:
       context: .
       dockerfile: ./artConfigurator/Dockerfile
-    networks:
+    networks: # IP кешируется в Docker после смены нужно сделать `docker network prune`
       pic_network:
-        ipv4_address: 172.18.0.100 #http://config.art.com:8085
+        ipv4_address: 172.18.0.100
 
 #https://github.com/arunbandari/mongo-gui/tree/master
 

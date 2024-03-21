@@ -15,7 +15,6 @@ WORKDIR /app/
 COPY ./backend-api/dist/ ./dist
 COPY ./backend-api/node_modules/ ./node_modules
 
-ENV NODE_ENV=development
 EXPOSE 3000
-CMD NODE_ENV=development node dist/main
+CMD node dist/main
 
