@@ -5,10 +5,10 @@ import { OnePaintingSection } from "./oneSection";
 import { useEffect, useState } from "react";
 
 export const Paintings: React.FC = () => {
-  const sc = import.meta.env.VITE_SCHEME;
-  const bu = import.meta.env.VITE_BACKEND_URL.replace(/https?:\/\//g, "");
-  const bp = import.meta.env.VITE_BACKEND_PORT;
-  const ai = import.meta.env.VITE_API_IMAGE;
+  const sc = import.meta?.env?.VITE_SCHEME;
+  const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+  const bp = import.meta?.env?.VITE_BACKEND_PORT;
+  const ai = import.meta?.env?.VITE_API_IMAGE;
   const BACKEND_API =
     sc && bu && bp ? `${sc}://${bu}:${bp}` : "http://localhost-default:9000";
 

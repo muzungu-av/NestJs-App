@@ -31,6 +31,7 @@ export const Main: React.FC = () => {
     );
   };
 
+
   const BeforeSliderSection: React.FC = () => {
     return (
       <div className="py-[5%] px-[5%] flex flex-col items-center gap-10">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MainPageBg from "../../../assets/images/MainPageBg.jpg";
+import MainPageBg from "../../assets/images/MainPageBg.jpg";
 import { get } from "../../api/axiosInstance";
 
 export const GallerySection = () => {
@@ -58,7 +58,7 @@ export const GallerySection = () => {
         <div className="flex flex-col justify-between">
           <div className="flex flex-col gap-4">
             <h3 className="font-federo text-5xl whitespace-nowrap">
-              Meine Galerie
+              Meine Galerie!!!
             </h3>
             <button className="btn-primary">Mehr erfahren</button>
           </div>
