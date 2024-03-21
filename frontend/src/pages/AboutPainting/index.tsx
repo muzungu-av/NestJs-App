@@ -3,12 +3,9 @@ import React, { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import styles from "./painting.module.scss";
 import ShoppingCart from "../../assets/icons/ShoppingCart.svg";
-
 import mini1 from "../../assets/images/Group_1000001764.png";
 import mini2 from "../../assets/images/photo_2024-02-10_18-54-36.png";
-
 import boatPic from "../../assets/images/1.png";
 import lighthousePic from "../../assets/images/2.png";
 import seaPic from "../../assets/images/3.png";
@@ -16,17 +13,14 @@ import autumnPic from "../../assets/images/4.png";
 import boatManPic from "../../assets/images/5.png";
 import womanPic from "../../assets/images/6.png";
 import cityPic from "../../assets/images/7.png";
-
-// import { AxiosInstance } from "../../api/axiosInstance";
+import { PaintingSlider } from "../../components/PaintingSlider";
 
 const slidesArr = [
-  boatPic,
-  lighthousePic,
-  seaPic,
   autumnPic,
-  boatManPic,
-  womanPic,
-  cityPic
+  autumnPic,
+  autumnPic,
+  autumnPic,
+  autumnPic,
 ];
 const objPaint = {
   img: boatPic,
@@ -238,50 +232,7 @@ export const AboutPainting: React.FC = () => {
   return (
     <MainLayout>
       <PaintingSection />
-
-      <div>
-        <div className={styles["slider-container"]}>
-          <Slider
-            easing="ease"
-            ref={slider}
-            dots={false}
-            infinite={true}
-            speed={500}
-            slidesToShow={3}
-            slidesToScroll={1}
-            centerMode={true}
-            centerPadding="60px"
-            className={styles["slick-track"]}
-          >
-            {slidesArr.map((image: string) => {
-              return (
-                <div className="px-5 py-7 ">
-                  <img
-                    src={image}
-                    style={{
-                      border: "15px solid #240909",
-                      borderRadius: "3px",
-
-                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
-                    }}
-                    className=" border-[15px] border-[#240909] shadow-lg"
-                  />
-                </div>
-              );
-            })}
-          </Slider>
-          <div
-            className={`${styles["hover-area"]} ${styles["hover-area-left"]}`}
-            onMouseEnter={() => handleHover("left")}
-            onMouseLeave={() => setHoverDirection(null)}
-          />
-          <div
-            className={`${styles["hover-area"]} ${styles["hover-area-right"]}`}
-            onMouseEnter={() => handleHover("right")}
-            onMouseLeave={() => setHoverDirection(null)}
-          />
-        </div>
-      </div>
+      <PaintingSlider slides={slidesArr} />
     </MainLayout>
   );
 };

@@ -15,14 +15,14 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route
+        {/* <Route
           path="/about-me"
           element={
             <MainLayout>
               <AboutMe isMain={false} />
             </MainLayout>
           }
-        />
+        /> */}
         <Route path="/paintings" element={<Paintings />} />
         <Route path="/dibond" element={<Dibond />} />
         <Route
@@ -34,7 +34,7 @@ const App: React.FC = () => {
           }
         />
         <Route path="/painting" element={<AboutPainting />} />
-        <Route path="/" element={<Main />} />
+        <Route path="/about-me" element={<Main />} />
       </Routes>
     </Router>
   );

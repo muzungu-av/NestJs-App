@@ -1,13 +1,11 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 import { ReactNode } from "react";
-
+import Header from "./components/index";
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Header />
-      <div className="m-auto max-w-[1600px]">{children}</div>
-      <Footer />
+      {children}
+      {/* <Footer /> */}
     </>
   );
 };
