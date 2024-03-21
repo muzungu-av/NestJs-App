@@ -1,3 +1,7 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.btn-primary {
+  @apply text-base rounded-md bg-primary-50 py-4 px-8 font-federo w-40 h-12;
+}

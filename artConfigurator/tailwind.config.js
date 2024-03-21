@@ -2,14 +2,14 @@
 module.exports = {
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx}",
-    "./node_modules/flowbite/**/*.{html,js,jsx,ts,tsx}",
+    "./node_modules/flowbite/**/*.{html,js,jsx,ts,tsx}"
   ],
   darkMode: "class",
   theme: {
     extend: {
       colors: {
         primary: {
-          50: "#eff6ff",
+          50: "#FFEDCB",
           100: "#dbeafe",
           200: "#bfdbfe",
           300: "#93c5fd",
@@ -19,9 +19,9 @@ module.exports = {
           700: "#1d4ed8",
           800: "#1e40af",
           900: "#1e3a8a",
-          950: "#172554",
-        },
-      },
+          950: "#172554"
+        }
+      }
     },
     fontFamily: {
       body: [
@@ -39,7 +39,7 @@ module.exports = {
         "Apple Color Emoji",
         "Segoe UI Emoji",
         "Segoe UI Symbol",
-        "Noto Color Emoji",
+        "Noto Color Emoji"
       ],
       sans: [
         "Inter",
@@ -56,9 +56,13 @@ module.exports = {
         "Apple Color Emoji",
         "Segoe UI Emoji",
         "Segoe UI Symbol",
-        "Noto Color Emoji",
+        "Noto Color Emoji"
       ],
-    },
+      italiana: ["Italiana"],
+      apple: ['"Homemade Apple"'],
+      federo: ["Federo"],
+      poppins: ["Poppins"]
+    }
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [require("flowbite/plugin")]
 };
