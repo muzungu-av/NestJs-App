@@ -32,10 +32,10 @@ export const Biography = () => {
             data={loremIpsum({
               count: 33,
               format: "plain",
-              units: "sentences"
+              units: "sentences",
             })}
             config={{
-              toolbar: []
+              toolbar: [],
             }}
             onChange={(event, editor) => {
               handleEditorChange(event, editor);

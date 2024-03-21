@@ -1,41 +1,19 @@
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useNavigate
-} from "react-router-dom";
-
-import { ReactNode } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import "./output.css";
-import { Biography } from "./pages/Biography";
-import MainLayout from ".";
-
+import { Biography } from "./pages/biography";
+import LogIn from "./pages/login";
+import MainLayout from "./layouts/MainLayout";
 const App: React.FC = () => {
-  // const PrivateRoute = ({ children }: { children: ReactNode }) => {
-  //   const navigate = useNavigate();
-  //   const token = localStorage.getItem("token") || "";
-  //   if (!token) {
-  //     navigate("/login", { replace: true });
-  //     return null;
-  //   }
-  //   return <>{children}</>;
-  // };
-
   return (
     <Router>
-      <Routes>
-        {/* <Route path="/" element={<SignIn />} /> */}
-        <Route
-          path="/biography"
-          element={
-            <MainLayout>
-              <Biography />
-            </MainLayout>
-          }
-        />
-      </Routes>
+      <MainLayout>
+        <Routes>
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/biography" element={<Biography />} />
+        </Routes>
+      </MainLayout>
     </Router>
   );
 };

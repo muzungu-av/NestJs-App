@@ -4,25 +4,25 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Main } from "./pages/Main";
 import { Paintings } from "./pages/Paintings";
 import { Dibond } from "./pages/Dibond";
-import { Contacts } from "./pages/Contacts";
+import Contacts from "./pages/ContactsPage";
 import { AboutMe } from "./pages/AboutMe";
 import { AboutPainting } from "./pages/AboutPainting";
 import "./App.css";
 import "./output.css";
-import MainLayout from "./Layouts/MainLayout";
+import MainLayout from "./layouts/MainLayout";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* <Route
+        <Route
           path="/about-me"
           element={
             <MainLayout>
               <AboutMe isMain={false} />
             </MainLayout>
           }
-        /> */}
+        />
         <Route path="/paintings" element={<Paintings />} />
         <Route path="/dibond" element={<Dibond />} />
         <Route
@@ -34,7 +34,7 @@ const App: React.FC = () => {
           }
         />
         <Route path="/painting" element={<AboutPainting />} />
-        <Route path="/about-me" element={<Main />} />
+        <Route path="/" element={<Main />} />
       </Routes>
     </Router>
   );
