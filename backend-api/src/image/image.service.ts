@@ -133,6 +133,24 @@ export class ImageService {
   }
 
   /**
+   *
+   *
+   * @param count
+   * @param fields set of requested fields
+   * @returns Promise<any> one document
+   */
+  async findBlock(count: number, fields: string): Promise<Partial<Image>[]> {
+    let query = this.imageModel.find().limit(count);
+    if (fields) {
+      const selectedFields = fields.split(',').join(' ');
+      query = query.select(`${selectedFields} -_id`);
+    } else {
+      query = query.select('-_id -__v');
+    }
+    return await query.lean().exec();
+  }
+
+  /**
    * Updating the document in the database.
    *
    * @param uid document uid
