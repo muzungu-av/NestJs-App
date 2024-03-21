@@ -37,7 +37,7 @@ export const Biography = () => {
             config={{
               toolbar: []
             }}
-            onChange={(event, editor) => {
+            onChange={(event: any, editor: any) => {
               handleEditorChange(event, editor);
             }}
             // onBlur={(event, editor) => {

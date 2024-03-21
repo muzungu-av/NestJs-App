@@ -11,6 +11,7 @@ import "./App.css";
 import "./output.css";
 import { Biography } from "./pages/Biography";
 import MainLayout from ".";
+import { AddingEditingPaint } from "./pages/Paint";
 
 const App: React.FC = () => {
   // const PrivateRoute = ({ children }: { children: ReactNode }) => {
@@ -32,6 +33,22 @@ const App: React.FC = () => {
           element={
             <MainLayout>
               <Biography />
+            </MainLayout>
+          }
+        />{" "}
+        <Route
+          path="/add-paint"
+          element={
+            <MainLayout>
+              <AddingEditingPaint isEditMode={false} />
+            </MainLayout>
+          }
+        />{" "}
+        <Route
+          path="/edit-paint"
+          element={
+            <MainLayout>
+              <AddingEditingPaint isEditMode={true} />
             </MainLayout>
           }
         />
