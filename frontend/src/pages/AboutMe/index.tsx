@@ -1,3 +1,4 @@
+
 import ProfilePic from "../../assets/images/ProfilePic.jpg";
 import play from "../../assets/icons/play.svg";
 import videoPic from "../../assets/images/videoPic.jpg";
@@ -16,10 +17,9 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
         <h3 className="font-italiana text-6xl pb-8 text-center">Biografie</h3>
         <div className="flex justify-around items-start ">
           <div>
-            <img
-              src={ProfilePic}
-              className="rounded-full w-[220px] h-[220px] mb-4 "
-            />
+            <div
+              className="rounded-full w-[220px] h-[220px] mb-4 bg-[#D9D9D9]"
+              ></div>
             <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
           </div>
           <div className="flex flex-col w-[50%] gap-8">

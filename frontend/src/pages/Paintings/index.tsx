@@ -14,7 +14,6 @@ export const Paintings: React.FC = () => {
 
   const [paintings, setPaintings] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
   const params = {
     fields: "description,dimension,imageUrl,miniImageUrl",
   };
