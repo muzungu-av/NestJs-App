@@ -1,23 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-// import { configuration } from 'config/configuration';
+import { configuration } from 'config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter());
 
   app.enableCors({
-    origin: 'http://172.18.0.101:8080', // Замените на разрешенный домен вашего клиента
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: ['content-type'], // с "*" не работает
+    origin: configuration().CORS_ORIGIN_URL,
     credentials: true,
   });
 
-  await app.listen(process.env.BACKEND_PORT);
+  await app.listen(configuration().BACKEND_PORT);
 }
 
 bootstrap();
-
-console.log(`NODE_ENV=` + process.env.NODE_ENV);
-console.log(`env file=` + `${process.cwd()}/.env.${process.env.NODE_ENV}`);
-console.log('PORT = ' + process.env.BACKEND_PORT);
-// console.log(configuration());
