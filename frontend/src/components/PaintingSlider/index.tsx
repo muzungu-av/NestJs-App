@@ -53,12 +53,12 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
       ))}
       <img
         src={SwiperArrow}
-        className="rotate-180 top-1/2 left-0 absolute z-[100] ml-4 cursor-pointer"
+        className="rotate-180 top-[40%] left-0 absolute z-[100] ml-4 cursor-pointer"
         onClick={handlePrev}
       ></img>
       <img
         src={SwiperArrow}
-        className="top-1/2 right-0 absolute z-[100] mr-4 cursor-pointer"
+        className="top-[40%] right-0 absolute z-[100] mr-4 cursor-pointer"
         onClick={handleNext}
       ></img>
     </Swiper>

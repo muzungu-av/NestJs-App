@@ -15,27 +15,6 @@ import LonelyBoat from "../../assets/images/contactPic.jpg";
 export const Main: React.FC = () => {
   const slidesArr = [SmallPic, SmallPic, SmallPic, SmallPic];
 
-  const HeroSection: React.FC = () => {
-    return (
-      <div className="bg-[#F5F5F5]">
-        <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
-          <div className="self-center">
-            <img className=" border-[15px] border-[#240909]" src={SmallPic} />
-          </div>
-          <div>
-            <img
-              className=" border-[15px] border-[#240909]"
-              src={GalleryPic2}
-            />
-          </div>
-          <div className="flex flex-col justify-between">
-            <img className=" border-[15px] border-[#240909]" src={SitPic} />
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const HeroSection = () => {
     return (
       <div style={{ backgroundImage: `url(${MainPageBg})` }}>
@@ -76,8 +55,7 @@ export const Main: React.FC = () => {
   return (
     <MainLayout>
       <HeroSection />
-      <AboutMe />
-      <GallerySection />
+      {/* <GallerySection /> */}
       <AboutMe isMain={true} />
       <BeforeSliderSection />
       <PaintingSlider slides={slidesArr} />
