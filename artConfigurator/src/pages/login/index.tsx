@@ -2,15 +2,13 @@ import ContactPic from "../../assets/images/contactPic.jpg";
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-
-import AuthStore from "../store/AuthStore";
-
+import AuthStore from "../../store/AuthStore";
 type FormData = {
   username: string;
   password: string;
 };
 
-const LoginPage: React.FC = observer(() => {
+const LogIn: React.FC = observer(() => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<FormData>({
@@ -26,11 +24,11 @@ const LoginPage: React.FC = observer(() => {
   const handleLogin = async () => {
     try {
       // Call the login method from AuthStore and wait for it to complete
-      const response = await AuthStore.login(formData);
+      await AuthStore.login(formData);
       if (AuthStore.isLoggedIn) {
         const token = AuthStore.token;
         localStorage.setItem("token", token);
-        navigate("/private");
+        navigate("/menu");
       } else {
         console.error("Authentication error: Invalid response");
       }
@@ -38,7 +36,7 @@ const LoginPage: React.FC = observer(() => {
       console.error("Authentication error:", error);
     }
   };
-const LogIn = () => {
+
   return (
     <div>
       <div className="py-[5%] px-[5%]">
@@ -54,21 +52,31 @@ const LogIn = () => {
               <div className="flex flex-col gap-5 font-poppins text-sm font-medium">
                 <div className="flex gap-10">
                   <div className="flex flex-col w-full">
-                    <label htmlFor="email">Benutzername</label>
+                    <label htmlFor="username">Benutzername</label>
                     <input
                       className="border-t-0 border-x-0 border-b-[1px]"
                       type="text"
-                      name="email"
+                      name="username"
+                      onChange={handleInputChange}
+                      value={formData.username}
+                      required
                     ></input>
                   </div>
                 </div>
                 <div className="flex gap-10">
                   <div className="flex flex-col w-full">
-                    <label htmlFor="nachricht">Passwort</label>
+                    <label htmlFor="password">Passwort</label>
                     <input
                       className="border-t-0 border-x-0 border-b-[1px] "
-                      type="text"
-                      name="nachricht"
+                      type="password"
+                      name="password"
+                      required
+                      placeholder="••••••••"
+                      onChange={handleInputChange}
+                      value={formData.password}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleLogin();
+                      }}
                     ></input>
                   </div>
                 </div>
@@ -79,5 +87,5 @@ const LogIn = () => {
       </div>
     </div>
   );
-};
+});
 export default LogIn;
