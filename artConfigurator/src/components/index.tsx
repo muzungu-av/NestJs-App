@@ -1,9 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-interface MenuLinkProps {
-  to: string;
-  children: React.ReactNode;
-}
 const Header = () => {
   const navigate = useNavigate();
   //   const MenuLink: React.FC<MenuLinkProps> = ({ to, children }) => {
