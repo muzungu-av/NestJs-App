@@ -1,18 +1,10 @@
 import MainLayout from "../../layouts/MainLayout";
-import React, { useState, useRef, useEffect } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import React from "react";
 import ShoppingCart from "../../assets/icons/ShoppingCart.svg";
 import mini1 from "../../assets/images/Group_1000001764.png";
 import mini2 from "../../assets/images/photo_2024-02-10_18-54-36.png";
 import boatPic from "../../assets/images/1.png";
-import lighthousePic from "../../assets/images/2.png";
-import seaPic from "../../assets/images/3.png";
 import autumnPic from "../../assets/images/4.png";
-import boatManPic from "../../assets/images/5.png";
-import womanPic from "../../assets/images/6.png";
-import cityPic from "../../assets/images/7.png";
 import { PaintingSlider } from "../../components/PaintingSlider";
 
 const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
@@ -30,48 +22,9 @@ const miniatureArr1 = [
   { img: mini2, isMain: false },
 ];
 
-// type PaintingProps = {
-//   slides: string[];
-// };
 type Paint = { isMain: boolean; img: any; w?: number; h?: number };
 
 export const AboutPainting: React.FC = () => {
-  const slider = useRef<Slider | null>(null);
-  const [hoverDirection, setHoverDirection] = useState<string | null>(null);
-
-  useEffect(() => {
-    let intervalId: number | null = null;
-    if (hoverDirection) {
-      intervalId = setInterval(() => {
-        if (hoverDirection === "left") {
-          slidePrev();
-        } else if (hoverDirection === "right") {
-          slideNext();
-        }
-      }, 300); // Adjust the interval time as needed
-    }
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [hoverDirection]);
-
-  const slidePrev = () => {
-    if (slider.current) {
-      slider.current.slickPrev();
-    }
-  };
-
-  const slideNext = () => {
-    if (slider.current) {
-      slider.current.slickNext();
-    }
-  };
-
-  const handleHover = (direction: string) => {
-    setHoverDirection(direction);
-  };
-
   const PaintingSection = () => {
     return (
       <>
