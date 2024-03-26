@@ -2,16 +2,17 @@ import "./App.css";
 import {
   BrowserRouter as Router,
   Route,
-  Routes,
-  useNavigate
+  Routes
+  // useNavigate
 } from "react-router-dom";
 
-import { ReactNode } from "react";
+// import { ReactNode } from "react";
 import "./App.css";
 import "./output.css";
 import { Biography } from "./pages/Biography";
 import MainLayout from ".";
 import { AddingEditingPaint } from "./pages/Paint";
+import { PaintingsKopien } from "./pages/PaintingsKopien";
 
 const App: React.FC = () => {
   // const PrivateRoute = ({ children }: { children: ReactNode }) => {
@@ -49,6 +50,14 @@ const App: React.FC = () => {
           element={
             <MainLayout>
               <AddingEditingPaint isEditMode={true} />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/paintings-kopien"
+          element={
+            <MainLayout>
+              <PaintingsKopien />
             </MainLayout>
           }
         />

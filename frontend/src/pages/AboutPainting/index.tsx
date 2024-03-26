@@ -152,12 +152,24 @@ export const AboutPainting: React.FC = () => {
               </div>
               <p className="text-2xl font-federo">Wählen Sie Bildgröße</p>{" "}
               <div className="grid grid-cols-2 gap-4 justify-start w-[80%]">
-                <button className="btn-size">40 х 60 cm</button>
-                <button className="btn-size">50 х 70 cm</button>
-                <button className="btn-size">50 х 70 cm</button>
-                <button className="btn-size">110 х 133 cm</button>
-                <button className="btn-size">120 х 160 cm</button>{" "}
-                <button className="btn-size">150 х 200 cm</button>
+                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                  40 х 60 cm
+                </button>
+                <button className="btn-sizew-[100%] h-[54px] text-2xl">
+                  50 х 70 cm
+                </button>
+                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                  50 х 70 cm
+                </button>
+                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                  110 х 133 cm
+                </button>
+                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                  120 х 160 cm
+                </button>{" "}
+                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                  150 х 200 cm
+                </button>
               </div>{" "}
               <div className=" relative py-[10px]">
                 <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
