@@ -1,7 +1,7 @@
-import photo from "./../../assets/EmptyPhoto.png";
-import addPhoto from "./../../assets/Add_photo.png";
+import photo from "./../../assets/images/EmptyPhoto.png";
+import addPhoto from "./../../assets/images/Add_photo.png";
 import editPhoto from "./../../../../frontend/src/assets/images/BoatPicture.jpg";
-import deletePhoto from "./../../assets/Delete.png";
+import deletePhoto from "./../../assets/images/Delete.png";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { loremIpsum } from "lorem-ipsum";

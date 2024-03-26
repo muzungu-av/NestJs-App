@@ -9,8 +9,8 @@ import {
 // import { ReactNode } from "react";
 import "./App.css";
 import "./output.css";
-import { Biography } from "./pages/Biography";
-import MainLayout from ".";
+import { Biography } from "./pages/biography";
+import MainLayout from "./layouts/MainLayout";
 import { AddingEditingPaint } from "./pages/Paint";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
 

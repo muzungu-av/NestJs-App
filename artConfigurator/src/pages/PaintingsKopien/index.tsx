@@ -1,4 +1,4 @@
-import photo from "./../../assets/EmptyPhoto.png";
+import photo from "./../../assets/images/EmptyPhoto.png";
 
 export const PaintingsKopien = () => {
   const kopiens = [
