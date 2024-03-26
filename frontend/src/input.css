@@ -19,7 +19,17 @@
     }
   }
 }
-
+.swiper-wrapper {
+  padding-block: 5%;
+  padding-left: 5%;
+  max-width: 1400px !important;
+}
+.swiper-button-next {
+  display: none !important;
+}
+.swiper-button-prev {
+  display: none !important;
+}
 [type="text"]:focus {
   box-shadow: none;
 }

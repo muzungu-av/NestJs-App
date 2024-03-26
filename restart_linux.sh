@@ -10,10 +10,10 @@ cd .. && cd ./frontend
 rm -r ./dist
 yarn build
 
-#cd .. && cd ./artConfigurator
-#echo "************ Art Config ************"
-#rm -r ./dist
-#yarn build
+cd .. && cd ./artConfigurator
+echo "************ Art Config ************"
+rm -r ./dist
+yarn build
 
 cd ..
 echo "************ RUN DOCKER COMPOSE *************"
