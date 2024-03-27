@@ -13,6 +13,7 @@ import { Biography } from "./pages/biography";
 import MainLayout from "./layouts/MainLayout";
 import { AddingEditingPaint } from "./pages/Paint";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
+import { AddingEditingKopien } from "./pages/AddingEditingKopien";
 
 const App: React.FC = () => {
   return (
@@ -32,6 +33,22 @@ const App: React.FC = () => {
           element={
             <MainLayout>
               <AddingEditingPaint isEditMode={false} />
+            </MainLayout>
+          }
+        />{" "}
+        <Route
+          path="/add-kopien"
+          element={
+            <MainLayout>
+              <AddingEditingKopien isEditMode={false} />
+            </MainLayout>
+          }
+        />{" "}
+        <Route
+          path="/edit-kopien"
+          element={
+            <MainLayout>
+              <AddingEditingKopien isEditMode={true} />
             </MainLayout>
           }
         />{" "}

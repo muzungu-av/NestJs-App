@@ -1,6 +1,6 @@
 import photo from "./../../assets/images/Frame9.png";
 import addPhoto from "./../../assets/images/Add_photo.png";
-import deletePhoto from "./../../assets/images/Delete.png";
+import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
