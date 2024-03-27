@@ -50,9 +50,9 @@ export const AddingEditingKopien = ({
     setCurrentRow({});
   };
 
-  const handleEditorChange = (event: any, editor: any) => {
-    const data = editor.getData();
-  };
+  // const handleEditorChange = (event: any, editor: any) => {
+  //   const data = editor.getData();
+  // };
 
   const handleAddSize = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -276,9 +276,9 @@ export const AddingEditingKopien = ({
             config={{
               toolbar: []
             }}
-            onChange={(event: any, editor: any) => {
-              handleEditorChange(event, editor);
-            }}
+            // onChange={(event: any, editor: any) => {
+            //   handleEditorChange(event, editor);
+            // }}
             // onBlur={(event, editor) => {
             //   console.log("Blur.", editor);
             // }}
