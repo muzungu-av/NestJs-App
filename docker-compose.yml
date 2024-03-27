@@ -49,13 +49,13 @@ services:
     env_file:
       - ./frontend/.env.$ENVIRONMENT
     ports:
-      - 8080:8080
+      - 8081:8081
     build:
       context: .
       dockerfile: ./frontend/Dockerfile
     networks:
       pic_network:
-        ipv4_address: 172.18.0.101 # IP кешируется в Docker после смены нужно сделать `docker network prune`
+        ipv4_address: 172.18.0.104 # IP кешируется в Docker после смены нужно сделать `docker network prune`
 
   art-config:
     image: art-config-img
@@ -73,7 +73,7 @@ services:
       dockerfile: ./artConfigurator/Dockerfile
     networks: # IP кешируется в Docker после смены нужно сделать `docker network prune`
       pic_network:
-        ipv4_address: 172.18.0.100
+        ipv4_address: 172.18.0.105
 
 #https://github.com/arunbandari/mongo-gui/tree/master
 
