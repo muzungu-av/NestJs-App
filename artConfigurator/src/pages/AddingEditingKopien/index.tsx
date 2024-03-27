@@ -109,7 +109,7 @@ export const AddingEditingKopien = ({
                     </tr>
                   </thead>
 
-                  <tbody className="bg-[#FFEDCB]">
+                  <tbody className="bg-[#FFEDCB] p-4">
                     {sizes.map((row: any, index: number) => (
                       <>
                         {index == currentRow?.index ? (
@@ -122,7 +122,7 @@ export const AddingEditingKopien = ({
                                     handleChangeCurrentRow("width", v)
                                   }
                                   type="text"
-                                  className="w-10 px-2 m-2 h-6 bg-gray-300 border-none outline-none"
+                                  className="w-[30%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
                                 />{" "}
                                 X
                                 <input
@@ -131,7 +131,7 @@ export const AddingEditingKopien = ({
                                   }
                                   value={currentRow?.height}
                                   type="text"
-                                  className="w-10 px-2  m-2  h-6 bg-gray-300 border-none outline-none"
+                                  className="w-[30%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
                                 />
                               </div>
                             </td>
@@ -145,7 +145,7 @@ export const AddingEditingKopien = ({
                                   value={currentRow?.price}
                                   placeholder="0.00"
                                   type="text"
-                                  className="w-16 px-2  m-2  h-6 bg-gray-300 border-none outline-none"
+                                  className="w-[80%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
                                 />
                               </div>
                             </td>
@@ -233,13 +233,13 @@ export const AddingEditingKopien = ({
                     id="newWidth"
                     name="width"
                     type="text"
-                    className="w-16 px-2 m-2 h-6 bg-gray-300 border-none outline-none"
+                    className="w-[30%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
                   />{" "}
                   X
                   <input
                     type="text"
                     name="height"
-                    className="w-16 px-2  m-2  h-6 bg-gray-300 border-none outline-none"
+                    className="w-[30%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
                   />
                 </div>
               </div>{" "}
@@ -250,7 +250,7 @@ export const AddingEditingKopien = ({
                   <input
                     type="text"
                     name="price"
-                    className="w-16 px-2 m-2 h-6 bg-gray-300 border-none outline-none"
+                    className="w-[80%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
                   />{" "}
                 </div>
               </div>{" "}
