@@ -1,9 +1,10 @@
-import photo from "./../../assets/Frame9.png";
-import addPhoto from "./../../assets/Add_photo.png";
-import deletePhoto from "./../../assets/Delete.png";
-// import { CKEditor } from "@ckeditor/ckeditor5-react";
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import { loremIpsum } from "lorem-ipsum";
+import photo from "./../../assets/images/Frame9.png";
+import addPhoto from "./../../assets/images/Add_photo.png";
+import deletePhoto from "./../../assets/images/Delete.svg";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+import { loremIpsum } from "lorem-ipsum";
 export const Biography = () => {
   // const handleEditorChange = (event: any, editor: any) => {
   //   const data = editor.getData();
@@ -27,22 +28,26 @@ export const Biography = () => {
         </div>{" "}
         <div className="w-[60%]">
           <div className="font-federo text-3xl mb-4">Beschreibung</div>
-          <div>
-            {/* <CKEditor
-              editor={ClassicEditor}
-              data={loremIpsum({
-                count: 33,
-                format: "plain",
-                units: "sentences",
-              })}
-              config={{
-                toolbar: [],
-              }}
-              onChange={(event, editor) => {
-                handleEditorChange(event, editor);
-              }}
-            /> */}
-          </div>
+          <CKEditor
+            editor={ClassicEditor}
+            data={loremIpsum({
+              count: 33,
+              format: "plain",
+              units: "sentences"
+            })}
+            config={{
+              toolbar: []
+            }}
+            // onChange={(event: any, editor: any) => {
+            //   handleEditorChange(event, editor);
+            // }}
+            // onBlur={(event, editor) => {
+            //   console.log("Blur.", editor);
+            // }}
+            // onFocus={(event, editor) => {
+            //   console.log("Focus.", editor);
+            // }}
+          />
           <div className="flex justify-end my-4">
             <button className="btn-primary">abbrechen</button>{" "}
             <button className="btn-primary ml-2">speichern</button>
