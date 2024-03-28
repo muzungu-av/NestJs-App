@@ -10,6 +10,7 @@ import {
 import "./App.css";
 import "./output.css";
 import { Biography } from "./pages/biography";
+import LogIn from "./pages/login";
 import MainLayout from "./layouts/MainLayout";
 import { AddingEditingPaint } from "./pages/Paint";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
@@ -19,7 +20,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* <Route path="/" element={<SignIn />} /> */}
+        <Route path="/login" element={<LogIn />} />
         <Route
           path="/biography"
           element={

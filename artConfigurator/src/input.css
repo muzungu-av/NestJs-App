@@ -17,3 +17,9 @@
 [type="text"]:focus {
   box-shadow: none;
 }
+[type="checkbox"]:checked,
+[type="radio"]:checked,
+.dark [type="checkbox"]:checked,
+.dark [type="radio"]:checked {
+  background-color: #895c06 !important;
+}
