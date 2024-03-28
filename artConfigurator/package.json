@@ -21,6 +21,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.8",
     "flowbite": "^2.3.0",
+    "lorem-ipsum": "^2.0.8",
     "mobx": "^6.12.1",
     "mobx-react": "^9.1.0",
     "mobx-react-lite": "^4.0.6",

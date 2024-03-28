@@ -33,20 +33,3 @@ export const get = async (
     throw error;
   }
 };
-
-// const post = async (
-//   baseUrl: string,
-//   relatedUrl: string,
-//   credentials: boolean,
-//   jwtAuth: boolean,
-//   data: any
-// ) => {
-//   try {
-//     const instance = Axios(credentials, jwtAuth);
-//     const response = await instance.post(baseUrl + relatedUrl, data);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error making POST request:", error);
-//     throw error;
-//   }
-// };

@@ -1,11 +1,11 @@
 # PRODUCTION  FRONTEND
 FROM nginx:stable AS paint-front-img
 
-# Установка mc
-RUN apt-get update && \
-    apt-get install -y mc && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# # Установка mc
+# RUN apt-get update && \
+#     apt-get install -y mc && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
 
 RUN rm -rf /usr/share/nginx/html/*
 COPY ./frontend/dist /usr/share/nginx/html

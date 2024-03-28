@@ -1,4 +1,4 @@
-import Play from "../../assets/icons/play.svg";
+import Play from "../../assets/icons/Play.svg"; // (linux error) big Letter please
 import videoPic from "../../assets/images/videoPic.jpg";
 import videoPic2 from "../../assets/images/videoPic2.jpg";
 import { GallerySection } from "../../components/GallerySection";
