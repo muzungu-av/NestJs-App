@@ -3,8 +3,14 @@
 @import "tailwindcss/utilities";
 
 .btn-primary {
-  @apply text-base rounded-md bg-primary-50 py-4 px-8 font-federo w-40 h-12;
+  @apply text-base rounded-xl bg-primary-50 py-4 px-8 font-federo;
 }
 [type="text"]:focus {
   box-shadow: none;
+}
+[type="checkbox"]:checked,
+[type="radio"]:checked,
+.dark [type="checkbox"]:checked,
+.dark [type="radio"]:checked {
+  background-color: #895c06 !important;
 }

@@ -101,4 +101,5 @@ networks:
     ipam:
       config:
         - subnet: 172.18.0.0/24
+        
 # docker compose  --env-file .env.development --env-file ../backend-api/.env.development up -d
