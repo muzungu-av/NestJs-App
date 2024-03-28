@@ -1,11 +1,13 @@
 {
   "name": "art-configurator",
+  "license": "Commercial License",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "npm-run-all -p dev:css vite",
-    "build": "yarn run build:css && tsc && vite build",
+    "build:dev": "yarn run build:css && tsc && NODE_ENV=development vite build --mode development",
+    "build:prod": "yarn run build:css && tsc && NODE_ENV=production vite build --mode production",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "vite": "vite",

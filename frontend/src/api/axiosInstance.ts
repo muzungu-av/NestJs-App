@@ -24,7 +24,6 @@ export const get = async (
   jwtAuth: boolean,
   params?: Record<string, string | number>
 ) => {
-  console.log("<<<<" + baseUrl + relatedUrl);
   try {
     const instance = Axios(credentials, jwtAuth);
     const response = await instance.get(baseUrl + relatedUrl, { params });

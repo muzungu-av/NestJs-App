@@ -16,7 +16,7 @@ services:
     command: mongod --logpath /var/log/mongodb/mongod.log --config /etc/mongod.conf --keyFile /var/lib/mongodb/mongodb-keyfile
     networks:
       pic_network:
-        ipv4_address: 172.18.0.103 # IP кешируется в Docker после смены нужно сделать `docker network prune`
+        ipv4_address: 172.18.0.110 # IP кешируется в Docker после смены нужно сделать `docker network prune`
 
   paint-back-api:
     image: paint-back-api-img
@@ -29,7 +29,7 @@ services:
     environment:
       - NODE_ENV=$ENVIRONMENT
     ports:
-      - 3000:3000
+      - 4001:4001
     build:
       context: .
       dockerfile: ./backend-api/Dockerfile
@@ -37,7 +37,7 @@ services:
       - ./backend-api/logs:/app/logs
     networks:
       pic_network:
-        ipv4_address: 172.18.0.102 # IP кешируется в Docker после смены нужно сделать `docker network prune`
+        ipv4_address: 172.18.0.103 # IP кешируется в Docker после смены нужно сделать `docker network prune`
 
   paint-front:
     image: paint-front-img
@@ -46,8 +46,6 @@ services:
     depends_on:
       - mongodb
       - paint-back-api
-    env_file:
-      - ./frontend/.env.$ENVIRONMENT
     ports:
       - 8081:8081
     build:
@@ -55,7 +53,7 @@ services:
       dockerfile: ./frontend/Dockerfile
     networks:
       pic_network:
-        ipv4_address: 172.18.0.104 # IP кешируется в Docker после смены нужно сделать `docker network prune`
+        ipv4_address: 172.18.0.102 # IP кешируется в Docker после смены нужно сделать `docker network prune`
 
   art-config:
     image: art-config-img
@@ -64,8 +62,6 @@ services:
     depends_on:
       - mongodb
       - paint-back-api
-    env_file:
-      - ./artConfigurator/.env
     ports:
       - 8085:8085
     build:
@@ -73,7 +69,7 @@ services:
       dockerfile: ./artConfigurator/Dockerfile
     networks: # IP кешируется в Docker после смены нужно сделать `docker network prune`
       pic_network:
-        ipv4_address: 172.18.0.105
+        ipv4_address: 172.18.0.104
 
 #https://github.com/arunbandari/mongo-gui/tree/master
 
@@ -101,4 +97,4 @@ networks:
     ipam:
       config:
         - subnet: 172.18.0.0/24
-# docker compose  --env-file .env.development --env-file ../backend-api/.env.development up -d
+          gateway: 172.18.0.1
