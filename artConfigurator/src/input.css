@@ -1,3 +1,19 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.btn-primary {
+  @apply rounded-md bg-primary-50 font-federo;
+}
+.btn-size {
+  @apply rounded-[13px] font-federo text-black    border-[#000000];
+  border: 3px solid #000000;
+  &:hover,
+  &:focus,
+  &:active {
+    @apply border-[#895C06] bg-[#FFEDCB];
+  }
+}
+[type="text"]:focus {
+  box-shadow: none;
+}

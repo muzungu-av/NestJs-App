@@ -10,17 +10,26 @@
     @apply bg-white rounded-full w-16 h-16 flex justify-center items-center;
   }
   .btn-size {
-    @apply rounded-[13px] font-federo text-black text-[24px]  w-[100%] h-[54px]  border-[#000000];
+    @apply rounded-[13px] font-federo text-black text-2xl  w-[100%] h-[54px]  border-[#000000];
     border: 2px solid #000000;
     &:hover,
     &:focus,
     &:active {
-      /* border: 1px solid #000000; */
       @apply border-[#895C06] bg-[#FFEDCB];
     }
   }
 }
-
+.swiper-wrapper {
+  padding-block: 5%;
+  padding-left: 5%;
+  max-width: 1400px !important;
+}
+.swiper-button-next {
+  display: none !important;
+}
+.swiper-button-prev {
+  display: none !important;
+}
 [type="text"]:focus {
   box-shadow: none;
 }

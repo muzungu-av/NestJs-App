@@ -1,36 +1,21 @@
-import MainLayout from "../../Layouts/MainLayout";
+import MainLayout from "../../layouts/MainLayout";
 import React from "react";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import SmallPic from "../../assets/images/SmallPicture.jpg";
-import BoatPic from "../../assets/images/BoatPicture.jpg";
-// import ProfilePic from "../../assets/images/ProfilePic.jpg";
-// import play from "../../assets/icons/play.svg";
-// import SpringSlider from "../../components/SpringSlider/index";
-// import videoPic from "../../assets/images/videoPic.jpg";
-// import videoPic2 from "../../assets/images/videoPic2.jpg";
-import MainPageBg from "../../assets/images/MainPageBg.jpg";
-import GalleryPic1 from "../../assets/images/galleryPic1.jpg";
 import GalleryPic2 from "../../assets/images/galleryPic2.jpg";
-import GalleryPic3 from "../../assets/images/galleryPic3.jpg";
-// import ContactPic from "../../assets/images/contactPic.jpg";
-// import Gmail from "../../assets/icons/Gmail.svg";
-// import Instagram from "../../assets/icons/Instagram.svg";
-// import FaceBook from "../../assets/icons/Facebook.svg";
-import { Contacts } from "../Contacts";
+import SitPic from "../../assets/images/SitPic.jpg";
+import { Contacts } from "../../components/Contacts";
 import { AboutMe } from "../AboutMe";
-
+import { GallerySection } from "../../components/GallerySection";
 export const Main: React.FC = () => {
-  const slidesArr = [SmallPic, BoatPic, SmallPic];
+  const slidesArr = [SmallPic, SmallPic, SmallPic, SmallPic];
 
-  const GallerySection: React.FC = () => {
+  const HeroSection: React.FC = () => {
     return (
-      <div className="" style={{ backgroundImage: `url(${MainPageBg})` }}>
+      <div className="bg-[#F5F5F5]">
         <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
-          <div className="self-end">
-            <img
-              className=" border-[15px] border-[#240909]"
-              src={GalleryPic1}
-            />
+          <div className="self-center">
+            <img className=" border-[15px] border-[#240909]" src={SmallPic} />
           </div>
           <div>
             <img
@@ -39,21 +24,14 @@ export const Main: React.FC = () => {
             />
           </div>
           <div className="flex flex-col justify-between">
-            <div className="flex flex-col gap-4">
-              <h3 className="font-federo text-5xl whitespace-nowrap">
-                Meine Galerie
-              </h3>
-              <button className="btn-primary">Mehr erfahren</button>
-            </div>
-            <img
-              className=" border-[15px] border-[#240909]"
-              src={GalleryPic3}
-            />
+            <img className=" border-[15px] border-[#240909]" src={SitPic} />
           </div>
         </div>
       </div>
     );
   };
+
+
   const BeforeSliderSection: React.FC = () => {
     return (
       <div className="py-[5%] px-[5%] flex flex-col items-center gap-10">
@@ -69,12 +47,12 @@ export const Main: React.FC = () => {
       </div>
     );
   };
+
   return (
     <MainLayout>
-      <PaintingSlider slides={slidesArr} />
-      <AboutMe />
-
+      <HeroSection />
       <GallerySection />
+      <AboutMe isMain={true} />
       <BeforeSliderSection />
       <PaintingSlider slides={slidesArr} />
       <Contacts />

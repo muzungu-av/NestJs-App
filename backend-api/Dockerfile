@@ -1,5 +1,10 @@
 FROM node:18.19-alpine AS paint-back-api-img
 
+# Установка mc
+# RUN apk update && \
+#     apk add --no-cache mc && \
+#     rm -rf /var/cache/apk/*
+
 # Установка сборочных зависимостей GraphicsMagick для jpg, jpeg, png
 RUN apk add --no-cache build-base \
     && apk add --no-cache \
@@ -15,7 +20,6 @@ WORKDIR /app/
 COPY ./backend-api/dist/ ./dist
 COPY ./backend-api/node_modules/ ./node_modules
 
-ENV NODE_ENV=development
-EXPOSE 3000
-CMD NODE_ENV=development node dist/main
+EXPOSE 4001
+CMD node dist/main
 

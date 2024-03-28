@@ -1,22 +1,18 @@
-// import MainLayout from "../../Layouts/MainLayout";
-import ProfilePic from "../../assets/images/ProfilePic.jpg";
-import play from "../../assets/icons/Play.svg";
-// import SpringSlider from "../../components/SpringSlider/index";
+import Play from "../../assets/icons/Play.svg"; // (linux error) big Letter please
 import videoPic from "../../assets/images/videoPic.jpg";
 import videoPic2 from "../../assets/images/videoPic2.jpg";
-// import Slide from "../../assets/images/slide.jpg";
-
-export const AboutMe: React.FC = () => {
+import { GallerySection } from "../../components/GallerySection";
+interface AboutMeProps {
+  isMain: boolean;
+}
+export const AboutMe = ({ isMain }: AboutMeProps) => {
   const AboutPainterSection: React.FC = () => {
     return (
       <div className="py-[5%] px-[5%]">
-        <h3 className="font-italiana text-6xl	text-center">Biografie</h3>
-        <div className="flex justify-around items-center ">
-          <div className="">
-            <img
-              src={ProfilePic}
-              className="rounded-full w-[220px] h-[220px] mb-4 "
-            />
+        <h3 className="font-italiana text-6xl pb-8 text-center">Biografie</h3>
+        <div className="flex justify-around items-start ">
+          <div>
+            <div className="rounded-full w-[220px] h-[220px] mb-4 bg-[#D9D9D9]"></div>
             <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
           </div>
           <div className="flex flex-col w-[50%] gap-8">
@@ -26,13 +22,61 @@ export const AboutMe: React.FC = () => {
               consectetur cumque, nostrum, doloribus iure culpa consequuntur
               aspernatur. Pariatur voluptate doloribus deleniti?
             </p>
-            <p className="font-apple w-[60%] self-center">
-              “ Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry ”
-            </p>
+            {!isMain && (
+              <>
+                <p className="font-federo">
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it to make a type
+                  specimen book. Lorem Ipsum is simply dummy text of the
+                  printing and typesetting industry. Lorem Ipsum has been the
+                  industry's standard dummy text ever since the 1500s, when an
+                  unknown printer took a galley of type and scrambled it to make
+                  a type specimen book. Lorem Ipsum is simply dummy text of the
+                  printing and typesetting industry. Lorem Ipsum has been the
+                  industry's standard dummy text ever since the 1500s, when an
+                  unknown printer took a galley of type and scrambled it to make
+                  a type specimen book.
+                </p>
+                <p className="font-federo">
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it to make a type
+                  specimen book.
+                </p>
+              </>
+            )}
+
+            {isMain && (
+              <p className="font-apple w-[60%] self-center pt-5">
+                “ Lorem Ipsum is simply dummy text of the printing and
+                typesetting industry ”
+              </p>
+            )}
           </div>
-          <button className="btn-primary self-end">Mehr erfahren</button>
+
+          {isMain && (
+            <button
+              className={
+                isMain ? "btn-primary self-end" : "btn-primary self-end"
+              }
+            >
+              Mehr erfahren
+            </button>
+          )}
         </div>
+        {!isMain && (
+          <div className=" flex flex-col  justify-center items-center ">
+            <p className="font-apple text-2xl font-normal m-16 self-center ">
+              “ Lorem Ipsum is simply dummy text of <br /> the printing and
+              typesetting industry ”
+            </p>
+
+            <button className={"btn-primary "}>Kontaktieren</button>
+          </div>
+        )}
       </div>
     );
   };
@@ -45,7 +89,7 @@ export const AboutMe: React.FC = () => {
             style={{ backgroundImage: `url(${picture})` }}
           >
             <div className="btn-play ">
-              <img src={play} />
+              <img src={Play} />
             </div>
           </div>
           <div className="w-[50%] flex flex-col gap-4">
@@ -69,11 +113,12 @@ export const AboutMe: React.FC = () => {
       </div>
     );
   };
+
   return (
     <>
       <AboutPainterSection />
-
       <VideoSection />
+      <GallerySection />
     </>
   );
 };

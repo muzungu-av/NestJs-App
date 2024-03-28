@@ -1,5 +1,10 @@
 import { makeAutoObservable } from "mobx";
-import { AxiosInstance } from "../api/axiosInstance";
+import { post } from "../api/axiosInstance";
+
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const login = import.meta?.env?.VITE_API_LOGIN;
+const URL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
 class AuthStore {
   error: string | null = null;
@@ -21,13 +26,8 @@ class AuthStore {
   }
   async login(loginFormData: { username: string; password: string }) {
     try {
-      const res = await AxiosInstance.post(
-        import.meta.env.VITE_API_LOGIN
-          ? import.meta.env.VITE_API_LOGIN
-          : "empty_api_login_url",
-        loginFormData
-      );
-      this.token = res.data.access_token;
+      const res = await post(URL, login, true, true, loginFormData); // это не тестировалось, нет страницы
+      this.token = res.data.token;
       localStorage.setItem("token", this.token);
       this.isLoggedIn = true;
     } catch (error: any) {

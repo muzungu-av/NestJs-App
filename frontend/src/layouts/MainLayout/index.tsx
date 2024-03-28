@@ -6,7 +6,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Header />
-      {children}
+      <div className="m-auto max-w-[1600px]">{children}</div>
       <Footer />
     </>
   );
