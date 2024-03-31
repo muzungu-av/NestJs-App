@@ -1,74 +1,38 @@
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  // useNavigate
-} from "react-router-dom";
-
-// import { ReactNode } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import "./output.css";
-import { Biography } from "./pages/biography";
 import LogIn from "./pages/login";
-import MainLayout from "./layouts/MainLayout";
-import { AddingEditingPaint } from "./pages/Paint";
-import { PaintingsKopien } from "./pages/PaintingsKopien";
-import { AddingEditingKopien } from "./pages/AddingEditingKopien";
+import MultiLevelMenu from "./components/menu";
+import { menuItemsWithPaths } from "./components/menu/menuItems";
 
 const App: React.FC = () => {
   return (
     <Router>
+      <MultiLevelMenu menuItems={menuItemsWithPaths} />
       <Routes>
-        <Route path="/login" element={<LogIn />} />
-        <Route
-          path="/biography"
-          element={
-            <MainLayout>
-              <Biography />
-            </MainLayout>
+        <Route path="/" element={<LogIn />} />
+
+        {menuItemsWithPaths.map((item) => (
+          <Route
+            key={item.id}
+            path={item.path}
+            element={item.element && <item.element />}
+          />
+        ))}
+
+        {menuItemsWithPaths.map((item) => {
+          if (item.children) {
+            return item.children.map((child) => (
+              <Route
+                key={child.id}
+                path={child.path}
+                element={<child.element isEditMode={child.isEditMode} />}
+              />
+            ));
           }
-        />{" "}
-        <Route
-          path="/add-paint"
-          element={
-            <MainLayout>
-              <AddingEditingPaint isEditMode={false} />
-            </MainLayout>
-          }
-        />{" "}
-        <Route
-          path="/add-kopien"
-          element={
-            <MainLayout>
-              <AddingEditingKopien isEditMode={false} />
-            </MainLayout>
-          }
-        />{" "}
-        <Route
-          path="/edit-kopien"
-          element={
-            <MainLayout>
-              <AddingEditingKopien isEditMode={true} />
-            </MainLayout>
-          }
-        />{" "}
-        <Route
-          path="/edit-paint"
-          element={
-            <MainLayout>
-              <AddingEditingPaint isEditMode={true} />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/paintings-kopien"
-          element={
-            <MainLayout>
-              <PaintingsKopien />
-            </MainLayout>
-          }
-        />
+          return null;
+        })}
       </Routes>
     </Router>
   );
