@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import AuthStore from "../../store/AuthStore";
+import { menuItemsWithPaths } from "../../components/menu/menuItems";
 type FormData = {
   username: string;
   password: string;
@@ -21,14 +22,18 @@ const LogIn: React.FC = observer(() => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const first_rout = menuItemsWithPaths[0].path as string;
+
   const handleLogin = async () => {
     try {
       // Call the login method from AuthStore and wait for it to complete
       await AuthStore.login(formData);
+      console.log("AuthStore.isLoggedIn");
+      console.log(AuthStore.isLoggedIn);
       if (AuthStore.isLoggedIn) {
-        const token = AuthStore.token;
-        localStorage.setItem("token", token);
-        navigate("/menu");
+        const access_token = AuthStore.access_token;
+        localStorage.setItem("access_token", access_token);
+        navigate(first_rout);
       } else {
         console.error("Authentication error: Invalid response");
       }
