@@ -19,7 +19,7 @@ const Header = () => {
     <div className="header px-[5%] py-[1%] flex justify-between ">
       <h5
         onClick={() => {
-          navigate("/main");
+          navigate("/biography");
         }}
         className="font-apple text-lg cursor-pointer"
       >
