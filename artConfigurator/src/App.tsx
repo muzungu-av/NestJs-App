@@ -14,6 +14,7 @@ import MainLayout from "./layouts/MainLayout";
 import { AddingEditingPaint } from "./pages/Paint";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
 import { AddingEditingKopien } from "./pages/AddingEditingKopien";
+import { Videos } from "./pages/Videos/Videos";
 
 const App: React.FC = () => {
   return (
@@ -65,6 +66,14 @@ const App: React.FC = () => {
           element={
             <MainLayout>
               <PaintingsKopien />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/videos"
+          element={
+            <MainLayout>
+              <Videos />
             </MainLayout>
           }
         />
