@@ -80,6 +80,10 @@ const LogIn: React.FC = observer(() => {
                       onChange={handleInputChange}
                       value={formData.password}
                     ></input>
+                    <button className="btn-primary" onClick={handleLogin}>
+                      {" "}
+                      Log in{" "}
+                    </button>
                   </div>
                 </div>
               </div>
