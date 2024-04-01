@@ -10,9 +10,10 @@ export const configuration = () => ({
     process.env.ALLOWED_IMAGE_EXTENSIONS?.split(',').map((ext) => ext.trim()) ||
     [],
   SECRET_KEY: process.env.SECRET_KEY,
-  MONGO_DB_PORT: process.env.MONGO_DB_PORT,
+  MONGO_DB_URI: process.env.MONGO_DB_URI,
   BACKEND_PORT: process.env.BACKEND_PORT,
-  CORS_ORIGIN_URL: process.env.CORS_ORIGIN_URL,
+  CORS_ORIGIN_URL1: process.env.CORS_ORIGIN_URL1,
+  CORS_ORIGIN_URL2: process.env.CORS_ORIGIN_URL2,
   CLOUDINARY_URL: process.env.CLOUDINARY_URL,
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,

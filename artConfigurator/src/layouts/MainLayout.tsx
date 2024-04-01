@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
-import Header from "../components/index";
-import { useNavigate } from "react-router-dom";
+import Header from "../components/header/index";
+import { useNavigate } from "react-router";
+
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
   return (

@@ -1,11 +1,13 @@
 {
   "name": "art-configurator",
+  "license": "Commercial License",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "npm-run-all -p dev:css vite",
-    "build": "yarn run build:css && tsc && vite build",
+    "build:dev": "yarn run build:css && tsc && NODE_ENV=development vite build --mode development",
+    "build:prod": "yarn run build:css && tsc && NODE_ENV=production vite build --mode production",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "vite": "vite",
@@ -19,12 +21,14 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.8",
     "flowbite": "^2.3.0",
+    "lorem-ipsum": "^2.0.8",
     "mobx": "^6.12.1",
     "mobx-react": "^9.1.0",
     "mobx-react-lite": "^4.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
+    "react-router": "^6.22.3",
     "react-router-dom": "^6.22.2"
   },
   "devDependencies": {

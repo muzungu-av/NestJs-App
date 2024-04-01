@@ -90,10 +90,12 @@ pids
 **/.yarn/install-state.gz
 .pnp.*
 
+yarn.lock
+package.json
 #**/yarn.lock
 **/package-lock.json
 **/.vscode/
 **/img/
 **/*file_storage/
 /docs
-frontend/src/output.css
+**/output.css

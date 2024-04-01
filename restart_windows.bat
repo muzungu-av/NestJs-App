@@ -1,16 +1,19 @@
-:: Остановка контейнеров с использованием Docker Compose
-docker-compose stop
 
-:: Переход в каталог backend-api и выполнение сборки
+echo ************ Backend *************
 cd .\backend-api
+rmdir /s /q .\dist
 yarn build
 
-:: Возврат в основной каталог и переход в каталог frontend
-cd ..\frontend
-yarn build
+echo ************ Frontend ************
+cd .. && cd .\frontend
+rmdir /s /q .\dist
+yarn build:dev
 
-:: Возврат в основной каталог
+cd .. && cd .\artConfigurator
+echo ************ Art Config ************
+rmdir /s /q .\dist
+yarn build:dev
+
 cd ..
-
-:: Запуск контейнеров с использованием Docker Compose, с пересборкой (--build)
+echo ************ RUN DOCKER COMPOSE *************
 docker-compose up -d --build

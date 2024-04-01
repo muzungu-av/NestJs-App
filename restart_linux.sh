@@ -1,4 +1,4 @@
-docker compose down
+docker compose stop
 
 echo "************ Backend *************"
 cd ./backend-api
@@ -8,12 +8,12 @@ yarn build
 echo "************ Frontend ************"
 cd .. && cd ./frontend
 rm -r ./dist
-yarn build
+yarn build:dev
 
 cd .. && cd ./artConfigurator
 echo "************ Art Config ************"
 rm -r ./dist
-yarn build
+yarn build:dev
 
 cd ..
 echo "************ RUN DOCKER COMPOSE *************"

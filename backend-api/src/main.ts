@@ -7,9 +7,20 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter());
 
   app.enableCors({
-    allowedHeaders: ['content-type'], // с "*" не работает
-    origin: configuration().CORS_ORIGIN_URL,
+    allowedHeaders: [
+      'Content-Type',
+      'Origin',
+      'X-Requested-With',
+      'Accept',
+      'Authorization',
+    ],
+    exposedHeaders: ['Authorization'],
+    origin: [
+      configuration().CORS_ORIGIN_URL1,
+      configuration().CORS_ORIGIN_URL2,
+    ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   });
 
   await app.listen(configuration().BACKEND_PORT);

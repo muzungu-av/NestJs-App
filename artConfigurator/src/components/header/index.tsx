@@ -22,7 +22,7 @@ const Header = () => {
     >
       <h5
         onClick={() => {
-          navigate("/");
+          navigate("/main");
         }}
         className="font-apple text-lg cursor-pointer"
       >
