@@ -99,3 +99,4 @@ package.json
 **/*file_storage/
 /docs
 **/output.css
+artConfigurator/src/output.css
