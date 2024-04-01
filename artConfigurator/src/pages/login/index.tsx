@@ -41,11 +41,19 @@ const LogIn: React.FC = observer(() => {
       console.error("Authentication error:", error);
     }
   };
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
+  };
 
   return (
     <div>
       <form className="py-[5%] px-[5%]" onSubmit={handleLogin}>
-        <div className="flex flex-col justify-center gap-6">
+        <div
+          className="flex flex-col justify-center gap-6"
+          onKeyDown={handleKeyPress}
+        >
           <h2 className="font-italiana text-6xl text-center">Calvin Calva</h2>
           <div className="border-t-4 border-black flex gap-10">
             <div
@@ -80,10 +88,6 @@ const LogIn: React.FC = observer(() => {
                       onChange={handleInputChange}
                       value={formData.password}
                     ></input>
-                    <button className="btn-primary" onClick={handleLogin}>
-                      {" "}
-                      Log in{" "}
-                    </button>
                   </div>
                 </div>
               </div>
