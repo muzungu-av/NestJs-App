@@ -16,7 +16,10 @@ const Header = () => {
   //     );
   //   };
   return (
-    <div className="header px-[5%] py-[1%] flex justify-between ">
+    <div
+      style={{ position: "sticky", zIndex: 100 }}
+      className="header px-[5%] py-[1%] flex justify-between "
+    >
       <h5
         onClick={() => {
           navigate("/main");

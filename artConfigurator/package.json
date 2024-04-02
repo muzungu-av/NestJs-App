@@ -6,12 +6,13 @@
   "type": "module",
   "scripts": {
     "dev": "npm-run-all -p dev:css vite",
+    "build:win": "yarn vite build --mode development",
     "build:dev": "yarn run build:css && tsc && NODE_ENV=development vite build --mode development",
     "build:prod": "yarn run build:css && tsc && NODE_ENV=production vite build --mode production",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "vite": "vite",
-    "build:css": "yarn run generate:css -- --minify",
+    "build:css": "yarn run generate:css --minify",
     "dev:css": "tailwindcss -w -i ./src/input.css -o ./src/output.css",
     "generate:css": "tailwindcss -i ./src/input.css -o ./src/output.css"
   },
