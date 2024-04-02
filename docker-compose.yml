@@ -74,7 +74,7 @@ services:
     image: ugleiton/mongo-gui
     restart: unless-stopped
     ports:
-      - 2025:2025
+      - 4321:4321
     environment:
       - MONGO_URL=${MONGO_DB_URI}
     networks:

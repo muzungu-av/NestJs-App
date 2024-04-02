@@ -20,7 +20,7 @@ async function bootstrap() {
       configuration().CORS_ORIGIN_URL2,
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
   });
 
   await app.listen(configuration().BACKEND_PORT);
