@@ -27,6 +27,15 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     }
   };
 
+  const handleDeletePhoto = () => {
+    const confirmation = window.confirm(
+      "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
+    );
+    if (confirmation) {
+      setSelectedPhoto(undefined);
+    }
+  };
+
   const handleEditorChange = (event: any, editor: any) => {
     const data = editor.getData();
     console.log({ event, editor, data });
@@ -51,7 +60,10 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
               <img src={addPhoto} /> Foto ändern
             </button>
           ) : (
-            <button className="w-[100%] flex justify-center m-2">
+            <button
+              className="w-[100%] flex justify-center m-2"
+              onClick={handleDeletePhoto}
+            >
               <img src={deletePhoto} /> Foto löschen
             </button>
           )}{" "}
