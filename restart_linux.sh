@@ -1,4 +1,4 @@
-docker compose stop
+docker compose down
 
 echo "************ Backend *************"
 cd ./backend-api
