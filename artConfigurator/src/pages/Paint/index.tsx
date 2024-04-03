@@ -1,14 +1,32 @@
-import photo from "./../../assets/images/EmptyPhoto.png";
+import emptyPhoto from "./../../assets/images/EmptyPhoto.png";
 import addPhoto from "./../../assets/images/Add_photo.png";
 import editPhoto from "./../../../../frontend/src/assets/images/BoatPicture.jpg";
 import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { loremIpsum } from "lorem-ipsum";
+import { useState } from "react";
 interface AddingEditingPaintProps {
   isEditMode: boolean;
 }
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
+  const [selectedPhoto, setSelectedPhoto] = useState<string | undefined>(
+    undefined
+  );
+
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedPhoto(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleEditorChange = (event: any, editor: any) => {
     const data = editor.getData();
     console.log({ event, editor, data });
@@ -24,7 +42,9 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           {isEditMode ? (
             <img className="mb-2" src={editPhoto} />
           ) : (
-            <img className="mb-2" src={photo} />
+            <label htmlFor="file-input">
+              <img className="mb-2" src={selectedPhoto || emptyPhoto} />
+            </label>
           )}
           {isEditMode ? (
             <button className="w-[100%] flex justify-center m-2 ">
@@ -61,6 +81,14 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           <div className="flex justify-end m-6">
             <div className="font-federo text-2xl mr-6">Auf Seite posten: </div>
             <div className="flex flex-col items-start mb-4 w-[20%]">
+              <input
+                type="file"
+                accept="image/*"
+                id="file-input"
+                className="hidden" // Скрываем input для выбора файла
+                onChange={handleFileInputChange}
+              />
+
               <div className="flex items-center mb-4">
                 <input
                   id="default-radio-1"
