@@ -43,10 +43,10 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             data={loremIpsum({
               count: 33,
               format: "plain",
-              units: "sentences"
+              units: "sentences",
             })}
             config={{
-              toolbar: []
+              toolbar: [],
             }}
             onChange={(event: any, editor: any) => {
               handleEditorChange(event, editor);
@@ -69,20 +69,25 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                   name="default-radio"
                   className="w-4 h-4 text-[#895C06] bg-gray-100 border-[#895C06] focus:ring-[#895C06] dark:focus:ring-[#895C06] dark:ring-[#895C06] focus:ring-2 dark:bg-gray-700 dark:border-[#895C06]"
                 ></input>
-                <label className="font-federo text-2xl text-gray-900 dark:text-gray-300 ml-2">
+                <label
+                  htmlFor="default-radio-1"
+                  className="font-federo text-2xl text-gray-900 dark:text-gray-300 ml-2"
+                >
                   Gemälde
                 </label>
               </div>
               <div className="flex items-center">
                 <input
-                  checked
                   id="default-radio-2"
                   type="radio"
                   value=""
                   name="default-radio"
                   className="w-4 h-4 text-[#895C06] bg-gray-100 border-[#895C06] focus:ring-[#895C06] dark:focus:ring-[#895C06] dark:ring-[#895C06] focus:ring-2 dark:bg-gray-700 dark:border-[#895C06]"
                 ></input>
-                <label className="font-federo text-2xl text-gray-900 dark:text-gray-300 ml-2">
+                <label
+                  htmlFor="default-radio-2"
+                  className="font-federo text-2xl text-gray-900 dark:text-gray-300 ml-2"
+                >
                   Atelier
                 </label>
               </div>
