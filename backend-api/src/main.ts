@@ -5,7 +5,7 @@ import { configuration } from 'config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter());
-
+  const corsOrigins = configuration().CORS_ORIGIN_URLS.split(',');
   app.enableCors({
     allowedHeaders: [
       'Content-Type',
@@ -15,10 +15,7 @@ async function bootstrap() {
       'Authorization',
     ],
     exposedHeaders: ['Authorization'],
-    origin: [
-      configuration().CORS_ORIGIN_URL1,
-      configuration().CORS_ORIGIN_URL2,
-    ],
+    origin: corsOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
   });

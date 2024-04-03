@@ -99,3 +99,4 @@ package.json
 **/*file_storage/
 /docs
 **/output.css
+**/src/output.css
