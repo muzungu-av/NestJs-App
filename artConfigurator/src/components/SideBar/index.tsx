@@ -33,8 +33,8 @@ const SideBar = ({ setIsClicked, isClicked, buttonRef }: SideBar) => {
       <div
         className={`opacity-90 font-federo ${
           isClicked
-            ? "translate-x-0 transition-all duration-500"
-            : "translate-x-[-300px] transition-all duration-500"
+            ? "translate-x-0 transition-all duration-700"
+            : "translate-x-[-300px] transition-all duration-700"
         }`}
       >
         <aside

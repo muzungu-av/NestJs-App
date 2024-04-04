@@ -9,11 +9,13 @@ interface SideBar {
 const Header = ({ setIsClicked, isClicked, buttonRef }: SideBar) => {
   const navigate = useNavigate();
   return (
-    <div className="header px-[5%] py-[1%] flex justify-between ">
+    <div className="header px-[1%] py-[1%] flex justify-between ">
       <img
         src={Burger}
         ref={buttonRef}
-        className={`${isClicked ? "rotate-90" : ""} `}
+        className={`transition-all duration-700 ${
+          isClicked ? "rotate-[270deg]" : ""
+        } `}
         onClick={() => setIsClicked(!isClicked)}
       />
       <h5
