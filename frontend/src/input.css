@@ -20,8 +20,6 @@
   }
 }
 .swiper-wrapper {
-  padding-block: 5%;
-  padding-left: 5%;
   max-width: 1400px !important;
 }
 .swiper-button-next {

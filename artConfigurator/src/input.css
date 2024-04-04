@@ -3,10 +3,10 @@
 @import "tailwindcss/utilities";
 
 .btn-primary {
-  @apply rounded-md bg-primary-50 font-federo;
+  @apply rounded-md bg-primary-50 px-4 py-2  font-federo;
 }
 .btn-size {
-  @apply rounded-[13px] font-federo text-black    border-[#000000];
+  @apply rounded-[13px] font-federo text-black  border-[#000000];
   border: 3px solid #000000;
   &:hover,
   &:focus,

@@ -3,11 +3,11 @@ import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
 const Footer = () => {
   return (
-    <footer className="bg-black  ">
+    <footer className="bg-black ">
       <div className="px-[5%] py-[5%] m-auto  max-w-[1600px]">
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-10 flex-col lg:flex-row">
           <h3 className="font-apple text-2xl text-white">Calvin Calva</h3>
-          <div className="flex justify-between text-white gap-8 font-federo text-xl">
+          <div className="flex flex-col lg:flex-row justify-between text-white gap-8 font-federo text-xl">
             <p>Über mich</p>
             <p>Gemälde</p>
             <p>Dibond</p>
