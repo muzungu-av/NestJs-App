@@ -5,6 +5,8 @@ import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useState } from "react";
+import MainLayout from "../../layouts/MainLayout";
+
 interface AddingEditingPaintProps {
   isEditMode: boolean;
 }
@@ -63,7 +65,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   };
 
   return (
-    <>
+    <MainLayout>
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
         Bearbeiten der Gemälde Seite
       </div>
@@ -101,12 +103,6 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             onChange={(event: any, editor: any) => {
               handleEditorChange(event, editor);
             }}
-            // onBlur={(event, editor) => {
-            //   console.log("Blur.", editor);
-            // }}
-            // onFocus={(event, editor) => {
-            //   console.log("Focus.", editor);
-            // }}
           />
           <div className="flex justify-end m-6">
             <div className="font-federo text-2xl mr-6">Auf Seite posten: </div>
@@ -163,6 +159,6 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           </div>
         </div>
       </div>
-    </>
+    </MainLayout>
   );
 };

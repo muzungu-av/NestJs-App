@@ -1,4 +1,5 @@
 import photo from "./../../assets/images/EmptyPhoto.png";
+import MainLayout from "../../layouts/MainLayout";
 
 export const PaintingsKopien = () => {
   const kopiens = [
@@ -21,7 +22,7 @@ export const PaintingsKopien = () => {
     }
   ];
   return (
-    <>
+    <MainLayout>
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">Kopien</div>
       <button className="btn-primary w-[230px] h-[45px] p-0 text-base  mx-[5%]">
         Neue Kopie hinzufügen +
@@ -79,6 +80,6 @@ export const PaintingsKopien = () => {
           );
         })}
       </div>
-    </>
+    </MainLayout>
   );
 };

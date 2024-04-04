@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import AuthStore from "../../store/AuthStore";
-import { menuItemsWithPaths } from "../../components/Menu/menuItems";
+import { menuItemsWithPaths } from "../../App.tsx";
 type FormData = {
   username: string;
   password: string;
@@ -26,7 +26,6 @@ const LogIn: React.FC = observer(() => {
 
   const handleLogin = async () => {
     try {
-      // Call the login method from AuthStore and wait for it to complete
       await AuthStore.login(formData);
       console.log("AuthStore.isLoggedIn");
       console.log(AuthStore.isLoggedIn);
@@ -88,10 +87,6 @@ const LogIn: React.FC = observer(() => {
                       onChange={handleInputChange}
                       value={formData.password}
                     ></input>
-                    {/* <button className="btn-primary" onClick={handleLogin}>
-                      {" "}
-                      Log in{" "}
-                    </button> */}
                   </div>
                 </div>
               </div>
