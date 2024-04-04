@@ -8,9 +8,9 @@ export const Contacts: React.FC = () => {
     <div className="py-[5%] px-[5%]">
       <div className="flex flex-col justify-center gap-6">
         <h2 className="font-italiana text-6xl">Kontaktdaten</h2>
-        <div className="border-t-4 border-black flex gap-10">
+        <div className="lg:border-t-4 lg:border-black flex flex-col lg:flex-row gap-10">
           <div
-            className="w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover"
+            className="lg:w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover"
             style={{ backgroundImage: `url(${ContactPic})` }}
           >
             <div className="flex flex-col items-start px-[5%] mb-8">
@@ -34,12 +34,12 @@ export const Contacts: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="w-[50%]">
+          <div className="lg:w-[50%]">
             <h3 className="font-federo text-2xl py-10">
               Oder schreiben Sie mir
             </h3>
             <div className="flex flex-col gap-5 font-poppins text-sm font-medium">
-              <div className="flex gap-10">
+              <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-[50%]">
                   <label htmlFor="name">Name</label>
                   <input
@@ -57,7 +57,7 @@ export const Contacts: React.FC = () => {
                   ></input>
                 </div>
               </div>
-              <div className="flex gap-10">
+              <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-full">
                   <label htmlFor="email">Email</label>
                   <input
@@ -75,7 +75,7 @@ export const Contacts: React.FC = () => {
                   ></input>
                 </div>
               </div>
-              <div className="flex gap-10">
+              <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-full">
                   <label htmlFor="nachricht">Nachricht</label>
                   <input
@@ -85,6 +85,7 @@ export const Contacts: React.FC = () => {
                   ></input>
                 </div>
               </div>
+              <button className="btn-primary self-end">Senden</button>
             </div>
           </div>
         </div>

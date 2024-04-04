@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import Burger from "../../assets/icons/burger.svg";
 
-// interface MenuLinkProps {
-//   to: string;
-//   children: React.ReactNode;
-// }
-const Header = () => {
+interface SideBar {
+  setIsClicked: any;
+  isClicked: boolean;
+  buttonRef: any;
+}
+const Header = ({ setIsClicked, isClicked, buttonRef }: SideBar) => {
   const navigate = useNavigate();
   //   const MenuLink: React.FC<MenuLinkProps> = ({ to, children }) => {
   //     return (
@@ -16,10 +18,13 @@ const Header = () => {
   //     );
   //   };
   return (
-    <div
-      style={{ position: "sticky", zIndex: 100 }}
-      className="header px-[5%] py-[1%] flex justify-between "
-    >
+    <div className="header px-[5%] py-[1%] flex justify-between ">
+      <img
+        src={Burger}
+        ref={buttonRef}
+        className={`${isClicked ? "rotate-90" : ""} `}
+        onClick={() => setIsClicked(!isClicked)}
+      />
       <h5
         onClick={() => {
           navigate("/biography");
