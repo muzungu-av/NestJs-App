@@ -1,11 +1,13 @@
 import NoPic from "../../assets/images/NoPic.jpg";
 
 interface Radio {
-  name: string;
-  first: string;
-  second: string;
+  radio: {
+    name: string;
+    first: string;
+    second: string;
+  };
 }
-const PicSection = ({ first, second, name }: Radio) => {
+const PicSection = ({ radio: { first, second, name } }: Radio) => {
   return (
     <div className="flex justify-between py-[5%]">
       <img src={NoPic} className="" />

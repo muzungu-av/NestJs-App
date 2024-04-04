@@ -27,7 +27,7 @@ const Header = ({ setIsClicked, isClicked, buttonRef }: SideBar) => {
       />
       <h5
         onClick={() => {
-          navigate("/main");
+          navigate("/biography");
         }}
         className="font-apple text-lg cursor-pointer"
       >
