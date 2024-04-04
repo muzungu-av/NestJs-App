@@ -187,6 +187,7 @@ export class ImageService {
     userId: string,
     file: Express.Multer.File,
     description: string,
+    typeOfImage: string,
   ): Promise<ImgFileProcessingResult> {
     return new Promise((resolve, reject) => {
       this.handler
@@ -196,6 +197,7 @@ export class ImageService {
             // save to mongo
             try {
               result.description = description;
+              result.typeOfImage = typeOfImage;
               winstonLogger.info(`${JSON.stringify(result)}`);
               const createImageDto = new CreateImageDto(result);
               await this.imageModel.create(createImageDto);

@@ -21,6 +21,7 @@ export class CreateImageDto {
   sizeBytes: string;
   createdAt: string;
   description: string;
+  typeOfImage: string;
   imageUrl: string;
   owner: User;
   dimension: AllDimension;
@@ -35,6 +36,7 @@ export class CreateImageDto {
     this.sizeBytes = imgFileProcessingResult.sizeBytes?.toString() || '';
     this.createdAt = imgFileProcessingResult.createdAt?.toISOString() || '';
     this.description = imgFileProcessingResult.description || '';
+    this.typeOfImage = imgFileProcessingResult.typeOfImage || '';
     this.owner = imgFileProcessingResult.owner;
     this.dimension = imgFileProcessingResult.dimension;
   }

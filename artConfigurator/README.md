@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+# Картины
 
 ## Setup
 

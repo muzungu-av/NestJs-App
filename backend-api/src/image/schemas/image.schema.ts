@@ -37,6 +37,9 @@ export class Image {
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: true })
+  typeOfImage: string;
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   owner: User;
 
