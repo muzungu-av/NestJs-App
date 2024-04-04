@@ -1,4 +1,5 @@
 import NoPic from "../../assets/images/NoPic.jpg";
+import MainLayout from "../../layouts/MainLayout";
 
 interface Radio {
   radio: {
@@ -68,16 +69,18 @@ const PicSection = ({ radio: { first, second, name } }: Radio) => {
 
 export const Pictures = () => {
   return (
-    <div className="px-[5%] pt-[2%]">
-      <h3 className="font-italiana text-5xl">
-        Liste der Bilder auf der Website
-      </h3>
+    <MainLayout>
+      <div className="px-[5%] pt-[2%]">
+        <h3 className="font-italiana text-5xl">
+          Liste der Bilder auf der Website
+        </h3>
 
-      <button className="btn-primary mt-10">Neues Bild hinzufügen +</button>
+        <button className="btn-primary mt-10">Neues Bild hinzufügen +</button>
 
-      <PicSection radio={{ name: "1", first: "radio1", second: "radio2" }} />
-      <PicSection radio={{ name: "2", first: "radio3", second: "radio4" }} />
-      <PicSection radio={{ name: "3", first: "radio5", second: "radio6" }} />
-    </div>
+        <PicSection radio={{ name: "1", first: "radio1", second: "radio2" }} />
+        <PicSection radio={{ name: "2", first: "radio3", second: "radio4" }} />
+        <PicSection radio={{ name: "3", first: "radio5", second: "radio6" }} />
+      </div>
+    </MainLayout>
   );
 };

@@ -4,11 +4,6 @@ import SideBar from "../components/SideBar";
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const [isClicked, setIsClicked] = useState(true);
   const buttonRef = useRef<HTMLDivElement | null>(null);
-  interface SideBar {
-    setIsClicked: any;
-    isClicked: boolean;
-    buttonRef: any;
-  }
   return (
     <>
       <Header

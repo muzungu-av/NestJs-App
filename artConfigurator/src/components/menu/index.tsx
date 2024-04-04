@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import arrow from "../../assets/icons/arrow.svg";
 interface MenuItemProps {
   item: MenuItemData;
+  className?: string;
 }
 
 interface MultiLevelMenuProps {
@@ -18,10 +19,9 @@ interface MenuItemData {
   isEditMode?: boolean;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ item }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Открываем/закрываем дочерние элементы меню
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -39,18 +39,44 @@ const MenuItem: React.FC<MenuItemProps> = ({ item }) => {
     <li>
       {item.path ? (
         <Link to={item.path} onClick={handleClick}>
-          {item.name}
+          <button
+            type="button"
+            className={`${className} flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
+            aria-controls="dropdown-example"
+            data-collapse-toggle="dropdown-example"
+          >
+            <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+              {item.name}
+            </span>
+          </button>
         </Link>
       ) : (
         <div onClick={handleClick}>
-          {item.name}
-          {item.children && <span>{isOpen ? "-" : "+"}</span>}
+          <button
+            type="button"
+            className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            aria-controls="dropdown-example"
+            data-collapse-toggle="dropdown-example"
+          >
+            <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+              {item.name}
+            </span>
+            <img
+              src={arrow}
+              className={`w-4 h-4 ${isOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+          {/* {item.children && <span>{isOpen ? "-" : "+"}</span>} */}
         </div>
       )}
       {isOpen && item.children && (
         <ul>
           {item.children.map((child) => (
-            <MenuItem key={child.id} item={child} />
+            <MenuItem
+              key={child.id}
+              item={child}
+              className="font-federo text-sm ml-2"
+            />
           ))}
         </ul>
       )}
