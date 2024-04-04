@@ -11,7 +11,6 @@ interface AddingEditingPaintProps {
   isEditMode: boolean;
 }
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
-  //Photo
   const [selectedPhoto, setSelectedPhoto] = useState<string | undefined>(
     undefined
   );
@@ -38,12 +37,11 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     }
   };
 
-  // Text Editor
   const default_text = "Geben Sie eine Beschreibung in dieses Feld ein...";
 
   const [editorData, setEditorData] = useState(default_text);
 
-  const handleEditorChange = (event: any, editor: any) => {
+  const handleEditorChange = (editor: any) => {
     const data = editor.getData();
     setEditorData(data);
   };
@@ -53,7 +51,6 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     setEditorData(newData);
   };
 
-  // Radio
   const [radioValue, setRadioValue] = useState<string | undefined>();
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRadioValue(event.target.value);
@@ -61,7 +58,6 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
   const handleSaveClick = () => {
     console.log("Selected radio value:", radioValue);
-    // Другие действия при сохранении...
   };
 
   return (
@@ -100,14 +96,13 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             config={{
               toolbar: [],
             }}
-            onChange={(event: any, editor: any) => {
-              handleEditorChange(event, editor);
+            onChange={(editor: any) => {
+              handleEditorChange(editor);
             }}
           />
           <div className="flex justify-end m-6">
             <div className="font-federo text-2xl mr-6">Auf Seite posten: </div>
             <div className="flex flex-col items-start mb-4 w-[20%]">
-              {/* Скрытый input для выбора файла */}
               <input
                 type="file"
                 accept="image/*"

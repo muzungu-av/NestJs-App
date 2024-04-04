@@ -1,51 +1,38 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import MainPageBg from "../../assets/images/MainPageBg.jpg";
-import { get } from "../../api/axiosInstance";
+// import { get } from "../../api/axiosInstance";
 import galleryPic1 from "../../assets/images/galleryPic1.jpg";
 import galleryPic2 from "../../assets/images/galleryPic2.jpg";
 import galleryPic3 from "../../assets/images/galleryPic3.jpg";
-import gallery from "../../assets/images/gallery.jpg";
 
-const galleryArr = [galleryPic1, galleryPic2, galleryPic3];
 export const GallerySection = () => {
-  const sc = import.meta.env.VITE_SCHEME;
-  const bu = import.meta.env.VITE_BACKEND_URL.replace(/https?:\/\//g, "");
-  const ai = import.meta.env.VITE_API_IMAGE;
-  const BACKEND_API =
-    sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
-  const countImgs = 3;
-  const params = { fields: "miniImageUrl" };
-  const [paintings, setPaintings] = useState<any[]>([]);
+  // const sc = import.meta.env.VITE_SCHEME;
+  // const bu = import.meta.env.VITE_BACKEND_URL.replace(/https?:\/\//g, "");
+  // const ai = import.meta.env.VITE_API_IMAGE;
+  // const BACKEND_API =
+  //   sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+  // const countImgs = 3;
+  // const params = { fields: "miniImageUrl" };
+  // const [paintings, setPaintings] = useState<any[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await get(
-          BACKEND_API,
-          `${ai}/block/${countImgs}`,
-          false,
-          false,
-          params
-        );
-        setPaintings(response.data);
-      } catch (error) {
-        console.error("Error fetching paintings:", error);
-      }
-    };
+  // // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await get(
+  //         BACKEND_API,
+  //         `${ai}/block/${countImgs}`,
+  //         false,
+  //         false,
+  //         params
+  //       );
+  //       setPaintings(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching paintings:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
-
-  function generateImageBlock(paintings: any[], index: number) {
-    if (index >= 0 && index < paintings.length) {
-      const borderStyle = "border-[15px] border-[#240909]";
-      const src = paintings[index].miniImageUrl;
-      return <img className={borderStyle} src={src} />;
-    } else {
-      console.log("Invalid index or paintings array is empty.");
-      return <></>;
-    }
-  }
+  //   fetchData();
+  // }, []);
 
   return (
     <>
