@@ -8,6 +8,7 @@ import { AboutMe } from "./pages/AboutMe";
 import "./App.css";
 import "./output.css";
 import MainLayout from "./layouts/MainLayout";
+import { AboutPainting } from "./pages/AboutPainting";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
             </MainLayout>
           }
         />
+        <Route path="/about-painting" element={<AboutPainting />} />
         <Route path="/paintings" element={<Paintings pageType="Gemälde" />} />
         <Route path="/dibond" element={<Paintings pageType="Atelier" />} />
         <Route
