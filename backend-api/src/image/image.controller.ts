@@ -42,6 +42,7 @@ export class ImageController {
   async uploadFileAndPassValidation(
     @UploadedFile() file: Express.Multer.File,
     @Body('description') description: string,
+    @Body('typeOfImage') typeOfImage: string,
     @Req() request: any,
     @Res() response: any,
   ) {
@@ -54,6 +55,7 @@ export class ImageController {
         user.userId,
         file,
         description,
+        typeOfImage,
       );
       return response.status(201).json({ uid: result.uid });
     } catch (error) {

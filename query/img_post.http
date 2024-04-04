@@ -1,14 +1,22 @@
 
-POST http://localhost:3000/api/image
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+POST http://172.18.0.103:4001/api/image
+Content-Type: multipart/form-data; boundary=------WebKitFormBoundaryk5OnU8GNyS4TxEjm
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5N2Q0YWVhOTQ1YWVkNDRhMGNmOTIiLCJlbWFpbCI6ImFiY0BnbC5jb20iLCJpYXQiOjE3MTIwNDk1MTEsImV4cCI6MTcxMjEzNTkxMX0.AAQz2Uv0z3HBD9SkbRrZGbgtyTHfguKTJh2kFvVpjcg
 
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="text"
-
-title
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="file"; filename="1.png"
+------WebKitFormBoundaryk5OnU8GNyS4TxEjm
+Content-Disposition: form-data; name="file"; filename="error.png"
 Content-Type: image/png
 
+
+------WebKitFormBoundaryk5OnU8GNyS4TxEjm
+Content-Disposition: form-data; name="description"
+
+Geben Sie eine Beschreibung in dieses Feld ein...
+------WebKitFormBoundaryk5OnU8GNyS4TxEjm
+Content-Disposition: form-data; name="typeOfImage"
+
+isAtelier
+------WebKitFormBoundaryk5OnU8GNyS4TxEjm--
+
 < ../backend-api/img/1.png
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
+------WebKitFormBoundaryk5OnU8GNyS4TxEjm--
