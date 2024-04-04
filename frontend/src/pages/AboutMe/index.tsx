@@ -10,12 +10,12 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
     return (
       <div className="py-[5%] px-[5%]">
         <h3 className="font-italiana text-6xl pb-8 text-center">Biografie</h3>
-        <div className="flex justify-around items-start ">
+        <div className="flex items-center lg:justify-around lg:items-start flex-col lg:flex-row">
           <div>
             <div className="rounded-full w-[220px] h-[220px] mb-4 bg-[#D9D9D9]"></div>
             <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
           </div>
-          <div className="flex flex-col w-[50%] gap-8">
+          <div className="flex flex-col lg:w-[50%] gap-8">
             <p className="font-federo">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit
               quam provident illum sapiente harum recusandae, atque et quisquam
@@ -50,7 +50,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
             )}
 
             {isMain && (
-              <p className="font-apple w-[60%] self-center pt-5">
+              <p className="font-apple lg:w-[60%] self-center pt-5">
                 “ Lorem Ipsum is simply dummy text of the printing and
                 typesetting industry ”
               </p>
@@ -60,7 +60,9 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
           {isMain && (
             <button
               className={
-                isMain ? "btn-primary self-end" : "btn-primary self-end"
+                isMain
+                  ? "btn-primary self-center lg:self-end mt-4 lg:mt-0"
+                  : "btn-primary self-center lg:self-end mt-4 lg:mt-0"
               }
             >
               Mehr erfahren
@@ -83,16 +85,16 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
   const VideoSection: React.FC = () => {
     const VideoBlock = ({ picture }: { picture: string }) => {
       return (
-        <div className="flex justify-between  gap-10 px-[5%]">
+        <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-10 px-[5%]">
           <div
-            className="w-[600px] h-[300px] flex justify-center items-center"
+            className="w-[320px] h-[170px] sm:w-[500px] sm:h-[250px] lg:w-[600px] lg:h-[300px] flex justify-center items-center"
             style={{ backgroundImage: `url(${picture})` }}
           >
             <div className="btn-play ">
               <img src={Play} />
             </div>
           </div>
-          <div className="w-[50%] flex flex-col gap-4">
+          <div className="lg:w-[50%] flex flex-col gap-4">
             <h3 className="font-italiana text-2xl ">Videoname</h3>
             <p className="font-federo text-lg">
               Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -100,7 +102,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
               ever since the 1500s, when an unknown printer took a galley of
               type and scrambled it to make a type specimen book.
             </p>
-            <button className="btn-primary	">Mehr erfahren</button>
+            <button className="btn-primary">Mehr erfahren</button>
           </div>
         </div>
       );

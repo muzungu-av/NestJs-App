@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import AuthStore from "../../store/AuthStore";
-import { menuItemsWithPaths } from "../../components/menu/menuItems";
+import { menuItemsWithPaths } from "../../components/Menu/menuItems";
 type FormData = {
   username: string;
   password: string;

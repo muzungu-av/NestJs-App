@@ -6,20 +6,19 @@ import GalleryPic2 from "../../assets/images/galleryPic2.jpg";
 import SitPic from "../../assets/images/SitPic.jpg";
 import { Contacts } from "../../components/Contacts";
 import { AboutMe } from "../AboutMe";
-import { GallerySection } from "../../components/GallerySection";
 export const Main: React.FC = () => {
   const slidesArr = [SmallPic, SmallPic, SmallPic, SmallPic];
 
   const HeroSection: React.FC = () => {
     return (
-      <div className="bg-[#F5F5F5]">
+      <div className="bg-[#F5F5F5] mt-10">
         <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
           <div className="self-center">
-            <img className=" border-[15px] border-[#240909]" src={SmallPic} />
+            <img className=" border-[15px] border-[#240909] " src={SmallPic} />
           </div>
           <div>
             <img
-              className=" border-[15px] border-[#240909]"
+              className=" border-[15px] border-[#240909] "
               src={GalleryPic2}
             />
           </div>
@@ -30,7 +29,6 @@ export const Main: React.FC = () => {
       </div>
     );
   };
-
 
   const BeforeSliderSection: React.FC = () => {
     return (
@@ -51,7 +49,6 @@ export const Main: React.FC = () => {
   return (
     <MainLayout>
       <HeroSection />
-      <GallerySection />
       <AboutMe isMain={true} />
       <BeforeSliderSection />
       <PaintingSlider slides={slidesArr} />
