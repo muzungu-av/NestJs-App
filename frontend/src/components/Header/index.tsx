@@ -1,16 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import burger from "../../assets/icons/burger.svg";
 import styles from "./header.module.scss";
-import { useState, useEffect, useRef } from "react";
-import Burger from "../../assets/icons/burger.svg";
+import { useState, useEffect } from "react";
 
 interface MenuLinkProps {
   to: string;
   children: React.ReactNode;
 }
 const Header = () => {
-  const [isClicked, setIsClicked] = useState(true);
-  const buttonRef = useRef<HTMLDivElement | null>(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [pageWidth, setPageWidth] = useState(window.innerWidth);
   const handleResize = () => {
@@ -64,9 +61,7 @@ const Header = () => {
   const BurgerMenu = () => {
     return (
       <div className={isMenuOpen ? styles.openedMenu : styles.menu}>
-        
         <nav className="navLinks font-federo  gap-6 text-xl flex flex-col items-center pt-10">
-          
           <MenuLink to="/about-me">Biografie</MenuLink>
           <MenuLink to="/paintings">Gemälde</MenuLink>
           <MenuLink to="/dibond">Atelier</MenuLink>

@@ -1,6 +1,9 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { Main } from "./pages/Main";
 import { Paintings } from "./pages/Paintings";
 import Contacts from "./pages/ContactsPage";
@@ -11,6 +14,7 @@ import MainLayout from "./layouts/MainLayout";
 import { AboutPainting } from "./pages/AboutPainting";
 
 const App: React.FC = () => {
+
   return (
     <Router>
       <Routes>
