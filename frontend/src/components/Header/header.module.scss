@@ -1,0 +1,18 @@
+.menu {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  top: -100%;
+  transition: all 1s ease-in-out;
+}
+.openedMenu {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  top: 96px;
+  transition: all 1s ease-in-out;
+}

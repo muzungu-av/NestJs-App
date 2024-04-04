@@ -3,13 +3,12 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import "./output.css";
 import LogIn from "./pages/login";
-import MultiLevelMenu from "./components/menu";
-import { menuItemsWithPaths } from "./components/menu/menuItems";
+import MultiLevelMenu from "./components/Menu";
+import { menuItemsWithPaths } from "./components/Menu/menuItems";
 
 const App: React.FC = () => {
   return (
     <Router>
-      <MultiLevelMenu menuItems={menuItemsWithPaths} />
       <Routes>
         <Route path="/" element={<LogIn />} />
 

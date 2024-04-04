@@ -7,13 +7,13 @@ export const Contacts: React.FC = () => {
   return (
     <div className="py-[5%] px-[5%]">
       <div className="flex flex-col justify-center gap-6">
-        <h2 className="font-italiana text-6xl">Kontaktdaten</h2>
-        <div className="border-t-4 border-black flex gap-10">
+        <h2 className="font-italiana text-4xl lg:text-6xl">Kontaktdaten</h2>
+        <div className="lg:border-t-4 lg:border-black flex flex-col lg:flex-row gap-10">
           <div
-            className="w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover"
+            className="lg:w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover min-h-[400px] "
             style={{ backgroundImage: `url(${ContactPic})` }}
           >
-            <div className="flex flex-col items-start px-[5%] mb-8">
+            <div className="flex flex-col items-center lg:items-start px-[5%] mb-8">
               <div className="bg-primary-100 rounded-full w-[120px] h-[120px] mb-4 " />
               <h4 className="font-apple text-center text-base text-white">
                 Calvin Calva
@@ -34,12 +34,12 @@ export const Contacts: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="w-[50%]">
+          <div className="lg:w-[50%]">
             <h3 className="font-federo text-2xl py-10">
               Oder schreiben Sie mir
             </h3>
             <div className="flex flex-col gap-5 font-poppins text-sm font-medium">
-              <div className="flex gap-10">
+              <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-[50%]">
                   <label htmlFor="name">Name</label>
                   <input
@@ -57,7 +57,7 @@ export const Contacts: React.FC = () => {
                   ></input>
                 </div>
               </div>
-              <div className="flex gap-10">
+              <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-full">
                   <label htmlFor="email">Email</label>
                   <input
@@ -75,7 +75,7 @@ export const Contacts: React.FC = () => {
                   ></input>
                 </div>
               </div>
-              <div className="flex gap-10">
+              <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-full">
                   <label htmlFor="nachricht">Nachricht</label>
                   <input
@@ -85,6 +85,7 @@ export const Contacts: React.FC = () => {
                   ></input>
                 </div>
               </div>
+              <button className="btn-primary self-end">Senden</button>
             </div>
           </div>
         </div>

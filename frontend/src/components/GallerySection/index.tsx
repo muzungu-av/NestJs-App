@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import MainPageBg from "../../assets/images/MainPageBg.jpg";
 import { get } from "../../api/axiosInstance";
+import galleryPic1 from "../../assets/images/galleryPic1.jpg";
+import galleryPic2 from "../../assets/images/galleryPic2.jpg";
+import galleryPic3 from "../../assets/images/galleryPic3.jpg";
+import gallery from "../../assets/images/gallery.jpg";
 
+const galleryArr = [galleryPic1, galleryPic2, galleryPic3];
 export const GallerySection = () => {
   const sc = import.meta.env.VITE_SCHEME;
   const bu = import.meta.env.VITE_BACKEND_URL.replace(/https?:\/\//g, "");
@@ -11,7 +16,6 @@ export const GallerySection = () => {
   const countImgs = 3;
   const params = { fields: "miniImageUrl" };
   const [paintings, setPaintings] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,19 +28,13 @@ export const GallerySection = () => {
           params
         );
         setPaintings(response.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching paintings:", error);
-        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   function generateImageBlock(paintings: any[], index: number) {
     if (index >= 0 && index < paintings.length) {
@@ -50,20 +48,40 @@ export const GallerySection = () => {
   }
 
   return (
-    <div className="" style={{ backgroundImage: `url(${MainPageBg})` }}>
-      <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
-        <div className="self-end">{generateImageBlock(paintings, 0)}</div>
-        <div>{generateImageBlock(paintings, 1)}</div>
-        <div className="flex flex-col justify-between">
-          <div className="flex flex-col gap-4">
-            <h3 className="font-federo text-5xl whitespace-nowrap">
-              Meine Galerie!!!
-            </h3>
-            <button className="btn-primary">Mehr erfahren</button>
+    <>
+      <div className="">
+        <h3 className="text-4xl font-federo text-center mb-6 block lg:hidden">
+          Meine Galerie
+        </h3>
+        <div className="" style={{ backgroundImage: `url(${MainPageBg})` }}>
+          <div className="py-[5%] px-[5%] flex justify-between gap-4">
+            <div className="self-end">
+              <img
+                className=" border-[15px] border-[#240909]  "
+                src={galleryPic1}
+              />
+            </div>
+
+            <div className="self-end">
+              <img
+                className="border-[15px] border-[#240909]  "
+                src={galleryPic2}
+              />
+            </div>
+            <div className="self-end">
+              <img
+                className=" border-[15px] border-[#240909]  "
+                src={galleryPic3}
+              />
+            </div>
           </div>
-          {generateImageBlock(paintings, 2)}
+        </div>
+        <div className="flex justify-center  mt-8">
+          <button className="btn-primary text-center m-auto self-center block lg:hidden">
+            Mehr erfahren
+          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
