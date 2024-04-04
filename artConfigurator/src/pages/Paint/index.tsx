@@ -4,7 +4,8 @@ import editPhoto from "./../../../../frontend/src/assets/images/BoatPicture.jpg"
 import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { useState } from "react";
+import { useRef, useState } from "react";
+
 interface AddingEditingPaintProps {
   isEditMode: boolean;
 }
@@ -27,12 +28,17 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     }
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleDeletePhoto = () => {
     const confirmation = window.confirm(
       "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
     );
     if (confirmation) {
       setSelectedPhoto(undefined);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+      }
     }
   };
 
@@ -41,14 +47,9 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
   const [editorData, setEditorData] = useState(default_text);
 
-  const handleEditorChange = (event: any, editor: any) => {
+  const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData();
     setEditorData(data);
-  };
-
-  const clearEditorContent = () => {
-    const newData = default_text;
-    setEditorData(newData);
   };
 
   // Radio
@@ -57,9 +58,22 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     setRadioValue(event.target.value);
   };
 
+  // очистить контент
+  const handleClearContent = () => {
+    setEditorData(default_text);
+    setSelectedPhoto(undefined);
+  };
+
+  // отправка данных
   const handleSaveClick = () => {
-    console.log("Selected radio value:", radioValue);
-    // Другие действия при сохранении...
+    console.log("Selected radio value:", radioValue); //Painting G      Atelier  A
+    console.log("Selected PHOTO value:", selectedPhoto);
+    // Удаление HTML-тегов для получения простого текста
+    // let plainText = editorData
+    //   .replace(/&[^;]+;/g, "")
+    //   .replace(/<\/p>/g, "\n")
+    //   .replace(/<p>/g, "");
+    console.log(editorData);
   };
 
   return (
@@ -113,6 +127,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             <div className="flex flex-col items-start mb-4 w-[20%]">
               {/* Скрытый input для выбора файла */}
               <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 id="file-input"
@@ -154,7 +169,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             </div>
           </div>
           <div className="flex justify-end my-4">
-            <button className="btn-primary" onClick={clearEditorContent}>
+            <button className="btn-primary" onClick={handleClearContent}>
               abbrechen
             </button>{" "}
             <button className="btn-primary ml-2" onClick={handleSaveClick}>
