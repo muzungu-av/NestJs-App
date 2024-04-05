@@ -94,7 +94,11 @@ const App: React.FC = () => {
               <Route
                 key={child.id}
                 path={child.path}
-                element={<child.element isEditMode={child.isEditMode} />}
+                element={
+                  child.element && (
+                    <child.element isEditMode={child.isEditMode || false} />
+                  )
+                }
               />
             ));
           }
