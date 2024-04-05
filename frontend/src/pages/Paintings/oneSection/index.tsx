@@ -1,12 +1,14 @@
 import ShoppingCart from "../../../assets/icons/ShoppingCart.svg";
+import DOMPurify from "dompurify";
 
 export const OnePaintingSection = ({
   text,
-  imgURL
+  imgURL,
 }: {
   text: string;
   imgURL: any;
 }) => {
+  const sanitizedText = DOMPurify.sanitize(text); //безопасный текст, санитаризация
   return (
     <div className="  py-[5%] px-[5%]">
       <div className="flex justify-between gap-2 lg:gap-6 lg:p-[30px]">
@@ -20,7 +22,10 @@ export const OnePaintingSection = ({
           <div className="font-['Italiana'] lg:text-2xl text-base">
             Bildname
           </div>
-          <p className="font-['Federo'] text-sm lg:text-xl">{text}</p>{" "}
+          <p
+            className="font-['Federo'] text-sm lg:text-xl"
+            dangerouslySetInnerHTML={{ __html: sanitizedText }}
+          ></p>{" "}
           <div className=" mt-2">
             <button
               type="button"

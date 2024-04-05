@@ -21,6 +21,7 @@
     "@ckeditor/ckeditor5-react": "^6.2.0",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.8",
+    "dompurify": "^3.0.11",
     "flowbite": "^2.3.0",
     "lorem-ipsum": "^2.0.8",
     "mobx": "^6.12.1",
@@ -33,6 +34,7 @@
     "react-router-dom": "^6.22.2"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
     "@types/react": "^18.2.63",
     "@types/react-dom": "^18.2.20",
     "@types/react-helmet": "^6.1.11",
