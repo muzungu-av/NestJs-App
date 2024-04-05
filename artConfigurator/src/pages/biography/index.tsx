@@ -13,7 +13,6 @@ export const Biography = () => {
   return (
     <>
       <MainLayout>
-        
         <div className="font-italiana text-5xl mx-[5%] my-[2%]">
           Bearbeiten der Biografie Seite
         </div>

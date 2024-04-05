@@ -1,24 +1,48 @@
-import NoPic from "../../assets/images/NoPic.jpg";
+import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
+import { useEffect, useMemo, useState } from "react";
+import { Delete, get } from "../../api/axiosInstance";
+import DOMPurify from "dompurify";
 
-interface Radio {
-  radio: {
-    name: string;
-    first: string;
-    second: string;
-  };
-}
-const PicSection = ({ radio: { first, second, name } }: Radio) => {
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const img = import.meta?.env?.VITE_API_IMAGE;
+const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+
+type PicSectionProps = {
+  uid: string;
+  groupName: string;
+  miniImageUrl: string;
+  description: string;
+};
+
+const handleDeleteClick = async (uid: string) => {
+  const userAnswer = window.confirm("Хотите выполнить действие?");
+
+  if (userAnswer) {
+    const response = await Delete(url + img, "/" + uid, true);
+    console.log(uid);
+    console.log(response);
+    console.log("Действие выполнено!");
+  } else {
+    console.log("Действие отменено.");
+  }
+};
+
+const PicSection: React.FC<PicSectionProps> = ({
+  uid,
+  groupName,
+  miniImageUrl,
+  description,
+}) => {
+  const sanitizedDescription = DOMPurify.sanitize(description); //безопасный текст, санитаризация
   return (
     <div className="flex justify-between py-[5%]">
-      <img src={NoPic} className="" />
-      <p className="w-1/2">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book. Lorem Ipsum is simply dummy
-        text of the printing and industry...
-      </p>
+      <img src={miniImageUrl} className="" />
+      <div
+        className="w-1/2"
+        dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+      />
       <div className="w-1/4 flex justify-center">
         <div className="flex flex-col gap-6">
           <div className="flex gap-8">
@@ -26,14 +50,14 @@ const PicSection = ({ radio: { first, second, name } }: Radio) => {
             <div>
               <div className="flex items-center mb-4">
                 <input
-                  id={first}
+                  id={groupName + "_P"}
                   type="radio"
                   value=""
-                  name={name}
+                  name={groupName}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
-                  htmlFor={first}
+                  htmlFor={groupName + "_P"}
                   className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Gemälde
@@ -41,15 +65,14 @@ const PicSection = ({ radio: { first, second, name } }: Radio) => {
               </div>
               <div className="flex items-center">
                 <input
-                  checked
-                  id={second}
+                  id={groupName + "_A"}
                   type="radio"
                   value=""
-                  name={name}
+                  name={groupName}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
-                  htmlFor={second}
+                  htmlFor={groupName + "_A"}
                   className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Atelier{" "}
@@ -59,7 +82,12 @@ const PicSection = ({ radio: { first, second, name } }: Radio) => {
           </div>
           <div className="flex gap-4">
             <button className="btn-primary">ändern</button>
-            <button className="btn-primary">löschen</button>
+            <button
+              className="btn-primary"
+              onClick={() => handleDeleteClick(uid)}
+            >
+              löschen
+            </button>
           </div>
         </div>
       </div>
@@ -67,7 +95,33 @@ const PicSection = ({ radio: { first, second, name } }: Radio) => {
   );
 };
 
+const fetchDataFromApi = async () => {
+  try {
+    const params = { fields: "uid,miniImageUrl,description" };
+    console.log(url + img);
+    const response = await get(undefined, url, img, false, params);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data from backend:", error);
+    return null;
+  }
+};
+
 export const Pictures = () => {
+  const navigate = useNavigate();
+  const handleAddNewClick = () => {
+    navigate("/add-paint");
+  };
+
+  const [data, setData] = useState<PicSectionProps[] | null>(null);
+
+  useEffect(() => {
+    fetchDataFromApi().then((result) => setData(result));
+  }, []);
+
+  const memoizedData = useMemo(() => data, [data]) as PicSectionProps[];
+  let j = 0;
   return (
     <MainLayout>
       <div className="px-[5%] pt-[2%]">
@@ -75,11 +129,20 @@ export const Pictures = () => {
           Liste der Bilder auf der Website
         </h3>
 
-        <button className="btn-primary mt-10">Neues Bild hinzufügen +</button>
+        <button className="btn-primary mt-10" onClick={handleAddNewClick}>
+          Neues Bild hinzufügen +
+        </button>
 
-        <PicSection radio={{ name: "1", first: "radio1", second: "radio2" }} />
-        <PicSection radio={{ name: "2", first: "radio3", second: "radio4" }} />
-        <PicSection radio={{ name: "3", first: "radio5", second: "radio6" }} />
+        {Array.isArray(memoizedData) &&
+          memoizedData.map((item) => (
+            <PicSection
+              key={item.uid}
+              uid={item.uid}
+              groupName={"pic_section_" + ++j}
+              miniImageUrl={item.miniImageUrl}
+              description={item.description}
+            />
+          ))}
       </div>
     </MainLayout>
   );

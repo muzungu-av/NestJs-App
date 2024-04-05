@@ -16,7 +16,7 @@ interface MenuItemData {
   path?: string;
   element?: React.ComponentType<any> | undefined;
   children?: MenuItemData[];
-  isEditMode?: boolean;
+  isEditMode?: boolean | undefined;
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {

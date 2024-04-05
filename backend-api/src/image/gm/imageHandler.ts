@@ -21,6 +21,7 @@ export interface ImgFileProcessingResult {
   sizeBytes?: number;
   createdAt?: Date;
   description?: string;
+  typeOfImage?: string;
   imageUrl?: string;
   miniImageUrl?: string;
   errorMessage?: string;

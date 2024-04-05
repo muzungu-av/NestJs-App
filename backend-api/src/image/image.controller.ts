@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
   Param,
   UseInterceptors,
   UploadedFile,
@@ -42,6 +43,7 @@ export class ImageController {
   async uploadFileAndPassValidation(
     @UploadedFile() file: Express.Multer.File,
     @Body('description') description: string,
+    @Body('typeOfImage') typeOfImage: string,
     @Req() request: any,
     @Res() response: any,
   ) {
@@ -54,6 +56,7 @@ export class ImageController {
         user.userId,
         file,
         description,
+        typeOfImage,
       );
       return response.status(201).json({ uid: result.uid });
     } catch (error) {
@@ -142,5 +145,14 @@ export class ImageController {
     @Query('fields') fields: string,
   ): Promise<any> {
     return this.imageService.findBlock(count, fields);
+  }
+
+  /**
+   * Delete document by its UID
+   */
+  @Delete(':uid')
+  deleteOne(@Param('uid') uid: string): Promise<boolean> {
+    winstonLogger.info(`Request for deletion of this document: ${uid}`);
+    return this.imageService.deleteOne(uid);
   }
 }

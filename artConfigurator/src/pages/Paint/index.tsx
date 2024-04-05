@@ -4,14 +4,30 @@ import editPhoto from "./../../../../frontend/src/assets/images/BoatPicture.jpg"
 import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { useState } from "react";
 import MainLayout from "../../layouts/MainLayout";
+import { useRef, useState } from "react";
+import { post } from "../../api/axiosInstance";
+
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const IMG = import.meta?.env?.VITE_API_IMAGE;
+const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
 interface AddingEditingPaintProps {
   isEditMode: boolean;
 }
+
+interface Fdata {
+  body: File;
+  filename: String;
+}
+
+const type_A = "isAtelier";
+const type_P = "isPainting";
+
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
-  const [selectedPhoto, setSelectedPhoto] = useState<string | undefined>(
+  //Photo
+  const [selectedPhoto, setSelectedPhoto] = useState<Fdata | undefined>(
     undefined
   );
 
@@ -22,11 +38,13 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedPhoto(reader.result as string);
+        setSelectedPhoto({ body: file, filename: file.name } as Fdata);
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDeletePhoto = () => {
     const confirmation = window.confirm(
@@ -34,6 +52,9 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     );
     if (confirmation) {
       setSelectedPhoto(undefined);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+      }
     }
   };
 
@@ -41,23 +62,48 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
   const [editorData, setEditorData] = useState(default_text);
 
-  const handleEditorChange = (editor: any) => {
+  const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData();
     setEditorData(data);
   };
 
-  const clearEditorContent = () => {
-    const newData = default_text;
-    setEditorData(newData);
-  };
-
+  // radio
   const [radioValue, setRadioValue] = useState<string | undefined>();
+
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRadioValue(event.target.value);
   };
 
-  const handleSaveClick = () => {
-    console.log("Selected radio value:", radioValue);
+  // очистить контент
+  const handleClearContent = () => {
+    setEditorData(default_text);
+    setSelectedPhoto(undefined);
+  };
+
+  // отправка данных
+  const handleSaveClick = async () => {
+    // Удаление HTML-тегов для получения простого текста
+    // let plainText = editorData
+    //   .replace(/&[^;]+;/g, "")
+    //   .replace(/<\/p>/g, "\n")
+    //   .replace(/<p>/g, "");
+    // console.log(editorData);
+
+    if (selectedPhoto && radioValue && editorData) {
+      const formData = new FormData();
+      formData.append("file", selectedPhoto.body);
+      formData.append("description", editorData);
+      formData.append("typeOfImage", radioValue);
+      const headers = {
+        "Content-Type": `multipart/form-data;`,
+      };
+      //todo добавить Сообщение об успешной неуспешной доставке изрбражения
+      const response = await post(headers, BURL, IMG, true, formData);
+      return response.data;
+    } else {
+      console.error("Какие-то проблеммы...");
+      //todo добавить Сообщение в случае, если: 1) файл не выбран 2) поле описание не заполнено  3) не выбрано знач в Radio кнопках
+    }
   };
 
   return (
@@ -72,7 +118,14 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             {isEditMode ? (
               <img className="mb-2" src={editPhoto} />
             ) : (
-              <img className="mb-2" src={selectedPhoto || emptyPhoto} />
+              <img
+                className="mb-2"
+                src={
+                  selectedPhoto
+                    ? URL.createObjectURL(selectedPhoto.body)
+                    : emptyPhoto
+                }
+              />
             )}
           </label>
           {isEditMode ? (
@@ -96,14 +149,15 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             config={{
               toolbar: [],
             }}
-            onChange={(editor: any) => {
-              handleEditorChange(editor);
+            onChange={(event: any, editor: any) => {
+              handleEditorChange(event, editor);
             }}
           />
           <div className="flex justify-end m-6">
             <div className="font-federo text-2xl mr-6">Auf Seite posten: </div>
             <div className="flex flex-col items-start mb-4 w-[20%]">
               <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 id="file-input"
@@ -114,7 +168,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                 <input
                   id="default-radio-1"
                   type="radio"
-                  value="G"
+                  value={type_P}
                   name="default-radio"
                   onChange={handleRadioChange}
                   className="w-4 h-4 text-[#895C06] bg-gray-100 border-[#895C06] focus:ring-[#895C06] dark:focus:ring-[#895C06] dark:ring-[#895C06] focus:ring-2 dark:bg-gray-700 dark:border-[#895C06]"
@@ -130,7 +184,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                 <input
                   id="default-radio-2"
                   type="radio"
-                  value="A"
+                  value={type_A}
                   name="default-radio"
                   onChange={handleRadioChange}
                   className="w-4 h-4 text-[#895C06] bg-gray-100 border-[#895C06] focus:ring-[#895C06] dark:focus:ring-[#895C06] dark:ring-[#895C06] focus:ring-2 dark:bg-gray-700 dark:border-[#895C06]"
@@ -145,7 +199,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             </div>
           </div>
           <div className="flex justify-end my-4">
-            <button className="btn-primary" onClick={clearEditorContent}>
+            <button className="btn-primary" onClick={handleClearContent}>
               abbrechen
             </button>{" "}
             <button className="btn-primary ml-2" onClick={handleSaveClick}>

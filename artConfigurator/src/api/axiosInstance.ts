@@ -1,13 +1,16 @@
 import axios from "axios";
 
-export const Axios = (credentials: boolean, jwtAuth: boolean) => {
-  const token = jwtAuth ? localStorage.getItem("token") : "";
+export const Axios = (header: any, jwtAuth: boolean) => {
+  //export const Axios = (header: any, credentials: boolean, jwtAuth: boolean) => {
+  const token = jwtAuth ? localStorage.getItem("access_token") : "";
   let h = {
     timeout: 5000,
-    headers: {
-      "Content-Type": "application/json",
-    } as { [key: string]: string },
-    withCredentials: credentials,
+    headers: header
+      ? header
+      : ({
+          "Content-Type": "application/json",
+        } as { [key: string]: string }),
+    // withCredentials: credentials,
   };
 
   if (jwtAuth) {
@@ -18,14 +21,15 @@ export const Axios = (credentials: boolean, jwtAuth: boolean) => {
 };
 
 export const get = async (
+  headers: any,
   baseUrl: string,
   relatedUrl: string,
-  credentials: boolean,
+  // credentials: boolean,
   jwtAuth: boolean,
   params?: Record<string, string | number>
 ) => {
   try {
-    const instance = Axios(credentials, jwtAuth);
+    const instance = Axios(headers, jwtAuth);
     const response = await instance.get(baseUrl + relatedUrl, { params });
     return response;
   } catch (error) {
@@ -35,18 +39,34 @@ export const get = async (
 };
 
 export const post = async (
+  headers: any,
   baseUrl: string,
   relatedUrl: string,
-  credentials: boolean,
+  // credentials: boolean,
   jwtAuth: boolean,
   data: any
 ) => {
   try {
-    const instance = Axios(credentials, jwtAuth);
+    const instance = Axios(headers, jwtAuth);
     const response = await instance.post(baseUrl + relatedUrl, data);
     return response.data;
   } catch (error) {
     console.error("Error making POST request:", error);
+    throw error;
+  }
+};
+
+export const Delete = async (
+  baseUrl: string,
+  relatedUrl: string,
+  jwtAuth: boolean
+) => {
+  try {
+    const instance = Axios(undefined, jwtAuth);
+    const response = await instance.delete(baseUrl + relatedUrl);
+    return response.data;
+  } catch (error) {
+    console.error("Error making DELETE request:", error);
     throw error;
   }
 };

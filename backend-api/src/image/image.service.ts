@@ -8,6 +8,7 @@ import { CreateImageDto } from './dto/createImageDto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import FilterDocs from './utils/alg';
 import { SliderMemoryService } from './utils/SliderMemoryService';
+import { boolean } from 'joi';
 
 interface CustomErrorOptions {
   message: string;
@@ -187,6 +188,7 @@ export class ImageService {
     userId: string,
     file: Express.Multer.File,
     description: string,
+    typeOfImage: string,
   ): Promise<ImgFileProcessingResult> {
     return new Promise((resolve, reject) => {
       this.handler
@@ -196,6 +198,7 @@ export class ImageService {
             // save to mongo
             try {
               result.description = description;
+              result.typeOfImage = typeOfImage;
               winstonLogger.info(`${JSON.stringify(result)}`);
               const createImageDto = new CreateImageDto(result);
               await this.imageModel.create(createImageDto);
@@ -324,8 +327,24 @@ export class ImageService {
         });
     });
   }
-}
 
-// remove(id: number) {
-//   return `This action removes a #${id} image`;
-// }
+  /**
+   * Deleting an image by image UID
+   *
+   * @param uid document's UID
+   * @returns Promise<any> one document
+   */
+  async deleteOne(uid: string): Promise<boolean> {
+    try {
+      const result = await this.imageModel.deleteOne({ uid }).exec();
+      if (result.deletedCount === 1) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      winstonLogger.error(`Error when deleting an image ${uid} : ${error}`);
+      return false;
+    }
+  }
+}

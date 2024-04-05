@@ -10,7 +10,7 @@ export const Contacts: React.FC = () => {
         <h2 className="font-italiana text-6xl hidden lg:block">Kontaktdaten</h2>
         <div className="lg:border-t-4 lg:border-black flex flex-col lg:flex-row gap-10">
           <div
-            className="lg:w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover"
+            className="lg:w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover min-h-[400px] "
             style={{ backgroundImage: `url(${ContactPic})` }}
           >
             <div className="flex flex-col items-center lg:items-start px-[5%] mb-8">
