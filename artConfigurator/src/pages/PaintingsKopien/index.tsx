@@ -1,10 +1,7 @@
 import photo from "./../../assets/images/EmptyPhoto.png";
 import MainLayout from "../../layouts/MainLayout";
-import { useNavigate } from "react-router";
 
 export const PaintingsKopien = () => {
-  const navigate = useNavigate();
-
   const kopiens = [
     {
       img: photo,
@@ -27,10 +24,7 @@ export const PaintingsKopien = () => {
   return (
     <MainLayout>
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">Kopien</div>
-      <button
-        className="btn-primary w-[230px] h-[45px] p-0 text-base  mx-[5%]"
-        onClick={() => navigate("/add-paint")}
-      >
+      <button className="btn-primary w-[230px] h-[45px] p-0 text-base  mx-[5%]">
         Neue Kopie hinzufügen +
       </button>
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">

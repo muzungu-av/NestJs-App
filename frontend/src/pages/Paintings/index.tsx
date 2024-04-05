@@ -5,12 +5,14 @@ import bgImgAtelier from "../../assets/images/bgImgAtelier.jpg";
 import bgImgKopien from "../../assets/images/bgImgKopien.jpg";
 import { OnePaintingSection } from "./oneSection";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 interface PaintingsProps {
   pageType: "Gemälde" | "Atelier" | "Kopien";
 }
 
 export const Paintings = ({ pageType }: PaintingsProps) => {
+  const navigate = useNavigate();
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const ai = import.meta?.env?.VITE_API_IMAGE;
@@ -20,22 +22,21 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
   const [paintings, setPaintings] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const params = {
-    fields: "description,dimension,imageUrl,miniImageUrl"
+    fields: "description,dimension,imageUrl,miniImageUrl",
   };
-
+  const getPictures = async () => {
+    try {
+      setLoading(true);
+      const response = await get(BACKEND_API, `${ai}/`, false, false, params);
+      setPaintings(response.data);
+    } catch (error) {
+      console.error("Error fetching paintings:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await get(BACKEND_API, `${ai}/`, false, false, params);
-        setPaintings(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching paintings:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    getPictures();
   }, []);
 
   if (loading) {
@@ -57,7 +58,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
               ? `url(${bgImgGemälde})`
               : pageType === "Atelier"
               ? `url(${bgImgAtelier})`
-              : `url(${bgImgKopien})`
+              : `url(${bgImgKopien})`,
         }}
       >
         {" "}
@@ -74,6 +75,8 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
           key={index}
           text={painting.description}
           imgURL={painting.miniImageUrl}
+          id={painting.id}
+          onClick={() => navigate(`/painting/${painting.id}`)}
         />
       ))}
     </MainLayout>

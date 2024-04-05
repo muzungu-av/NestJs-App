@@ -1,32 +1,55 @@
 import MainLayout from "../../layouts/MainLayout";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ShoppingCart from "../../assets/icons/ShoppingCart.svg";
 import mini1 from "../../assets/images/Group_1000001764.png";
 import mini2 from "../../assets/images/photo_2024-02-10_18-54-36.png";
 import boatPic from "../../assets/images/1.png";
 import autumnPic from "../../assets/images/3.png";
-
 import { PaintingSlider } from "../../components/PaintingSlider";
-import { useNavigate } from "react-router";
-
-const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
-const objPaint = {
-  img: boatPic,
-  isLandscape: false,
-  miniatures: [
-    { img: mini1, isMain: false },
-    { img: mini2, isMain: false }
-  ]
-};
-const miniatureArr1 = [
-  { isMain: true, img: boatPic, w: 320, h: 479 },
-  { img: mini1, isMain: false },
-  { img: mini2, isMain: false }
-];
-
-type Paint = { isMain: boolean; img: any; w?: number; h?: number };
+import { useNavigate, useParams } from "react-router";
+import { get } from "../../api/axiosInstance";
 
 export const AboutPainting: React.FC = () => {
+  const [paintingData, setPaintingData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
+  const objPaint = {
+    img: boatPic,
+    isLandscape: false,
+    miniatures: [
+      { img: mini1, isMain: false },
+      { img: mini2, isMain: false },
+    ],
+  };
+  const miniatureArr1 = [
+    { isMain: true, img: boatPic, w: 320, h: 479 },
+    { img: mini1, isMain: false },
+    { img: mini2, isMain: false },
+  ];
+  const sc = import.meta?.env?.VITE_SCHEME;
+  const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+  const ai = import.meta?.env?.VITE_API_IMAGE;
+  const { id } = useParams();
+  const BACKEND_API =
+    sc && bu ? `${sc}://${bu}/` : "http://localhost-default:9000";
+
+  const getPictureById = async () => {
+    try {
+      setLoading(true);
+      const response = await get(BACKEND_API, `${ai}/${id}`, false, false);
+      setPaintingData(response.data);
+    } catch (error) {
+      console.error("Error fetching paintings:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getPictureById();
+  }, []);
+  console.log("paintingData", paintingData);
+  type Paint = { isMain: boolean; img: any; w?: number; h?: number };
+  useEffect(() => {}, []);
   const navigate = useNavigate();
 
   const PaintingSection = () => {
@@ -55,7 +78,7 @@ export const AboutPainting: React.FC = () => {
                       border: "15px solid #240909",
                       borderRadius: "3px",
 
-                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)"
+                      boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.3)",
                     }}
                     className={
                       objPaint.isLandscape ? "w-full h-auto" : "h-auto w-auto"
@@ -194,17 +217,21 @@ export const AboutPainting: React.FC = () => {
               langlebig und langlebig sind.
             </p>
           </div>
-        </div>{" "}
+        </div>
         <div className="font-italiana flex justify-center text-4xl lg:text-[64px] mb-5 ">
           Ähnliche Angebote
-        </div>{" "}
+        </div>
       </>
     );
   };
   return (
     <MainLayout>
-      <PaintingSection />
-      <PaintingSlider slides={slidesArr} />
+      {loading && (
+        <>
+          <PaintingSection />
+          <PaintingSlider slides={slidesArr} />
+        </>
+      )}
     </MainLayout>
   );
 };
