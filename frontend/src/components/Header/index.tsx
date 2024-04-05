@@ -61,7 +61,9 @@ const Header = () => {
   const BurgerMenu = () => {
     return (
       <div className={isMenuOpen ? styles.openedMenu : styles.menu}>
-        <nav className="navLinks font-federo  gap-6 text-xl flex flex-col items-center pt-10">
+        <nav
+          className={`navLinks font-federo  gap-6 text-xl flex flex-col items-center pt-10  `}
+        >
           <MenuLink to="/about-me">Biografie</MenuLink>
           <MenuLink to="/paintings">Gemälde</MenuLink>
           <MenuLink to="/dibond">Atelier</MenuLink>

@@ -66,7 +66,6 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
               className={`w-4 h-4 ${isOpen ? "rotate-180" : ""}`}
             />
           </button>
-          {/* {item.children && <span>{isOpen ? "-" : "+"}</span>} */}
         </div>
       )}
       {isOpen && item.children && (

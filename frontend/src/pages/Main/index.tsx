@@ -12,7 +12,7 @@ export const Main: React.FC = () => {
   const HeroSection: React.FC = () => {
     return (
       <div className="bg-[#F5F5F5] mt-10">
-        <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
+        <div className="py-[10%] px-[5%] flex justify-center gap-20 ">
           <div className="self-center">
             <img className=" border-[15px] border-[#240909] " src={SmallPic} />
           </div>
@@ -32,9 +32,9 @@ export const Main: React.FC = () => {
 
   const BeforeSliderSection: React.FC = () => {
     return (
-      <div className="py-[5%] px-[5%] flex flex-col items-center gap-10">
-        <h3 className="font-italiana text-6xl">Dibond</h3>
-        <p className="font-federo text-xl">
+      <div className="py-[10%] px-[5%] flex flex-col items-center gap-10">
+        <h3 className="font-italiana text-4xl lg:text-6xl">Dibond</h3>
+        <p className="font-federo text-sm lg:text-xl">
           Die Technologie des Kopierens von Gemälden auf Dibond. "Dibond" ist
           ein Markenzeichen von Verbundwerkstoffen, das in verschiedenen
           industriellen und künstlerischen Anwendungen verwendet wird. Dibond

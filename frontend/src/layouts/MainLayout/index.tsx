@@ -2,6 +2,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { ReactNode, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const [isLoader, setLoader] = useState(false);
   const location = useLocation();
@@ -14,9 +15,11 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       }, 500);
     };
     changeState();
-    console.log("window.location", window.location.pathname);
+    console.log("window.location", window.location.pathname)
   }, [location]);
+  
   return (
+
     <>
       <Header />
       {isLoader ? (

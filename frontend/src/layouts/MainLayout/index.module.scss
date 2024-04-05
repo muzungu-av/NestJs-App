@@ -1,0 +1,34 @@
+.menu {
+    text-align: center;
+    padding-inline: 10%;
+    padding-top: 27px;
+    padding-bottom: 20px;
+    position: sticky;
+    align-items: center;
+    transition: height 0.4s ease-in-out;
+    height: 310px;
+    font-family: "Manrope";
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 20px;
+    background-color: #fff;
+    z-index: 1000;
+    margin-bottom: 10px;
+  }
+  .openedMenu {
+    text-align: center;
+    padding-inline: 10%;
+    padding-top: 27px;
+    padding-bottom: 20px;
+    height: 70px;
+    position: sticky;
+    align-items: center;
+    transition: height 0.4s ease-in-out;
+    font-family: "Manrope";
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 20px;
+    background-color: #fff;
+    z-index: 1000;
+    margin-bottom: 10px;
+  }

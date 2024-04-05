@@ -5,21 +5,24 @@ import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
 export const Contacts: React.FC = () => {
   return (
-    <div className="py-[5%] px-[5%]">
+    <div className="py-[10%] px-[5%]">
       <div className="flex flex-col justify-center gap-6">
-        <h2 className="font-italiana text-6xl">Kontaktdaten</h2>
+        <h2 className="font-italiana text-6xl hidden lg:block">Kontaktdaten</h2>
         <div className="lg:border-t-4 lg:border-black flex flex-col lg:flex-row gap-10">
           <div
             className="lg:w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover"
             style={{ backgroundImage: `url(${ContactPic})` }}
           >
-            <div className="flex flex-col items-start px-[5%] mb-8">
+            <div className="flex flex-col items-center lg:items-start px-[5%] mb-8">
+              <h2 className="font-italiana text-white text-4xl block lg:hidden mb-10">
+                Kontaktdaten
+              </h2>
               <div className="bg-primary-100 rounded-full w-[120px] h-[120px] mb-4 " />
               <h4 className="font-apple text-center text-base text-white">
                 Calvin Calva
               </h4>
             </div>
-            <div className="flex gap-5 px-[5%] font-federo text-base">
+            <div className="flex gap-5 px-[5%] justify-center lg:justify-start font-federo text-base">
               <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-32 h-12 items-center ">
                 <p>E-mail</p>
                 <img src={Gmail} />

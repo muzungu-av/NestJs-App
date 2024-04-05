@@ -6,6 +6,7 @@ import mini2 from "../../assets/images/photo_2024-02-10_18-54-36.png";
 import boatPic from "../../assets/images/1.png";
 import autumnPic from "../../assets/images/4.png";
 import { PaintingSlider } from "../../components/PaintingSlider";
+import { useNavigate } from "react-router";
 
 const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
 const objPaint = {
@@ -25,6 +26,8 @@ const miniatureArr1 = [
 type Paint = { isMain: boolean; img: any; w?: number; h?: number };
 
 export const AboutPainting: React.FC = () => {
+  const navigate = useNavigate();
+
   const PaintingSection = () => {
     return (
       <>
@@ -118,6 +121,7 @@ export const AboutPainting: React.FC = () => {
                   Gesamtbetrag : 1.230,00€
                 </h3>{" "}
                 <button
+                  onClick={() => navigate("/contacts")}
                   type="button"
                   className="w-[140px] w-30 h-10 ml-5 mt-2 font-federo rounded-[6px] text-#000 bg-[#FFEDCB]"
                 >
