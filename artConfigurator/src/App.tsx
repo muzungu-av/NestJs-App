@@ -5,8 +5,10 @@ import "./output.css";
 import LogIn from "./pages/login";
 import { AddingEditingKopien } from "./pages/AddingEditingKopien";
 import { AddingEditingPaint } from "./pages/Paint";
+import { Pictures } from "./pages/pictures";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
 import { Biography } from "./pages/biography";
+import { Videos } from "./pages/Videos/Videos";
 
 export const menuItemsWithPaths = [
   {
@@ -21,13 +23,20 @@ export const menuItemsWithPaths = [
     children: [
       {
         id: 4,
+        name: "Pictures List",
+        path: "/pictures-list",
+        element: Pictures,
+        isEditMode: false,
+      },
+      {
+        id: 5,
         name: "Add paint",
         path: "/add-paint",
         element: AddingEditingPaint,
         isEditMode: false,
       },
       {
-        id: 5,
+        id: 6,
         name: "Edit paint",
         path: "/edit-paint",
         element: AddingEditingPaint,
@@ -40,14 +49,14 @@ export const menuItemsWithPaths = [
     name: "Kopien",
     children: [
       {
-        id: 6,
+        id: 7,
         name: "Add kopien",
         path: "/add-kopien",
         element: AddingEditingKopien,
         isEditMode: false,
       },
       {
-        id: 7,
+        id: 8,
         name: "Edit kopien",
         path: "/edit-kopien",
         element: AddingEditingKopien,
@@ -56,10 +65,16 @@ export const menuItemsWithPaths = [
     ],
   },
   {
-    id: 8,
+    id: 9,
     name: "Paintings kopien",
     path: "/paintings-kopien",
     element: PaintingsKopien,
+  },
+  {
+    id: 10,
+    name: "Videos",
+    path: "/videos",
+    element: Videos,
   },
 ];
 const App: React.FC = () => {
