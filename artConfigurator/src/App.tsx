@@ -26,7 +26,6 @@ export const menuItemsWithPaths = [
         name: "Pictures List",
         path: "/pictures-list",
         element: Pictures,
-        isEditMode: false,
       },
       {
         id: 5,
