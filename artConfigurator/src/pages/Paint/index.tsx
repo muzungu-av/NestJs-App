@@ -62,7 +62,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
   const [editorData, setEditorData] = useState(default_text);
 
-  const handleEditorChange = (editor: any) => {
+  const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData();
     setEditorData(data);
   };
@@ -149,8 +149,8 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             config={{
               toolbar: [],
             }}
-            onChange={(editor: any) => {
-              handleEditorChange(editor);
+            onChange={(event: any, editor: any) => {
+              handleEditorChange(event, editor);
             }}
           />
           <div className="flex justify-end m-6">
