@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useMemo, useState } from "react";
-import { get } from "../../api/axiosInstance";
+import { Delete, get } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
+
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const img = import.meta?.env?.VITE_API_IMAGE;
+const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
 type PicSectionProps = {
   uid: string;
@@ -11,16 +16,25 @@ type PicSectionProps = {
   description: string;
 };
 
+const handleDeleteClick = async (uid: string) => {
+  const userAnswer = window.confirm("Хотите выполнить действие?");
+
+  if (userAnswer) {
+    const response = await Delete(url + img, "/" + uid, true);
+    console.log(uid);
+    console.log(response);
+    console.log("Действие выполнено!");
+  } else {
+    console.log("Действие отменено.");
+  }
+};
+
 const PicSection: React.FC<PicSectionProps> = ({
   uid,
   groupName,
   miniImageUrl,
   description,
 }) => {
-  const handleDeleteClick = (uid: string) => {
-    console.log(uid);
-  };
-  let i = 0;
   const sanitizedDescription = DOMPurify.sanitize(description); //безопасный текст, санитаризация
   return (
     <div className="flex justify-between py-[5%]">
@@ -36,10 +50,10 @@ const PicSection: React.FC<PicSectionProps> = ({
             <div>
               <div className="flex items-center mb-4">
                 <input
-                  id={groupName + "_" + ++i}
+                  id={groupName + "_P"}
                   type="radio"
                   value=""
-                  name={groupName + "_P"}
+                  name={groupName}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -51,10 +65,10 @@ const PicSection: React.FC<PicSectionProps> = ({
               </div>
               <div className="flex items-center">
                 <input
-                  id={groupName + "_" + ++i}
+                  id={groupName + "_A"}
                   type="radio"
                   value=""
-                  name={groupName + "_A"}
+                  name={groupName}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -81,15 +95,12 @@ const PicSection: React.FC<PicSectionProps> = ({
   );
 };
 
-const sc = import.meta?.env?.VITE_SCHEME;
-const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
-const IMG = import.meta?.env?.VITE_API_IMAGE;
-const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
-
 const fetchDataFromApi = async () => {
   try {
     const params = { fields: "uid,miniImageUrl,description" };
-    const response = await get(undefined, BURL, IMG, false, params);
+    console.log(url + img);
+    const response = await get(undefined, url, img, false, params);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data from backend:", error);
@@ -110,14 +121,7 @@ export const Pictures = () => {
   }, []);
 
   const memoizedData = useMemo(() => data, [data]) as PicSectionProps[];
-
-  // useEffect(() => {
-  //   fetchDataFromApi();
-  // }, []);
-
-  // const response = await post(headers, BURL, IMG, true, formData);
-  //http://172.18.0.103:4001/api/image?fields=uid,miniImageUrl,description
-
+  let j = 0;
   return (
     <MainLayout>
       <div className="px-[5%] pt-[2%]">
@@ -134,7 +138,7 @@ export const Pictures = () => {
             <PicSection
               key={item.uid}
               uid={item.uid}
-              groupName="radio1"
+              groupName={"pic_section_" + ++j}
               miniImageUrl={item.miniImageUrl}
               description={item.description}
             />

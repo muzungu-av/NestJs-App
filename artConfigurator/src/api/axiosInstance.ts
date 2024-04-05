@@ -55,3 +55,18 @@ export const post = async (
     throw error;
   }
 };
+
+export const Delete = async (
+  baseUrl: string,
+  relatedUrl: string,
+  jwtAuth: boolean
+) => {
+  try {
+    const instance = Axios(undefined, jwtAuth);
+    const response = await instance.delete(baseUrl + relatedUrl);
+    return response.data;
+  } catch (error) {
+    console.error("Error making DELETE request:", error);
+    throw error;
+  }
+};
