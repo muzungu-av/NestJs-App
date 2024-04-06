@@ -4,11 +4,10 @@ import { winstonLogger } from 'winston.logger';
 import { Image } from './schemas/image.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateImageDto } from './dto/createImageDto';
+import { CreateImageDto } from './dto/create-image.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import FilterDocs from './utils/alg';
 import { SliderMemoryService } from './utils/SliderMemoryService';
-import { boolean } from 'joi';
 
 interface CustomErrorOptions {
   message: string;
@@ -96,6 +95,16 @@ export class ImageService {
     let query = this.imageModel.find();
     query = query.select(`-_id -__v`);
     return await query.exec();
+  }
+
+  /**
+   * Returns the list of documents with images from Mongo matching the typeOfImage condition
+   *
+   * @param typeOfImage
+   * @returns Promise<any[]> document array
+   */
+  async findImagesByType(typeOfImage: string): Promise<Image[]> {
+    return this.imageModel.find({ typeOfImage }).exec();
   }
 
   /**

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AllDimension } from 'image/dto/createImageDto';
+import { AllDimension } from 'image/dto/create-image.dto';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { User } from 'user/schemas/user.schema';
 
