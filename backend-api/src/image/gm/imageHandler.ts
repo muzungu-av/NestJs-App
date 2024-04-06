@@ -8,7 +8,7 @@ import { winstonLogger } from 'winston.logger';
 import { CryptoHash } from 'image/crypto/crypto';
 import { UserService } from 'user/user.service';
 import { User } from 'user/schemas/user.schema';
-import { AllDimension, Dimension } from 'image/dto/createImageDto';
+import { AllDimension, Dimension } from 'image/dto/create-image.dto';
 
 export interface ImgFileProcessingResult {
   uid?: string;
