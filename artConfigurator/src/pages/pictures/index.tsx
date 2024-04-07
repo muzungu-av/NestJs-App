@@ -12,6 +12,7 @@ const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 type PicSectionProps = {
   uid: string;
   groupName: string;
+  typeOfImage: string;
   miniImageUrl: string;
   description: string;
 };
@@ -20,17 +21,13 @@ const handleDeleteClick = async (uid: string) => {
   const userAnswer = window.confirm("Хотите выполнить действие?");
 
   if (userAnswer) {
-    const response = await Delete(url + img, "/" + uid, true);
-    console.log(uid);
-    console.log(response);
-    console.log("Действие выполнено!");
-  } else {
-    console.log("Действие отменено.");
+    await Delete(url + img, "/" + uid, true);
   }
 };
 
 const PicSection: React.FC<PicSectionProps> = ({
   uid,
+  typeOfImage,
   groupName,
   miniImageUrl,
   description,
@@ -53,6 +50,7 @@ const PicSection: React.FC<PicSectionProps> = ({
                   id={groupName + "_P"}
                   type="radio"
                   value=""
+                  defaultChecked={typeOfImage === "isPainting"}
                   name={groupName}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -69,6 +67,7 @@ const PicSection: React.FC<PicSectionProps> = ({
                   type="radio"
                   value=""
                   name={groupName}
+                  defaultChecked={typeOfImage === "isAtelier"}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -97,8 +96,7 @@ const PicSection: React.FC<PicSectionProps> = ({
 
 const fetchDataFromApi = async () => {
   try {
-    const params = { fields: "uid,miniImageUrl,description" };
-    console.log(url + img);
+    const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
     const response = await get(undefined, url, img, false, params);
     console.log(response.data);
     return response.data;
@@ -120,7 +118,6 @@ export const Pictures = () => {
     fetchDataFromApi().then((result) => setData(result));
   }, []);
 
-  const memoizedData = useMemo(() => data, [data]) as PicSectionProps[];
   let j = 0;
   return (
     <MainLayout>
@@ -133,11 +130,12 @@ export const Pictures = () => {
           Neues Bild hinzufügen +
         </button>
 
-        {Array.isArray(memoizedData) &&
-          memoizedData.map((item) => (
+        {Array.isArray(data) &&
+          data.map((item) => (
             <PicSection
               key={item.uid}
               uid={item.uid}
+              typeOfImage={item.typeOfImage}
               groupName={"pic_section_" + ++j}
               miniImageUrl={item.miniImageUrl}
               description={item.description}

@@ -21,23 +21,39 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
 
   const [paintings, setPaintings] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const params = {
+  let params = {
+    typeOfImage: "isPainting",
     fields: "description,dimension,imageUrl,miniImageUrl",
   };
-  const getPictures = async () => {
-    try {
-      setLoading(true);
-      const response = await get(BACKEND_API, `${ai}/`, false, false, params);
-      setPaintings(response.data);
-    } catch (error) {
-      console.error("Error fetching paintings:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+  switch (pageType) {
+    case "Gemälde":
+      params["typeOfImage"] = "isPainting";
+      break;
+    case "Atelier":
+      params["typeOfImage"] = "isAtelier";
+      break;
+  }
+
   useEffect(() => {
-    getPictures();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await get(
+          BACKEND_API,
+          `${ai}/type`,
+          false,
+          false,
+          params
+        );
+        setPaintings(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching paintings:", error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [pageType]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -53,6 +69,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
         style={{
           backgroundSize: "cover",
           backgroundRepeat: pageType != "Atelier" ? "round" : "no-repeat",
+          //todo - switch
           backgroundImage:
             pageType === "Gemälde"
               ? `url(${bgImgGemälde})`
@@ -63,6 +80,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
       >
         {" "}
         <div className=" text-white text-center font-apple leading-8 text-base lg:text-2xl color-[#fff] p-20">
+          //todo - switch
           {pageType === "Gemälde"
             ? " “ Die Farben sind die Tasten, die die <br /> Künstler auf der Seele spielen ”"
             : pageType === "Atelier"
