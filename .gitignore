@@ -99,6 +99,3 @@ package.json
 **/*file_storage/
 /docs
 **/output.css
-**/src/output.css
-restart_art.sh
-restart_linux.sh
