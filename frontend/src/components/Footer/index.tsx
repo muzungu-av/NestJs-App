@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="flex justify-between gap-10 flex-col lg:flex-row">
           <h3 className="font-apple text-2xl text-white">Calvin Calva</h3>
           <div className="flex flex-col lg:flex-row justify-between text-white gap-8 font-federo text-xl">
-            <p onClick={() => navigate("/about-me")}>Über mich</p>
+            <p onClick={() => navigate("/bio")}>Über mich</p>
             <p onClick={() => navigate("/paintings")}>Gemälde</p>
             <p onClick={() => navigate("/dibond")}>Dibond</p>
             <p onClick={() => navigate("/contacts")}>Kontakte</p>

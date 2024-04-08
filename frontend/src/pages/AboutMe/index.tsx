@@ -68,7 +68,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
                   ? "btn-primary self-center lg:self-end mt-4 lg:mt-0"
                   : "btn-primary self-center lg:self-end mt-4 lg:mt-0"
               }
-              onClick={() => navigate("/about-me")}
+              onClick={() => navigate("/bio")}
             >
               Mehr erfahren
             </button>

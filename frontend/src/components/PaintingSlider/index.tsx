@@ -24,7 +24,7 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
   }, []);
 
   return (
-    <div className="px-6 relative">
+    <div className="px-6 py-[5%] relative my-6">
       <Swiper
         ref={sliderRef}
         centeredSlides={false}
@@ -43,18 +43,18 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
       >
         {slides.map((image: string, index: number) => (
           <SwiperSlide key={index}>
-            <img src={image} alt="slide" className="rounded-xl px-4" />
+            <img src={image} alt="slide" className="rounded-xl px-4 w-full" />
           </SwiperSlide>
         ))}
       </Swiper>
       <img
         src={SwiperArrow}
-        className="rotate-180 top-[20%] sm:top-[30%] left-0 absolute z-[100]  cursor-pointer scale-50 sm:scale-75 lg:scale-100"
+        className="rotate-180 top-[25%] sm:top-[30%] lg:top-[35%] left-[-0.5%] absolute z-[100]  cursor-pointer scale-50 sm:scale-75 lg:scale-100"
         onClick={handlePrev}
       ></img>
       <img
         src={SwiperArrow}
-        className="top-[20%] sm:top-[30%] right-0 absolute z-[100] cursor-pointer scale-50 sm:scale-75 lg:scale-100"
+        className="top-[25%] sm:top-[30%] lg:top-[35%] right-[-0.5%] absolute z-[100] cursor-pointer scale-50 sm:scale-75 lg:scale-100"
         onClick={handleNext}
       ></img>
     </div>

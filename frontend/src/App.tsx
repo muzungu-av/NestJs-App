@@ -14,16 +14,16 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route
-          path="/about-me"
+          path="/bio"
           element={
             <MainLayout>
               <AboutMe isMain={false} />
             </MainLayout>
           }
         />
-        <Route path="/about-painting" element={<AboutPainting />} />
         <Route path="/paintings" element={<Paintings pageType="Gemälde" />} />
         <Route path="/dibond" element={<Paintings pageType="Atelier" />} />
+        <Route path="/kopien" element={<Paintings pageType="Kopien" />} />
         <Route
           path="/contacts"
           element={
@@ -32,7 +32,7 @@ const App: React.FC = () => {
             </MainLayout>
           }
         />
-        <Route path="/painting/:id" element={<Paintings pageType="Kopien" />} />
+        <Route path="/painting/:id" element={<AboutPainting />} />
         <Route path="/" element={<Main />} />
       </Routes>
     </Router>
