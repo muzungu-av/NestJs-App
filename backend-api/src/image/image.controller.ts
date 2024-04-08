@@ -11,12 +11,18 @@ import {
   Res,
   Req,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { winstonLogger } from 'winston.logger';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
+import { GetImagesFilterDto } from './dto/get-images-filter.dto';
+import { DocumentCountDto } from './dto/document-count.dto';
+import { FindAllDto } from './dto/find-all.dto';
+import { FindOneDto } from './dto/find-one.dto';
+import { GetForBlockDto } from './dto/get-for-block.dto';
 
 /**
  * Controller for image manipulation.
@@ -70,7 +76,10 @@ export class ImageController {
    * @returns number of documents
    */
   @Get('count')
-  documentCount(): Promise<number> {
+  documentCount(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Query(new ValidationPipe({ transform: true })) dto: DocumentCountDto,
+  ): Promise<number> {
     return this.imageService.getImageCount();
   }
 
@@ -81,14 +90,25 @@ export class ImageController {
    * @returns Array of documents
    */
   @Get()
-  findAll(@Query('fields') fields: string): Promise<any> {
-    winstonLogger.info('Getting all Images');
-    if (fields) {
-      winstonLogger.info(`Query fields: ${fields}`);
-      return this.imageService.getAllImagesWithFields(fields);
-    } else {
-      return this.imageService.getAllImages();
-    }
+  findAll(
+    @Query(new ValidationPipe({ transform: true })) dto: FindAllDto,
+  ): Promise<any> {
+    winstonLogger.info(`Getting all Images with Query fields: ${dto.fields}`);
+    return this.imageService.getAllImagesWithFields(dto.fields);
+  }
+
+  /**
+   * Returns the list of documents with images from Mongo matching the typeOfImage condition
+   *
+   * @param filterDto validated query parameter (typeOfImage)
+   * @returns
+   */
+  @Get('type')
+  findImagesByType(
+    @Query(new ValidationPipe({ transform: true }))
+    filterDto: GetImagesFilterDto,
+  ): Promise<any> {
+    return this.imageService.findImagesByType(filterDto.typeOfImage);
   }
 
   /**
@@ -127,9 +147,9 @@ export class ImageController {
   @Get(':uid')
   findOne(
     @Param('uid') uid: string,
-    @Query('fields') fields: string,
+    @Query(new ValidationPipe()) dto: FindOneDto,
   ): Promise<any> {
-    return this.imageService.findOne(uid, fields);
+    return this.imageService.findOne(uid, dto.fields);
   }
 
   /**
@@ -141,17 +161,17 @@ export class ImageController {
    */
   @Get('/block/:count')
   getForBlock(
-    @Param('count') count: number,
-    @Query('fields') fields: string,
+    @Param('count', ValidationPipe) count: number,
+    @Query(new ValidationPipe({ transform: true })) dto: GetForBlockDto,
   ): Promise<any> {
-    return this.imageService.findBlock(count, fields);
+    return this.imageService.findBlock(count, dto.fields);
   }
 
   /**
    * Delete document by its UID
    */
   @Delete(':uid')
-  deleteOne(@Param('uid') uid: string): Promise<boolean> {
+  deleteOne(@Param('uid', ValidationPipe) uid: string): Promise<boolean> {
     winstonLogger.info(`Request for deletion of this document: ${uid}`);
     return this.imageService.deleteOne(uid);
   }
