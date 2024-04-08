@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Delete, get } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
 
