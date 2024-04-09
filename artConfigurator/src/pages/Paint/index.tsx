@@ -7,7 +7,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
 import { useRef, useState } from "react";
 import { post } from "../../api/axiosInstance";
-
+import { message } from "antd";
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const IMG = import.meta?.env?.VITE_API_IMAGE;
@@ -26,7 +26,6 @@ const type_A = "isAtelier";
 const type_P = "isPainting";
 
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
-  //Photo
   const [selectedPhoto, setSelectedPhoto] = useState<Fdata | undefined>(
     undefined
   );
@@ -53,7 +52,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     if (confirmation) {
       setSelectedPhoto(undefined);
       if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -67,42 +66,35 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     setEditorData(data);
   };
 
-  // radio
   const [radioValue, setRadioValue] = useState<string | undefined>();
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRadioValue(event.target.value);
   };
 
-  // очистить контент
   const handleClearContent = () => {
     setEditorData(default_text);
     setSelectedPhoto(undefined);
   };
 
-  // отправка данных
   const handleSaveClick = async () => {
-    // Удаление HTML-тегов для получения простого текста
-    // let plainText = editorData
-    //   .replace(/&[^;]+;/g, "")
-    //   .replace(/<\/p>/g, "\n")
-    //   .replace(/<p>/g, "");
-    // console.log(editorData);
-
-    if (selectedPhoto && radioValue && editorData) {
-      const formData = new FormData();
-      formData.append("file", selectedPhoto.body);
-      formData.append("description", editorData);
-      formData.append("typeOfImage", radioValue);
-      const headers = {
-        "Content-Type": `multipart/form-data;`,
-      };
-      //todo добавить Сообщение об успешной неуспешной доставке изрбражения
-      const response = await post(headers, BURL, IMG, true, formData);
-      return response.data;
-    } else {
-      console.error("Какие-то проблеммы...");
-      //todo добавить Сообщение в случае, если: 1) файл не выбран 2) поле описание не заполнено  3) не выбрано знач в Radio кнопках
+    try {
+      if (selectedPhoto && radioValue && editorData) {
+        const formData = new FormData();
+        formData.append("file", selectedPhoto.body);
+        formData.append("description", editorData);
+        formData.append("typeOfImage", radioValue);
+        const headers = {
+          "Content-Type": `multipart/form-data;`,
+        };
+        const response = await post(headers, BURL, IMG, true, formData);
+        message.success("Painting successfully uploaded");
+        return response.data;
+      } else {
+        message.error("Some required fields are missing");
+      }
+    } catch (res: any) {
+      message.error(res);
     }
   };
 
@@ -111,7 +103,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
         Bearbeiten der Gemälde Seite
       </div>
-      <div className="flex justify-around m-[5%]">
+      <div className="flex gap-6 justify-around m-[5%]">
         <div className="flex flex-col justify-start items-center w-[40%]">
           <div className="font-federo text-3xl mb-4">Foto</div>
           <label htmlFor="file-input">

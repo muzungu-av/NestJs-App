@@ -5,7 +5,7 @@ import bgImgAtelier from "../../assets/images/bgImgAtelier.jpg";
 import bgImgKopien from "../../assets/images/bgImgKopien.jpg";
 import { OnePaintingSection } from "./oneSection";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface PaintingsProps {
   pageType: "Gemälde" | "Atelier" | "Kopien";
@@ -13,6 +13,7 @@ interface PaintingsProps {
 
 export const Paintings = ({ pageType }: PaintingsProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const ai = import.meta?.env?.VITE_API_IMAGE;
@@ -21,14 +22,25 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
 
   const [paintings, setPaintings] = useState<any[]>([]);
 
-  // const params = {
-  //   fields: "description,dimension,imageUrl,miniImageUrl",
-  // };
   const getPictures = async () => {
     try {
       const response = await get(BACKEND_API, `${ai}/`, false, false);
-      console.log("response.data", response.data);
-      setPaintings(response.data);
+ 
+      if (pageType === "Gemälde") {
+        setPaintings(
+          response.data.filter((item: any) => item.typeOfImage === "isPainting")
+        );
+      }
+      if (pageType === "Atelier") {
+        setPaintings(
+          response.data.filter((item: any) => item.typeOfImage === "isAtelier")
+        );
+      }
+      if (pageType === "Kopien") {
+        setPaintings(
+          response.data.filter((item: any) => item.typeOfImage === "isKopien")
+        );
+      }
     } catch (error) {
       console.error("Error fetching paintings:", error);
     } finally {
@@ -36,7 +48,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
   };
   useEffect(() => {
     getPictures();
-  }, []);
+  }, [location.pathname]);
 
   return (
     <MainLayout>
@@ -72,7 +84,17 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
             text={painting.description}
             imgURL={painting.miniImageUrl}
             id={painting.id}
-            onClick={() => navigate(`/painting/${painting.uid}`)}
+            onClick={() => {
+              if (pageType === "Gemälde") {
+                navigate(`/contacts`);
+              }
+              if (pageType === "Atelier") {
+                navigate(`/contacts`);
+              }
+              if (pageType === "Kopien") {
+                navigate(`/painting/${painting.uid}`);
+              }
+            }}
           />
         ))}
       </>

@@ -49,25 +49,25 @@ export const menuItemsWithPaths = [
     children: [
       {
         id: 7,
+        name: "Kopien list",
+        path: "/paintings-kopien",
+        element: PaintingsKopien,
+      },
+      {
+        id: 8,
         name: "Add kopien",
         path: "/add-kopien",
         element: AddingEditingKopien,
         isEditMode: false,
       },
       {
-        id: 8,
+        id: 9,
         name: "Edit kopien",
         path: "/edit-kopien",
         element: AddingEditingKopien,
         isEditMode: true,
       },
     ],
-  },
-  {
-    id: 9,
-    name: "Paintings kopien",
-    path: "/paintings-kopien",
-    element: PaintingsKopien,
   },
   {
     id: 10,
