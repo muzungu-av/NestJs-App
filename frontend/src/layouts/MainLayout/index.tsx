@@ -7,7 +7,6 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   const [isLoader, setLoader] = useState(false);
   const location = useLocation();
   useEffect(() => {
-    console.log("location", location);
     setLoader(true);
     const changeState = () => {
       setTimeout(() => {
@@ -15,11 +14,9 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       }, 500);
     };
     changeState();
-    console.log("window.location", window.location.pathname)
   }, [location]);
-  
-  return (
 
+  return (
     <>
       <Header />
       {isLoader ? (

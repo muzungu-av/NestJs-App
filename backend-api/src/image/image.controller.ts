@@ -12,6 +12,7 @@ import {
   Req,
   Query,
   ValidationPipe,
+  Put,
 } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { Express } from 'express';
@@ -65,6 +66,33 @@ export class ImageController {
         typeOfImage,
       );
       return response.status(201).json({ uid: result.uid });
+    } catch (error) {
+      return response.status(500).json({ message: `${error}` });
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':uid') // Используем PUT метод и ожидаем параметр uid в URL
+  async update(
+    @Param('uid') uid: string, // Получаем параметр uid из URL
+    @Body('description') description: string,
+    @Body('typeOfImage') typeOfImage: string,
+    @Req() request: any,
+    @Res() response: any,
+  ) {
+    const { user } = request;
+    winstonLogger.info(
+      `PUT request 'updateFile' from user: ${JSON.stringify(user.userId)}`,
+    );
+    try {
+      // Предположим, что ваш сервис имеет метод для обновления данных файла по его uid
+      const result = await this.imageService.updateFile(
+        uid,
+        user.userId,
+        description,
+        typeOfImage,
+      );
+      return response.status(200).json({ result });
     } catch (error) {
       return response.status(500).json({ message: `${error}` });
     }

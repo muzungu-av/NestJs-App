@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
-import { Delete, get } from "../../api/axiosInstance";
+import { Delete, Get } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
 
 const sc = import.meta?.env?.VITE_SCHEME;
@@ -32,6 +32,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   miniImageUrl,
   description,
 }) => {
+  const navigate = useNavigate();
   const sanitizedDescription = DOMPurify.sanitize(description); //безопасный текст, санитаризация
   return (
     <div className="flex justify-between py-[5%]">
@@ -80,12 +81,19 @@ const PicSection: React.FC<PicSectionProps> = ({
             </div>
           </div>
           <div className="flex gap-4">
-            <button className="btn-primary">ändern</button>
+            <button
+              className="btn-primary"
+              onClick={() => {
+                navigate(`/edit-paint/${uid}`);
+              }}
+            >
+              ändern {/*Change*/}
+            </button>
             <button
               className="btn-primary"
               onClick={() => handleDeleteClick(uid)}
             >
-              löschen
+              löschen {/*delete*/}
             </button>
           </div>
         </div>
@@ -97,8 +105,7 @@ const PicSection: React.FC<PicSectionProps> = ({
 const fetchDataFromApi = async () => {
   try {
     const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
-    const response = await get(undefined, url, img, false, params);
-    console.log(response.data);
+    const response = await Get(undefined, url, img, false, params);
     return response.data;
   } catch (error) {
     console.error("Error fetching data from backend:", error);
