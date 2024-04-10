@@ -5,9 +5,9 @@ export const Axios = (credentials: boolean, jwtAuth: boolean) => {
   let h = {
     timeout: 5000,
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     } as { [key: string]: string },
-    withCredentials: credentials,
+    withCredentials: credentials
   };
 
   if (jwtAuth) {
@@ -15,6 +15,23 @@ export const Axios = (credentials: boolean, jwtAuth: boolean) => {
   }
 
   return axios.create(h);
+};
+export const post = async (
+  headers: any,
+  baseUrl: string,
+  relatedUrl: string,
+  // credentials: boolean,
+  jwtAuth: boolean,
+  data: any
+) => {
+  try {
+    const instance = Axios(headers, jwtAuth);
+    const response = await instance.post(baseUrl + relatedUrl, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error making POST request:", error);
+    throw error;
+  }
 };
 
 export const get = async (

@@ -2,8 +2,37 @@ import ContactPic from "../../assets/images/contactPic.jpg";
 import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
+import { post } from "../../api/axiosInstance";
+import { useRef } from "react";
 
 export const Contacts: React.FC = () => {
+  const sc = import.meta?.env?.VITE_SCHEME;
+  const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+  const mailing = import.meta?.env?.VITE_API_MAILING;
+  const URL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSend = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const formObject: { [key: string]: string } = {};
+    formData.forEach((value, key) => {
+      formObject[key as string] = value as string;
+    });
+    const payload = {
+      email: formObject.email,
+      text: formObject.nachricht,
+      name: formObject.name,
+      number: formObject.nummer,
+      surname: formObject.vorname
+    };
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    await post(headers, URL, mailing, true, payload).then(() =>
+      formRef.current?.reset()
+    );
+  };
   return (
     <div className="py-[10%] px-[5%]">
       <div className="flex flex-col justify-center gap-6">
@@ -24,16 +53,22 @@ export const Contacts: React.FC = () => {
             </div>
             <div className="flex gap-5 px-[5%] justify-center lg:justify-start font-federo text-base">
               <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-32 h-12 items-center ">
-                <p>E-mail</p>
+                <a href="mailto:info@haltentech.com"> E-mail</a>
                 <img src={Gmail} />
               </div>
 
               <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-12 h-12 items-center ">
-                <img src={Instagram} />
+                <a>
+                  {" "}
+                  <img src={Instagram} />
+                </a>
               </div>
 
               <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-12 h-12 items-center ">
-                <img src={FaceBook} />
+                <a>
+                  {" "}
+                  <img src={FaceBook} />
+                </a>
               </div>
             </div>
           </div>
@@ -41,7 +76,11 @@ export const Contacts: React.FC = () => {
             <h3 className="font-federo text-2xl py-10">
               Oder schreiben Sie mir
             </h3>
-            <div className="flex flex-col gap-5 font-poppins text-sm font-medium">
+            <form
+              ref={formRef}
+              onSubmit={handleSend}
+              className="flex flex-col gap-5 font-poppins text-sm font-medium"
+            >
               <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-[50%]">
                   <label htmlFor="name">Name</label>
@@ -88,8 +127,10 @@ export const Contacts: React.FC = () => {
                   ></input>
                 </div>
               </div>
-              <button className="btn-primary self-end">Senden</button>
-            </div>
+              <button type="submit" className="btn-primary self-end">
+                Senden
+              </button>
+            </form>
           </div>
         </div>
       </div>

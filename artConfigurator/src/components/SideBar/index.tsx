@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { menuItemsWithPaths } from "../../App.tsx";
-import MultiLevelMenu from "../menu/index.tsx";
+import MultiLevelMenu from "../Menu";
 
 interface SideBar {
   setIsClicked: any;
