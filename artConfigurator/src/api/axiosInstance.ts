@@ -20,7 +20,7 @@ export const Axios = (header: any, jwtAuth: boolean) => {
   return axios.create(h);
 };
 
-export const Get = async (
+export const get = async (
   headers: any,
   baseUrl: string,
   relatedUrl: string,
@@ -38,7 +38,7 @@ export const Get = async (
   }
 };
 
-export const Post = async (
+export const post = async (
   headers: any,
   baseUrl: string,
   relatedUrl: string,
@@ -52,23 +52,6 @@ export const Post = async (
     return response.data;
   } catch (error) {
     console.error("Error making POST request:", error);
-    throw error;
-  }
-};
-
-export const Put = async (
-  headers: any,
-  baseUrl: string,
-  relatedUrl: string,
-  jwtAuth: boolean,
-  data: any
-) => {
-  try {
-    const instance = Axios(headers, jwtAuth);
-    const response = await instance.put(baseUrl + relatedUrl, data);
-    return response.data;
-  } catch (error) {
-    console.error("Error making PUT request:", error);
     throw error;
   }
 };

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
-import { Delete, Get } from "../../api/axiosInstance";
+import { Delete, get } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
 import { message } from "antd";
 const sc = import.meta?.env?.VITE_SCHEME;
@@ -26,99 +26,86 @@ export const Pictures = () => {
     }
   };
 
-  if (userAnswer) {
-    await Delete(url + img, "/" + uid, true);
-  }
-};
-
-const PicSection: React.FC<PicSectionProps> = ({
-  uid,
-  typeOfImage,
-  groupName,
-  miniImageUrl,
-  description,
-}) => {
-  const navigate = useNavigate();
-  const sanitizedDescription = DOMPurify.sanitize(description); //безопасный текст, санитаризация
-  return (
-    <div className="flex justify-between py-[5%]">
-      <img src={miniImageUrl} className="" />
-      <div
-        className="w-1/2"
-        dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-      />
-      <div className="w-1/4 flex justify-center">
-        <div className="flex flex-col gap-6">
-          <div className="flex gap-8">
-            <p>Auf Seite posten: </p>
-            <div>
-              <div className="flex items-center mb-4">
-                <input
-                  id={groupName + "_P"}
-                  type="radio"
-                  value=""
-                  defaultChecked={typeOfImage === "isPainting"}
-                  name={groupName}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label
-                  htmlFor={groupName + "_P"}
-                  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Gemälde
-                </label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  id={groupName + "_A"}
-                  type="radio"
-                  value=""
-                  name={groupName}
-                  defaultChecked={typeOfImage === "isAtelier"}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label
-                  htmlFor={groupName + "_A"}
-                  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Atelier{" "}
-                </label>
+  const PicSection: React.FC<PicSectionProps> = ({
+    uid,
+    typeOfImage,
+    groupName,
+    miniImageUrl,
+    description,
+  }) => {
+    const sanitizedDescription = DOMPurify.sanitize(description); //безопасный текст, санитаризация
+    return (
+      <div className="flex justify-between py-[5%]">
+        <img src={miniImageUrl} className="" />
+        <div
+          className="w-1/2"
+          dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+        />
+        <div className="w-1/4 flex justify-center">
+          <div className="flex flex-col gap-6">
+            <div className="flex gap-8">
+              <p>Auf Seite posten: </p>
+              <div>
+                <div className="flex items-center mb-4">
+                  <input
+                    id={groupName + "_P"}
+                    type="radio"
+                    value=""
+                    defaultChecked={typeOfImage === "isPainting"}
+                    name={groupName}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor={groupName + "_P"}
+                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Gemälde
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    id={groupName + "_A"}
+                    type="radio"
+                    value=""
+                    name={groupName}
+                    defaultChecked={typeOfImage === "isAtelier"}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor={groupName + "_A"}
+                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Atelier{" "}
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex gap-4">
-            <button
-              className="btn-primary"
-              onClick={() => {
-                navigate(`/edit-paint/${uid}`);
-              }}
-            >
-              ändern {/*Change*/}
-            </button>
-            <button
-              className="btn-primary"
-              onClick={() => handleDeleteClick(uid)}
-            >
-              löschen {/*delete*/}
-            </button>
+            <div className="flex gap-4">
+              <button className="btn-primary">ändern</button>
+              <button
+                className="btn-primary"
+                onClick={() => handleDeleteClick(uid)}
+              >
+                löschen
+              </button>
+            </div>
           </div>
         </div>
       </div>
     );
   };
 
-const fetchDataFromApi = async () => {
-  try {
-    const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
-    const response = await Get(undefined, url, img, false, params);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data from backend:", error);
-    return null;
-  }
-};
-
-export const Pictures = () => {
+  const fetchDataFromApi = async () => {
+    try {
+      const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
+      const response = await get(undefined, url, img, false, params);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data from backend:", error);
+      return null;
+    }
+  };
+  const [data, setData] = useState<PicSectionProps[] | null>(null);
   const navigate = useNavigate();
   const handleAddNewClick = () => {
     navigate("/add-paint");

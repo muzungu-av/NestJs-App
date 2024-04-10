@@ -5,8 +5,11 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
 import { loremIpsum } from "lorem-ipsum";
-
 export const Biography = () => {
+  // const handleEditorChange = (event: any, editor: any) => {
+  //   const data = editor.getData();
+  //   console.log({ event, editor, data });
+  // };
   return (
     <>
       <MainLayout>
@@ -40,7 +43,7 @@ export const Biography = () => {
               //   handleEditorChange(event, editor);
               // }}
               // onBlur={(event, editor) => {
-              //   ("Blur.", editor);
+              //   console.log("Blur.", editor);
               // }}
               // onFocus={(event, editor) => {
               //   console.log("Focus.", editor);

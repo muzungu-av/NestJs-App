@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { Post } from "../api/axiosInstance";
+import { post } from "../api/axiosInstance";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -26,7 +26,7 @@ class AuthStore {
   }
   async login(loginFormData: { username: string; password: string }) {
     try {
-      const res = await Post(undefined, URL, login, true, loginFormData); // это не тестировалось, нет страницы
+      const res = await post(undefined, URL, login, true, loginFormData); // это не тестировалось, нет страницы
       this.access_token = res.access_token;
       localStorage.setItem("access_token", this.access_token);
       this.isLoggedIn = true;

@@ -10,8 +10,7 @@ import { useNavigate, useParams } from "react-router";
 import { get } from "../../api/axiosInstance";
 import { CreateImageDto } from "../../../types.d";
 export const AboutPainting: React.FC = () => {
-  const [_paintingData, setPaintingData] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [paintingData, setPaintingData] = useState<CreateImageDto>();
   const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
   const objPaint = {
     img: boatPic,
@@ -40,7 +39,8 @@ export const AboutPainting: React.FC = () => {
   useEffect(() => {
     getPictureById();
   }, []);
-  type Paint = { isMain: boolean; img: any; w?: number; h?: number };
+  console.log("paintingData", paintingData);
+  // type Paint = { isMain: boolean; img: any; w?: number; h?: number };
   useEffect(() => {}, []);
   const navigate = useNavigate();
 

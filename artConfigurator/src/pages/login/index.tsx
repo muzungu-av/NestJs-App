@@ -27,6 +27,8 @@ const LogIn: React.FC = observer(() => {
   const handleLogin = async () => {
     try {
       await AuthStore.login(formData);
+      console.log("AuthStore.isLoggedIn");
+      console.log(AuthStore.isLoggedIn);
       if (AuthStore.isLoggedIn) {
         const access_token = AuthStore.access_token;
         localStorage.setItem("access_token", access_token);

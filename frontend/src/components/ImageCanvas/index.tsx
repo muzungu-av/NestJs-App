@@ -13,10 +13,11 @@ const ImageCanvas: React.FC<ImageCanvasProps> = ({ pic }) => {
         const img = new Image();
         img.src = pic;
         img.onload = function () {
+          console.log("Image loaded successfully");
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         };
         img.onerror = function (_event) {
-          console.error("Image source:", img.src);
+          console.log("Image source:", img.src);
         };
       }
     }
