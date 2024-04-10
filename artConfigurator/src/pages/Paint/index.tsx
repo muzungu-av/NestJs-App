@@ -8,7 +8,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useRef, useState } from "react";
 import { Put, Get, Post } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
-
+import { Spinner } from "../../components/Spinner";
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const IMG = import.meta?.env?.VITE_API_IMAGE;
@@ -29,6 +29,7 @@ const type_A = "isAtelier";
 const type_P = "isPainting";
 
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
+  const [loader, setLoader] = useState<boolean>(false);
   const { uid } = useParams();
   //Photo
   const fetchDataFromApi = async () => {
@@ -130,7 +131,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   // Проверка наличия необходимых данных
   const checkData = () => {
     if (!entityDataObject || !entityDataObject.typeOfImage || !editorData) {
-      alert("Nicht alle Daten sind ausgefüllt");
+      message.error("Nicht alle Daten sind ausgefüllt");
       return false;
     }
     return true;
@@ -140,6 +141,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   const handleSaveClick = async () => {
     if (checkData()) {
       try {
+        setLoader(true);
         if (!isEditMode) {
           const formData = new FormData();
           formData.append("description", editorData);
@@ -173,8 +175,10 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           message.success("Painting successfully uploaded");
           return response.data;
         }
-      } catch (res: any) {
-        message.error(res);
+      } catch (e) {
+        message.error("Bild nicht geladen");
+      } finally {
+        setLoader(false);
       }
     }
   };
@@ -188,10 +192,15 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
   return (
     <MainLayout>
+      {loader && <Spinner />}
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
         Bearbeiten der Gemälde Seite
       </div>
-      <div className="flex gap-6 justify-around m-[5%]">
+      <div
+        className={`flex gap-6 justify-around m-[5%] ${
+          loader ? "opacity-50" : "opacity-100"
+        }`}
+      >
         <div className="flex flex-col justify-start items-center w-[40%]">
           <div className="font-federo text-3xl mb-4">Foto</div>
           <label htmlFor="file-input">

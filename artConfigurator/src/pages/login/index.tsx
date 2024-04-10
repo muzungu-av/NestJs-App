@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import AuthStore from "../../store/AuthStore";
 import { menuItemsWithPaths } from "../../App.tsx";
+import { message } from "antd";
 type FormData = {
   username: string;
   password: string;
@@ -35,9 +36,11 @@ const LogIn: React.FC = observer(() => {
         navigate(first_rout);
       } else {
         console.error("Authentication error: Invalid response");
+        message.error("Please check your email and password");
       }
     } catch (error) {
-      console.error("Authentication error:", error);
+      console.error("Authentication error", error);
+      message.error("Authentication error");
     }
   };
   const handleKeyPress = (event: any) => {
@@ -67,7 +70,7 @@ const LogIn: React.FC = observer(() => {
                     <label htmlFor="username">Benutzername</label>
                     <input
                       className="border-t-0 border-x-0 border-b-[1px]"
-                      type="text"
+                      type="email"
                       name="username"
                       onChange={handleInputChange}
                       value={formData.username}

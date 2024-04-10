@@ -37,15 +37,15 @@ const PicSection: React.FC<PicSectionProps> = ({
   const navigate = useNavigate();
   const sanitizedDescription = DOMPurify.sanitize(description); //безопасный текст, санитаризация
   return (
-    <div className="flex justify-between py-[5%]">
+    <div className="flex justify-between gap-6 py-[5%]">
       <img src={miniImageUrl} className="" />
       <div
-        className="w-1/2"
+        className="w-1/2 text-xl"
         dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
       />
       <div className="w-1/4 flex justify-center">
         <div className="flex flex-col gap-6">
-          <div className="flex gap-8">
+          <div className="flex gap-8 text-xl">
             <p>Auf Seite posten: </p>
             <div>
               <div className="flex items-center mb-4">
@@ -59,7 +59,7 @@ const PicSection: React.FC<PicSectionProps> = ({
                 />
                 <label
                   htmlFor={groupName + "_P"}
-                  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  className="ms-2 text-xl font-medium text-gray-900 dark:text-gray-300"
                 >
                   Gemälde
                 </label>
@@ -75,16 +75,16 @@ const PicSection: React.FC<PicSectionProps> = ({
                 />
                 <label
                   htmlFor={groupName + "_A"}
-                  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  className="ms-2 text-xl font-medium text-gray-900 dark:text-gray-300"
                 >
                   Atelier{" "}
                 </label>
               </div>
             </div>
           </div>
-          <div className="flex gap-4">
+          <div className="flex justify-between">
             <button
-              className="btn-primary"
+              className="btn-primary w-28"
               onClick={() => {
                 navigate(`/edit-paint/${uid}`);
               }}
@@ -92,7 +92,7 @@ const PicSection: React.FC<PicSectionProps> = ({
               ändern {/*Change*/}
             </button>
             <button
-              className="btn-primary"
+              className="btn-primary w-28"
               onClick={() => handleDeleteClick(uid)}
             >
               löschen {/*delete*/}

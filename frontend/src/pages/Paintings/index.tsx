@@ -6,7 +6,7 @@ import bgImgKopien from "../../assets/images/bgImgKopien.jpg";
 import { OnePaintingSection } from "./oneSection";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { message } from "antd";
 interface PaintingsProps {
   pageType: "Gemälde" | "Atelier" | "Kopien";
 }
@@ -43,6 +43,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
       }
     } catch (error) {
       console.error("Error fetching paintings:", error);
+      message.error("Error getting paintings");
     } finally {
     }
   };
