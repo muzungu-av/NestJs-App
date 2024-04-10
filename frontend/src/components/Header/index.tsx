@@ -52,7 +52,7 @@ const Header = () => {
   const MenuLink: React.FC<MenuLinkProps> = ({ to, children }) => {
     return (
       <div>
-        <Link to={to} className="menu-link">
+        <Link to={to} className="menu-link" onClick={() => setMenuOpen(false)}>
           {children}
         </Link>
       </div>
@@ -64,10 +64,10 @@ const Header = () => {
         <nav
           className={`navLinks font-federo  gap-6 text-xl flex flex-col items-center pt-10  `}
         >
-          <MenuLink to="/about-me">Biografie</MenuLink>
+          <MenuLink to="/bio">Biografie</MenuLink>
           <MenuLink to="/paintings">Gemälde</MenuLink>
           <MenuLink to="/dibond">Atelier</MenuLink>
-          <MenuLink to="/painting">Kopien</MenuLink>
+          <MenuLink to="/kopien">Kopien</MenuLink>
           <MenuLink to="/contacts">Kontakte</MenuLink>
         </nav>
       </div>
@@ -86,10 +86,10 @@ const Header = () => {
             Calvin Calva
           </h5>
           <nav className="navLinks font-federo  gap-6 text-xl hidden lg:flex">
-            <MenuLink to="/about-me">Biografie</MenuLink>
+            <MenuLink to="/bio">Biografie</MenuLink>
             <MenuLink to="/paintings">Gemälde</MenuLink>
             <MenuLink to="/dibond">Atelier</MenuLink>
-            <MenuLink to="/painting">Kopien</MenuLink>
+            <MenuLink to="/kopien">Kopien</MenuLink>
             <MenuLink to="/contacts">Kontakte</MenuLink>
           </nav>
           <img

@@ -1,5 +1,6 @@
 import ShoppingCart from "../../../assets/icons/ShoppingCart.svg";
 import DOMPurify from "dompurify";
+import style from './oneSection.module.scss'
 
 export const OnePaintingSection = ({
   text,
@@ -12,9 +13,9 @@ export const OnePaintingSection = ({
   id: string;
   onClick: any;
 }) => {
-  const sanitizedText = DOMPurify.sanitize(text); //безопасный текст, санитаризация
+  const sanitizedText = DOMPurify.sanitize(text);
   return (
-    <div className="  py-[5%] px-[5%]" id={id} onClick={onClick}>
+    <div className="py-[5%] px-[5%]" id={id} onClick={onClick}>
       <div className="flex justify-between gap-2 lg:gap-6 lg:p-[30px]">
         <div className="max-w-[50%] min-h-full  ">
           <img
@@ -27,7 +28,10 @@ export const OnePaintingSection = ({
             Bildname
           </div>
           <p
-            className="font-['Federo'] text-sm lg:text-xl"
+          style={{
+        
+          }}
+            className={`font-['Federo'] text-sm lg:text-xl ${style.wrappedText}`}
             dangerouslySetInnerHTML={{ __html: sanitizedText }}
           ></p>{" "}
           <div className=" mt-2">

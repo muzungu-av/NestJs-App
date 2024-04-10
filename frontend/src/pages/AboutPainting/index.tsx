@@ -8,7 +8,7 @@ import autumnPic from "../../assets/images/3.png";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import { useNavigate, useParams } from "react-router";
 import { get } from "../../api/axiosInstance";
-
+import { CreateImageDto } from "../../../types.d";
 export const AboutPainting: React.FC = () => {
   const [_paintingData, setPaintingData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,27 +21,20 @@ export const AboutPainting: React.FC = () => {
       { img: mini2, isMain: false },
     ],
   };
-  const miniatureArr1 = [
-    { isMain: true, img: boatPic, w: 320, h: 479 },
-    { img: mini1, isMain: false },
-    { img: mini2, isMain: false },
-  ];
+ 
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const ai = import.meta?.env?.VITE_API_IMAGE;
   const { id } = useParams();
   const BACKEND_API =
-    sc && bu ? `${sc}://${bu}/` : "http://localhost-default:9000";
+    sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
   const getPictureById = async () => {
     try {
-      setLoading(true);
       const response = await get(BACKEND_API, `${ai}/${id}`, false, false);
       setPaintingData(response.data);
     } catch (error) {
       console.error("Error fetching paintings:", error);
-    } finally {
-      setLoading(false);
     }
   };
   useEffect(() => {
@@ -54,24 +47,26 @@ export const AboutPainting: React.FC = () => {
   const PaintingSection = () => {
     return (
       <>
-        <div>
+        <div className="py-[5%]">
           <div className="font-italiana flex justify-center text-4xl lg:text-[64px] ">
             Kopien der Gemälde
           </div>{" "}
           <div className=" flex justify-center font-italiana text-2xl lg:text-2xl p-10">
-            Bildname
+            {paintingData?.originalName}
           </div>
           <div className="flex lg:flex-row flex-col gap-[40px] px-[5%]">
-            <div className=" w-full lg:w-[60%]">
+            <div className=" lg:w-[60%]">
               <div className={objPaint.isLandscape ? "" : "flex flex-row"}>
                 {/*Main pic */}
                 <div
                   className={
-                    objPaint.isLandscape ? "lg:w-full" : "lg:w-1/2 lg:ml-20"
+                    objPaint.isLandscape
+                      ? "w-1/2 lg:w-full"
+                      : "w-1/2 lg:w-1/2 lg:ml-20"
                   }
                 >
                   <img
-                    src={miniatureArr1[0].img}
+                    src={paintingData?.imageUrl}
                     alt="Main"
                     style={{
                       border: "15px solid #240909",
@@ -88,19 +83,20 @@ export const AboutPainting: React.FC = () => {
                 <div
                   className={
                     objPaint.isLandscape
-                      ? "flex w-full pl-2"
-                      : "lg:w-1/2 lg:pl-2"
+                      ? "flex w-1/2 pl-2"
+                      : " flex flex-col gap-2 items-center w-1/2 lg:w-1/2 lg:pl-2"
                   }
                 >
-                  {objPaint.miniatures.map((v: Paint) => {
-                    return (
-                      <img
-                        src={v.img}
-                        alt="Thumbnail 1"
-                        className="w-full min-w-[20%] lg:w-1/2 p-4 lg:m-10 lg:p-0 "
-                      />
-                    );
-                  })}{" "}
+                  <img
+                    src={paintingData?.miniImageUrl}
+                    alt="Thumbnail 1"
+                    className="w-1/2 lg:w-1/2 p-4  lg:p-0 "
+                  />
+                  <img
+                    src={paintingData?.miniImageUrl}
+                    alt="Thumbnail 1"
+                    className="w-1/2 lg:w-1/2 p-4 lg:p-0 "
+                  />
                 </div>
               </div>
             </div>
@@ -157,63 +153,8 @@ export const AboutPainting: React.FC = () => {
             </div>
           </div>
           <div className="m-[5%]">
-            <p className="  font-federo text-sm lg:text-xl m-2">
-              Wie funktioniert das Kopieren von Bildern auf Dibond. Hier sind
-              einige gängige Schritte:
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Bildauswahl:{" "}
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              {" "}
-              Der Künstler oder Fotograf wählt das zu kopierende Bild auf Dibond
-              aus.
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Bildvorbereitung:{" "}
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Das Bild muss möglicherweise entsprechend der Größe der
-              Dibond-Platte vorbereitet, bearbeitet oder skaliert werden.
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Bildübertragung auf Dibond:{" "}
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              {" "}
-              Es gibt mehrere Möglichkeiten, ein Bild auf Dibond zu übertragen.
-              Beispielsweise kann ein Bild auf eine spezielle Selbstklebefolie
-              gedruckt werden, die dann auf die Dibond-Oberfläche geklebt wird.
-              Eine weitere Methode ist der direkte Druck des Bildes auf die
-              Dibond-Oberfläche mittels UV-Drucktechnologie.
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Bildfixierung:{" "}
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Nach der Übertragung des Bildes auf Dibond kann es fixiert oder
-              mit einer Schutzschicht beschichtet werden, um die Kratzfestigkeit
-              und die Umweltbelastung zu verbessern.
-            </p>{" "}
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Kantenbearbeitung:{" "}
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Auf Wunsch des Künstlers können die Kanten der Dibond-Platte
-              bearbeitet werden, um ihnen ein komplettes und professionelles
-              Aussehen zu verleihen.
-            </p>{" "}
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Aufhängung oder Montage:{" "}
-            </p>
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Wenn Dibond als Kunstplatte verwendet wird, kann es nach Ihren
-              Wünschen aufgehängt oder installiert werden.
-            </p>{" "}
-            <p className="  font-federo text-sm lg:text-base m-2">
-              Solche Techniken ermöglichen die Erstellung von stilvollen und
-              modernen künstlerischen Werken, die dank der Verwendung von Dibond
-              langlebig und langlebig sind.
+            <p className="  font-federo text-base lg:text-xl m-2">
+              {paintingData?.description}
             </p>
           </div>
         </div>
@@ -225,12 +166,10 @@ export const AboutPainting: React.FC = () => {
   };
   return (
     <MainLayout>
-      {loading && (
-        <>
-          <PaintingSection />
-          <PaintingSlider slides={slidesArr} />
-        </>
-      )}
+      <>
+        <PaintingSection />
+        <PaintingSlider slides={slidesArr} />
+      </>
     </MainLayout>
   );
 };

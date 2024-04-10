@@ -3,7 +3,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
 import { Delete, Get } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
-
+import { message } from "antd";
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const img = import.meta?.env?.VITE_API_IMAGE;
@@ -17,8 +17,14 @@ type PicSectionProps = {
   description: string;
 };
 
-const handleDeleteClick = async (uid: string) => {
-  const userAnswer = window.confirm("Хотите выполнить действие?");
+export const Pictures = () => {
+  const handleDeleteClick = async (uid: string) => {
+    const userAnswer = window.confirm("Do u want to delete?");
+    if (userAnswer) {
+      await Delete(url + img, "/" + uid, true);
+      message.success("Successfully deleted");
+    }
+  };
 
   if (userAnswer) {
     await Delete(url + img, "/" + uid, true);
@@ -98,9 +104,8 @@ const PicSection: React.FC<PicSectionProps> = ({
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 const fetchDataFromApi = async () => {
   try {
@@ -119,11 +124,9 @@ export const Pictures = () => {
     navigate("/add-paint");
   };
 
-  const [data, setData] = useState<PicSectionProps[] | null>(null);
-
   useEffect(() => {
-    fetchDataFromApi().then((result) => setData(result));
-  }, []);
+    fetchDataFromApi();
+  }, [data]);
 
   let j = 0;
   return (

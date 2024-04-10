@@ -91,7 +91,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     if (confirmation) {
       setEntityDataObject(undefined); //если удалили фото - удаляем все данные о нем
       if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -121,7 +121,6 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     });
   };
 
-  // очистить контент
   const handleClearContent = () => {
     setEditorData(default_text);
     setEntityDataObject(undefined);
@@ -136,7 +135,6 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     return true;
   };
 
-  // отправка данных
   const handleSaveClick = async () => {
     if (checkData()) {
       if (!isEditMode) {
@@ -185,7 +183,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
         Bearbeiten der Gemälde Seite
       </div>
-      <div className="flex justify-around m-[5%]">
+      <div className="flex gap-6 justify-around m-[5%]">
         <div className="flex flex-col justify-start items-center w-[40%]">
           <div className="font-federo text-3xl mb-4">Foto</div>
           <label htmlFor="file-input">
