@@ -86,7 +86,7 @@ const PicSection: React.FC<PicSectionProps> = ({
             <button
               className="btn-primary w-28"
               onClick={() => {
-                navigate(`/edit-paint/${uid}`);
+                navigate(`/edit_paint/${uid}`);
               }}
             >
               ändern {/*Change*/}
@@ -118,7 +118,7 @@ const fetchDataFromApi = async () => {
 export const Pictures = () => {
   const navigate = useNavigate();
   const handleAddNewClick = () => {
-    navigate("/add-paint");
+    navigate("/add_paint");
   };
 
   const [data, setData] = useState<PicSectionProps[] | null>(null);

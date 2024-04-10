@@ -1,4 +1,4 @@
-call docker-compose down
+call docker-compose stop
 echo ************ Backend *************
 CALL .\backend.bat
 
