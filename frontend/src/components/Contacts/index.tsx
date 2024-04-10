@@ -3,12 +3,14 @@ import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
 import { post } from "../../api/axiosInstance";
+import { useRef } from "react";
 
 export const Contacts: React.FC = () => {
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const mailing = import.meta?.env?.VITE_API_MAILING;
   const URL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleSend = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,7 +29,9 @@ export const Contacts: React.FC = () => {
     const headers = {
       "Content-Type": "application/json"
     };
-    await post(headers, URL, mailing, true, payload);
+    await post(headers, URL, mailing, true, payload).then(() =>
+      formRef.current?.reset()
+    );
   };
   return (
     <div className="py-[10%] px-[5%]">
@@ -49,16 +53,22 @@ export const Contacts: React.FC = () => {
             </div>
             <div className="flex gap-5 px-[5%] justify-center lg:justify-start font-federo text-base">
               <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-32 h-12 items-center ">
-                <p>E-mail</p>
+                <a href="mailto:info@haltentech.com"> E-mail</a>
                 <img src={Gmail} />
               </div>
 
               <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-12 h-12 items-center ">
-                <img src={Instagram} />
+                <a>
+                  {" "}
+                  <img src={Instagram} />
+                </a>
               </div>
 
               <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-12 h-12 items-center ">
-                <img src={FaceBook} />
+                <a>
+                  {" "}
+                  <img src={FaceBook} />
+                </a>
               </div>
             </div>
           </div>
@@ -67,6 +77,7 @@ export const Contacts: React.FC = () => {
               Oder schreiben Sie mir
             </h3>
             <form
+              ref={formRef}
               onSubmit={handleSend}
               className="flex flex-col gap-5 font-poppins text-sm font-medium"
             >

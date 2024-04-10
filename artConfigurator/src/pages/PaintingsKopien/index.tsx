@@ -2,11 +2,6 @@ import { useNavigate } from "react-router-dom";
 import photo from "./../../assets/images/EmptyPhoto.png";
 import MainLayout from "../../layouts/MainLayout";
 
-const sc = import.meta?.env?.VITE_SCHEME;
-const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
-const img = import.meta?.env?.VITE_API_IMAGE;
-const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
-
 export const PaintingsKopien = () => {
   const navigate = useNavigate();
   const copies = [
@@ -18,15 +13,15 @@ export const PaintingsKopien = () => {
         "60x80 cm",
         "110x133 cm",
         "120x160 cm",
-        "150x200 cm",
+        "150x200 cm"
       ],
-      price: ["99,00", "4.700,00"],
+      price: ["99,00", "4.700,00"]
     },
     {
       img: photo,
       sizes: ["40x60 cm", "50x70 cm", "60x80 cm"],
-      price: ["99,00", "4.700,00"],
-    },
+      price: ["99,00", "4.700,00"]
+    }
   ];
 
   return (
