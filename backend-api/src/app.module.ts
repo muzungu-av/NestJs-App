@@ -11,6 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { WinstonModule } from 'nest-winston';
 import { winstonLogger } from './winston.logger';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { MailModule } from 'mailing/mailing.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       expandVariables: true, // allow create nested environment variables
     }),
     ImageModule,
+    MailModule,
     UserModule,
     AuthModule,
     CloudinaryModule,

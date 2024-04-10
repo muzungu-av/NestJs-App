@@ -1,9 +1,34 @@
-
 import ContactPic from "../../assets/images/contactPic.jpg";
 import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
+import { post } from "../../api/axiosInstance";
+
 export const Contacts: React.FC = () => {
+  const sc = import.meta?.env?.VITE_SCHEME;
+  const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+  const mailing = import.meta?.env?.VITE_API_MAILING;
+  const URL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+
+  const handleSend = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const formObject: { [key: string]: string } = {};
+    formData.forEach((value, key) => {
+      formObject[key as string] = value as string;
+    });
+    const payload = {
+      email: formObject.email,
+      text: formObject.nachricht,
+      name: formObject.name,
+      number: formObject.nummer,
+      surname: formObject.vorname
+    };
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    await post(headers, URL, mailing, true, payload);
+  };
   return (
     <div className="py-[10%] px-[5%]">
       <div className="flex flex-col justify-center gap-6">
@@ -41,7 +66,10 @@ export const Contacts: React.FC = () => {
             <h3 className="font-federo text-2xl py-10">
               Oder schreiben Sie mir
             </h3>
-            <div className="flex flex-col gap-5 font-poppins text-sm font-medium">
+            <form
+              onSubmit={handleSend}
+              className="flex flex-col gap-5 font-poppins text-sm font-medium"
+            >
               <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-[50%]">
                   <label htmlFor="name">Name</label>
@@ -88,8 +116,10 @@ export const Contacts: React.FC = () => {
                   ></input>
                 </div>
               </div>
-              <button className="btn-primary self-end">Senden</button>
-            </div>
+              <button type="submit" className="btn-primary self-end">
+                Senden
+              </button>
+            </form>
           </div>
         </div>
       </div>
