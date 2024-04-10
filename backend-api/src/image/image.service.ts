@@ -356,4 +356,28 @@ export class ImageService {
       return false;
     }
   }
+
+  async updateFile(
+    uid: string,
+    userId: string,
+    description: string,
+    typeOfImage: string,
+  ): Promise<boolean> {
+    winstonLogger.info(`User ${userId} updates image ${uid}`);
+    winstonLogger.info(`description - ${description}`);
+    winstonLogger.info(`typeOfImageid - ${typeOfImage}`);
+    try {
+      const result = await this.imageModel.findOneAndUpdate(
+        { uid },
+        { description, typeOfImage },
+        { new: true },
+      );
+      winstonLogger.info(`${result}`);
+    } catch (error) {
+      // Обработка ошибок, если что-то пошло не так
+      console.error('Error updating file:', error);
+      return false;
+    }
+    return true;
+  }
 }

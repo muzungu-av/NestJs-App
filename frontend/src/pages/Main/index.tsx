@@ -7,9 +7,9 @@ import SitPic from "../../assets/images/SitPic.jpg";
 import { Contacts } from "../../components/Contacts";
 import { AboutMe } from "../AboutMe";
 import { get } from "../../api/axiosInstance";
-export const Main: React.FC = () => {
-  const slidesArr = [SmallPic, SmallPic, SmallPic, SmallPic];
 
+export const Main: React.FC = () => {
+  // const slidesArr = [SmallPic, SmallPic, SmallPic, SmallPic];
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const ai = import.meta?.env?.VITE_API_IMAGE;

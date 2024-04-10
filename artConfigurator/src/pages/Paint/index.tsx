@@ -1,13 +1,14 @@
 import emptyPhoto from "./../../assets/images/EmptyPhoto.png";
 import addPhoto from "./../../assets/images/Add_photo.png";
-import editPhoto from "./../../../../frontend/src/assets/images/BoatPicture.jpg";
+import { message } from "antd";
 import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
-import { useRef, useState } from "react";
-import { post } from "../../api/axiosInstance";
-import { message } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { Put, Get, Post } from "../../api/axiosInstance";
+import { useParams } from "react-router-dom";
+
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const IMG = import.meta?.env?.VITE_API_IMAGE;
@@ -17,18 +18,50 @@ interface AddingEditingPaintProps {
   isEditMode: boolean;
 }
 
-interface Fdata {
-  body: File;
-  filename: String;
+interface EntityDataStructure {
+  body: File | undefined;
+  url: string | undefined;
+  filename: String | undefined;
+  typeOfImage: string;
 }
 
 const type_A = "isAtelier";
 const type_P = "isPainting";
 
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
-  const [selectedPhoto, setSelectedPhoto] = useState<Fdata | undefined>(
-    undefined
-  );
+  const { uid } = useParams();
+  //Photo
+  const fetchDataFromApi = async () => {
+    try {
+      const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
+      const response = await Get(
+        undefined,
+        BURL,
+        `${IMG}/${uid}`,
+        false,
+        params
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data from backend:", error);
+      return null;
+    }
+  };
+
+  const [entityDataObject, setEntityDataObject] = useState<
+    EntityDataStructure | undefined
+  >(undefined);
+
+  useEffect(() => {
+    fetchDataFromApi().then((result) =>
+      setEntityDataObject({
+        body: undefined,
+        url: result.miniImageUrl,
+        filename: undefined,
+        typeOfImage: result.typeOfImage || "",
+      } as EntityDataStructure)
+    );
+  }, []);
 
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -36,8 +69,14 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
+      const type = entityDataObject?.typeOfImage || "";
       reader.onloadend = () => {
-        setSelectedPhoto({ body: file, filename: file.name } as Fdata);
+        setEntityDataObject({
+          body: file,
+          url: undefined,
+          filename: file.name,
+          typeOfImage: type,
+        } as EntityDataStructure);
       };
       reader.readAsDataURL(file);
     }
@@ -50,9 +89,9 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
       "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
     );
     if (confirmation) {
-      setSelectedPhoto(undefined);
+      setEntityDataObject(undefined); //если удалили фото - удаляем все данные о нем
       if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
       }
     }
   };
@@ -66,37 +105,86 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     setEditorData(data);
   };
 
-  const [radioValue, setRadioValue] = useState<string | undefined>();
-
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRadioValue(event.target.value);
+    const { value } = event.target;
+    setEntityDataObject((prevEntityDataObject) => {
+      if (prevEntityDataObject) {
+        return { ...prevEntityDataObject, typeOfImage: value };
+      } else {
+        return {
+          typeOfImage: value,
+          body: undefined,
+          url: undefined,
+          filename: undefined,
+        };
+      }
+    });
   };
 
+  // очистить контент
   const handleClearContent = () => {
     setEditorData(default_text);
-    setSelectedPhoto(undefined);
+    setEntityDataObject(undefined);
   };
 
+  // Проверка наличия необходимых данных
+  const checkData = () => {
+    if (!entityDataObject || !entityDataObject.typeOfImage || !editorData) {
+      alert("Nicht alle Daten sind ausgefüllt");
+      return false;
+    }
+    return true;
+  };
+
+  // отправка данных
   const handleSaveClick = async () => {
-    try {
-      if (selectedPhoto && radioValue && editorData) {
-        const formData = new FormData();
-        formData.append("file", selectedPhoto.body);
-        formData.append("description", editorData);
-        formData.append("typeOfImage", radioValue);
-        const headers = {
-          "Content-Type": `multipart/form-data;`,
-        };
-        const response = await post(headers, BURL, IMG, true, formData);
-        message.success("Painting successfully uploaded");
-        return response.data;
-      } else {
-        message.error("Some required fields are missing");
+    if (checkData()) {
+      try {
+        if (!isEditMode) {
+          const formData = new FormData();
+          formData.append("description", editorData);
+          formData.append("typeOfImage", entityDataObject!.typeOfImage);
+          if (entityDataObject?.body) {
+            formData.append("file", entityDataObject.body);
+          }
+          const headers = {
+            "Content-Type": `multipart/form-data;`,
+          };
+          const response = await Post(headers, BURL, IMG, true, formData);
+          console.log(response);
+          message.success("Painting successfully uploaded");
+          return response.data;
+        } else {
+          const headers = {
+            "Content-Type": "application/json",
+          };
+          const payload = {
+            description: editorData,
+            typeOfImage: entityDataObject?.typeOfImage,
+          };
+          const response = await Put(
+            headers,
+            BURL,
+            IMG + "/" + uid,
+            true,
+            payload
+          );
+          console.log(response);
+          message.success("Painting successfully uploaded");
+          return response.data;
+        }
+      } catch (res: any) {
+        message.error(res);
       }
-    } catch (res: any) {
-      message.error(res);
     }
   };
+
+  let img_resource = emptyPhoto;
+  if (entityDataObject && entityDataObject.body) {
+    img_resource = URL.createObjectURL(entityDataObject.body);
+  } else if (entityDataObject && entityDataObject.url) {
+    img_resource = entityDataObject.url;
+  }
 
   return (
     <MainLayout>
@@ -107,29 +195,18 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         <div className="flex flex-col justify-start items-center w-[40%]">
           <div className="font-federo text-3xl mb-4">Foto</div>
           <label htmlFor="file-input">
-            {isEditMode ? (
-              <img className="mb-2" src={editPhoto} />
-            ) : (
-              <img
-                className="mb-2"
-                src={
-                  selectedPhoto
-                    ? URL.createObjectURL(selectedPhoto.body)
-                    : emptyPhoto
-                }
-              />
-            )}
+            <img className="mb-2" src={img_resource} />
           </label>
           {isEditMode ? (
             <button className="w-[100%] flex justify-center m-2 ">
-              <img src={addPhoto} /> Foto ändern
+              <img src={addPhoto} /> Foto ändern {/* Change photo */}
             </button>
           ) : (
             <button
               className="w-[100%] flex justify-center m-2"
               onClick={handleDeletePhoto}
             >
-              <img src={deletePhoto} /> Foto löschen
+              <img src={deletePhoto} /> Foto löschen {/*Delete photo*/}
             </button>
           )}{" "}
         </div>{" "}
@@ -160,6 +237,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                 <input
                   id="default-radio-1"
                   type="radio"
+                  checked={entityDataObject?.typeOfImage === "isPainting"}
                   value={type_P}
                   name="default-radio"
                   onChange={handleRadioChange}
@@ -176,6 +254,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                 <input
                   id="default-radio-2"
                   type="radio"
+                  checked={entityDataObject?.typeOfImage === "isAtelier"}
                   value={type_A}
                   name="default-radio"
                   onChange={handleRadioChange}
@@ -192,10 +271,10 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           </div>
           <div className="flex justify-end my-4">
             <button className="btn-primary" onClick={handleClearContent}>
-              abbrechen
+              abbrechen {/* cancel */}
             </button>{" "}
             <button className="btn-primary ml-2" onClick={handleSaveClick}>
-              speichern
+              speichern {/* save */}
             </button>
           </div>
         </div>

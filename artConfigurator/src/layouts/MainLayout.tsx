@@ -1,6 +1,6 @@
 import { ReactNode, useRef, useState } from "react";
 import SideBar from "../components/SideBar";
-import Header from "../components/Header"; 
+import Header from "../components/header";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const [isClicked, setIsClicked] = useState(true);

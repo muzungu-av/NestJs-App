@@ -1,8 +1,8 @@
-
 import ContactPic from "../../assets/images/contactPic.jpg";
 import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
+
 export const Contacts: React.FC = () => {
   return (
     <div className="py-[10%] px-[5%]">

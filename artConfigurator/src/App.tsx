@@ -13,22 +13,26 @@ import { Videos } from "./pages/Videos/Videos";
 export const menuItemsWithPaths = [
   {
     id: 1,
+    visibilty: true,
     name: "Biography",
     path: "/biography",
     element: Biography,
   },
   {
     id: 2,
+    visibilty: true,
     name: "Paint",
     children: [
       {
         id: 4,
+        visibilty: true,
         name: "Pictures List",
         path: "/pictures-list",
         element: Pictures,
       },
       {
         id: 5,
+        visibilty: true,
         name: "Add paint",
         path: "/add-paint",
         element: AddingEditingPaint,
@@ -36,8 +40,9 @@ export const menuItemsWithPaths = [
       },
       {
         id: 6,
+        visibilty: false,
         name: "Edit paint",
-        path: "/edit-paint",
+        path: "/edit-paint/:uid",
         element: AddingEditingPaint,
         isEditMode: true,
       },
@@ -45,23 +50,20 @@ export const menuItemsWithPaths = [
   },
   {
     id: 3,
+    visibilty: true,
     name: "Kopien",
     children: [
       {
         id: 7,
-        name: "Kopien list",
-        path: "/paintings-kopien",
-        element: PaintingsKopien,
-      },
-      {
-        id: 8,
+        visibilty: true,
         name: "Add kopien",
         path: "/add-kopien",
         element: AddingEditingKopien,
         isEditMode: false,
       },
       {
-        id: 9,
+        id: 8,
+        visibilty: true,
         name: "Edit kopien",
         path: "/edit-kopien",
         element: AddingEditingKopien,
@@ -70,7 +72,15 @@ export const menuItemsWithPaths = [
     ],
   },
   {
+    id: 9,
+    visibilty: true,
+    name: "Paintings kopien",
+    path: "/paintings-kopien",
+    element: PaintingsKopien,
+  },
+  {
     id: 10,
+    visibilty: true,
     name: "Videos",
     path: "/videos",
     element: Videos,

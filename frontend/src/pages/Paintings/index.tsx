@@ -25,7 +25,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
   const getPictures = async () => {
     try {
       const response = await get(BACKEND_API, `${ai}/`, false, false);
- 
+
       if (pageType === "Gemälde") {
         setPaintings(
           response.data.filter((item: any) => item.typeOfImage === "isPainting")
