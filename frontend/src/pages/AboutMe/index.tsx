@@ -3,9 +3,11 @@ import videoPic from "../../assets/images/videoPic.jpg";
 import videoPic2 from "../../assets/images/videoPic2.jpg";
 import { GallerySection } from "../../components/GallerySection";
 import { useNavigate } from "react-router";
+
 interface AboutMeProps {
   isMain: boolean;
 }
+
 export const AboutMe = ({ isMain }: AboutMeProps) => {
   const navigate = useNavigate();
   const AboutPainterSection: React.FC = () => {

@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
-import { Delete, get } from "../../api/axiosInstance";
+import { Delete, Get } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
+import { message } from "antd";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -18,10 +19,11 @@ type PicSectionProps = {
 };
 
 const handleDeleteClick = async (uid: string) => {
-  const userAnswer = window.confirm("Хотите выполнить действие?");
+  const userAnswer = window.confirm("Do u want to delete?");
 
   if (userAnswer) {
     await Delete(url + img, "/" + uid, true);
+    message.success("Successfully deleted");
   }
 };
 
@@ -32,6 +34,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   miniImageUrl,
   description,
 }) => {
+  const navigate = useNavigate();
   const sanitizedDescription = DOMPurify.sanitize(description); //безопасный текст, санитаризация
   return (
     <div className="flex justify-between py-[5%]">
@@ -80,12 +83,19 @@ const PicSection: React.FC<PicSectionProps> = ({
             </div>
           </div>
           <div className="flex gap-4">
-            <button className="btn-primary">ändern</button>
+            <button
+              className="btn-primary"
+              onClick={() => {
+                navigate(`/edit_paint/${uid}`);
+              }}
+            >
+              ändern {/*Change*/}
+            </button>
             <button
               className="btn-primary"
               onClick={() => handleDeleteClick(uid)}
             >
-              löschen
+              löschen {/*delete*/}
             </button>
           </div>
         </div>
@@ -97,8 +107,7 @@ const PicSection: React.FC<PicSectionProps> = ({
 const fetchDataFromApi = async () => {
   try {
     const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
-    const response = await get(undefined, url, img, false, params);
-    console.log(response.data);
+    const response = await Get(undefined, url, img, false, params);
     return response.data;
   } catch (error) {
     console.error("Error fetching data from backend:", error);
@@ -109,7 +118,7 @@ const fetchDataFromApi = async () => {
 export const Pictures = () => {
   const navigate = useNavigate();
   const handleAddNewClick = () => {
-    navigate("/add-paint");
+    navigate("/add_paint");
   };
 
   const [data, setData] = useState<PicSectionProps[] | null>(null);

@@ -12,6 +12,7 @@ interface MultiLevelMenuProps {
 
 interface MenuItemData {
   id: number;
+  visibilty: boolean;
   name: string;
   path?: string;
   element?: React.ComponentType<any> | undefined;
@@ -34,61 +35,64 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
       handleToggle();
     }
   };
-
-  return (
-    <li>
-      {item.path ? (
-        <Link to={item.path} onClick={handleClick}>
-          <button
-            type="button"
-            className={`${className} flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
-            aria-controls="dropdown-example"
-            data-collapse-toggle="dropdown-example"
-          >
-            <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
-              {item.name}
-            </span>
-          </button>
-        </Link>
-      ) : (
-        <div onClick={handleClick}>
-          <button
-            type="button"
-            className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-            aria-controls="dropdown-example"
-            data-collapse-toggle="dropdown-example"
-          >
-            <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
-              {item.name}
-            </span>
-            <img
-              src={arrow}
-              className={`w-4 h-4 ${isOpen ? "rotate-180" : ""}`}
-            />
-          </button>
-        </div>
-      )}
-      {isOpen && item.children && (
-        <ul>
-          {item.children.map((child) => (
-            <MenuItem
-              key={child.id}
-              item={child}
-              className="font-federo text-sm ml-2"
-            />
-          ))}
-        </ul>
-      )}
-    </li>
-  );
+  if (item.visibilty) {
+    return (
+      <li>
+        {item.path ? (
+          <Link to={item.path} onClick={handleClick}>
+            <button
+              type="button"
+              className={`${className} flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
+              aria-controls="dropdown-example"
+              data-collapse-toggle="dropdown-example"
+            >
+              <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                {item.name}
+              </span>
+            </button>
+          </Link>
+        ) : (
+          <div onClick={handleClick}>
+            <button
+              type="button"
+              className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              aria-controls="dropdown-example"
+              data-collapse-toggle="dropdown-example"
+            >
+              <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                {item.name}
+              </span>
+              <img
+                src={arrow}
+                className={`w-4 h-4 ${isOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+          </div>
+        )}
+        {isOpen && item.children && (
+          <ul>
+            {item.children.map((child) => (
+              <MenuItem
+                key={child.id}
+                item={child}
+                className="font-federo text-sm ml-2"
+              />
+            ))}
+          </ul>
+        )}
+      </li>
+    );
+  }
 };
 
 const MultiLevelMenu: React.FC<MultiLevelMenuProps> = ({ menuItems }) => {
   return (
     <ul>
-      {menuItems.map((item) => (
-        <MenuItem key={item.id} item={item} />
-      ))}
+      {menuItems.map((item) => {
+        if (item.visibilty) {
+          return <MenuItem key={item.id} item={item} />;
+        }
+      })}
     </ul>
   );
 };

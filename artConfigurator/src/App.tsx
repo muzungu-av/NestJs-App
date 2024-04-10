@@ -13,31 +13,36 @@ import { Videos } from "./pages/Videos/Videos";
 export const menuItemsWithPaths = [
   {
     id: 1,
-    name: "Biography",
+    visibilty: true,
+    name: "Biografie",
     path: "/biography",
     element: Biography,
   },
   {
     id: 2,
-    name: "Paint",
+    visibilty: true,
+    name: "Gemälde" /* картины */,
     children: [
       {
-        id: 4,
-        name: "Pictures List",
-        path: "/pictures-list",
+        id: 5,
+        visibilty: true,
+        name: "Liste der Gemälde" /* список картин */,
+        path: "/painting_list",
         element: Pictures,
       },
       {
-        id: 5,
-        name: "Add paint",
-        path: "/add-paint",
+        id: 6,
+        visibilty: true,
+        name: "Bild hinzufügen" /* добавить картину */,
+        path: "/add_paint",
         element: AddingEditingPaint,
         isEditMode: false,
       },
       {
-        id: 6,
-        name: "Edit paint",
-        path: "/edit-paint",
+        id: 7,
+        visibilty: false,
+        name: "Bild bearbeiten" /* редактировать картину */,
+        path: "/edit_paint/:uid",
         element: AddingEditingPaint,
         isEditMode: true,
       },
@@ -45,37 +50,43 @@ export const menuItemsWithPaths = [
   },
   {
     id: 3,
+    visibilty: true,
     name: "Kopien",
     children: [
       {
-        id: 7,
-        name: "Add kopien",
-        path: "/add-kopien",
+        id: 8,
+        visibilty: true,
+        name: "Gemälde kopieren" /* список копий */,
+        path: "/copy_paintings",
+        element: PaintingsKopien,
+      },
+      {
+        id: 9,
+        visibilty: true,
+        name: "Kopien hinzufügen" /* Добавить копии */,
+        path: "/add_copy",
         element: AddingEditingKopien,
         isEditMode: false,
       },
       {
-        id: 8,
-        name: "Edit kopien",
-        path: "/edit-kopien",
+        id: 10,
+        visibilty: false,
+        name: "Kopien bearbeiten" /* редактирование копий */,
+        path: "/edit_copy",
         element: AddingEditingKopien,
         isEditMode: true,
       },
     ],
   },
   {
-    id: 9,
-    name: "Paintings kopien",
-    path: "/paintings-kopien",
-    element: PaintingsKopien,
-  },
-  {
-    id: 10,
+    id: 4,
+    visibilty: true,
     name: "Videos",
     path: "/videos",
     element: Videos,
   },
 ];
+
 const App: React.FC = () => {
   return (
     <Router>

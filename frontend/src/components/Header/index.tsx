@@ -7,6 +7,7 @@ interface MenuLinkProps {
   to: string;
   children: React.ReactNode;
 }
+
 const Header = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [pageWidth, setPageWidth] = useState(window.innerWidth);
@@ -25,6 +26,7 @@ const Header = () => {
       window.scrollTo(scrollLeft, scrollTop);
     };
   };
+
   const enableScroll = () => {
     window.onscroll = function () {};
   };
@@ -35,12 +37,14 @@ const Header = () => {
       disableScroll();
     }
   }, [isMenuOpen]);
+
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {
@@ -49,6 +53,7 @@ const Header = () => {
       }
     };
   }, [pageWidth]);
+
   const MenuLink: React.FC<MenuLinkProps> = ({ to, children }) => {
     return (
       <div>
@@ -58,6 +63,7 @@ const Header = () => {
       </div>
     );
   };
+
   const BurgerMenu = () => {
     return (
       <div className={isMenuOpen ? styles.openedMenu : styles.menu}>
@@ -73,6 +79,7 @@ const Header = () => {
       </div>
     );
   };
+
   return (
     <>
       <div className="m-auto max-w-[1600px] h-24">

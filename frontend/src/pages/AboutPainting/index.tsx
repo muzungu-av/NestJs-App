@@ -9,6 +9,7 @@ import { PaintingSlider } from "../../components/PaintingSlider";
 import { useNavigate, useParams } from "react-router";
 import { get } from "../../api/axiosInstance";
 import { CreateImageDto } from "../../../types.d";
+
 export const AboutPainting: React.FC = () => {
   const [paintingData, setPaintingData] = useState<CreateImageDto>();
   const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
@@ -20,7 +21,7 @@ export const AboutPainting: React.FC = () => {
       { img: mini2, isMain: false },
     ],
   };
- 
+
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const ai = import.meta?.env?.VITE_API_IMAGE;
@@ -164,6 +165,7 @@ export const AboutPainting: React.FC = () => {
       </>
     );
   };
+
   return (
     <MainLayout>
       <>

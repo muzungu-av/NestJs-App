@@ -1,6 +1,6 @@
 import ShoppingCart from "../../../assets/icons/ShoppingCart.svg";
 import DOMPurify from "dompurify";
-import style from './oneSection.module.scss'
+import style from "./oneSection.module.scss";
 
 export const OnePaintingSection = ({
   text,
@@ -28,9 +28,7 @@ export const OnePaintingSection = ({
             Bildname
           </div>
           <p
-          style={{
-        
-          }}
+            style={{}}
             className={`font-['Federo'] text-sm lg:text-xl ${style.wrappedText}`}
             dangerouslySetInnerHTML={{ __html: sanitizedText }}
           ></p>{" "}

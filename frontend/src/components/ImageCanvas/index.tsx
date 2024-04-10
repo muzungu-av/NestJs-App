@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 interface ImageCanvasProps {
   pic: string;
 }
+
 const ImageCanvas: React.FC<ImageCanvasProps> = ({ pic }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null); // Explicitly specify the type
   useEffect(() => {
