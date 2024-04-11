@@ -176,7 +176,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           return response.data;
         }
       } catch (e) {
-        message.error("Bild nicht geladen");
+        message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
       } finally {
         setLoader(false);
       }

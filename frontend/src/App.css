@@ -7,3 +7,13 @@
     @apply bg-[#FFEDCB], w-[158px], h-[45px], rounded-[13px], color-[#000000],font-federo, text-md;
   }
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

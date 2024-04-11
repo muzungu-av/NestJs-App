@@ -4,35 +4,71 @@ import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
 import { post } from "../../api/axiosInstance";
 import { useRef } from "react";
-
+import { message } from "antd";
+import { Button, Checkbox, Form, Input, Select } from "antd";
 export const Contacts: React.FC = () => {
+  const phoneArr = [
+    { country: "Germany", code: "49" },
+    { country: "UK", code: "44" },
+    { country: "USA", code: "1" },
+  ];
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const mailing = import.meta?.env?.VITE_API_MAILING;
   const URL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
   const formRef = useRef<HTMLFormElement>(null);
+  const [form] = Form.useForm();
 
   const handleSend = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const formObject: { [key: string]: string } = {};
-    formData.forEach((value, key) => {
-      formObject[key as string] = value as string;
-    });
-    const payload = {
-      email: formObject.email,
-      text: formObject.nachricht,
-      name: formObject.name,
-      number: formObject.nummer,
-      surname: formObject.vorname
-    };
-    const headers = {
-      "Content-Type": "application/json"
-    };
-    await post(headers, URL, mailing, true, payload).then(() =>
-      formRef.current?.reset()
-    );
+    try {
+      const payload = {
+        email: form.getFieldValue("email"),
+        text: form.getFieldValue("nachricht"),
+        name: form.getFieldValue("username"),
+        number: form.getFieldValue("prefix") + form.getFieldValue("nummer"),
+        surname: form.getFieldValue("nachname"),
+      };
+      console.log("payload", payload);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      await post(headers, URL, mailing, true, payload).then(() =>
+        formRef.current?.reset()
+      );
+      message.success("Ihre Bewerbung wurde versendet");
+    } catch (e) {
+      console.error(e);
+      message.error("Probleme beim Versenden der Bewerbung");
+    }
   };
+  const validatePhoneNumber = (rule: object, value: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      if (value && value.length !== 10) {
+        reject("Phone number must be 10 digits long");
+      } else {
+        resolve();
+      }
+    });
+  };
+  const { Option } = Select;
+  const prefixSelector = (
+    <Form.Item
+      name="prefix"
+      noStyle
+      rules={[
+        {
+          required: true,
+          message: "Bitte wählen Sie den Ländercode",
+        },
+      ]}
+    >
+      <Select style={{ width: 70 }}>
+        {phoneArr.map((item) => {
+          return <Option value={"+" + item.code}>{"+" + item.code}</Option>;
+        })}
+      </Select>
+    </Form.Item>
+  );
   return (
     <div className="py-[10%] px-[5%]">
       <div className="flex flex-col justify-center gap-6">
@@ -76,61 +112,122 @@ export const Contacts: React.FC = () => {
             <h3 className="font-federo text-2xl py-10">
               Oder schreiben Sie mir
             </h3>
-            <form
-              ref={formRef}
-              onSubmit={handleSend}
+            <Form
+              layout="vertical"
+              form={form}
+              onFinish={handleSend}
               className="flex flex-col gap-5 font-poppins text-sm font-medium"
             >
               <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-[50%]">
-                  <label htmlFor="name">Name</label>
-                  <input
-                    className="border-t-0 border-x-0 border-b-[1px]"
-                    type="text"
-                    name="name"
-                  ></input>
+                  <Form.Item
+                    name="username"
+                    label="Name"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Bitte geben Sie Ihren Namen ein",
+                      },
+                    ]}
+                  >
+                    <input
+                      className="border-t-0 border-x-0 border-b-[1px] w-full"
+                      type="text"
+                      name="name"
+                    ></input>
+                  </Form.Item>
                 </div>
                 <div className="flex flex-col w-[50%]">
-                  <label htmlFor="vorname">Vorname</label>
-                  <input
-                    className="border-t-0 border-x-0 border-b-[1px]"
-                    type="text"
-                    name="vorname"
-                  ></input>
+                  <Form.Item
+                    name="nachname"
+                    label="Nachname"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Bitte geben Sie Ihren Nachnamen ein",
+                      },
+                    ]}
+                  >
+                    <input
+                      className="border-t-0 border-x-0 border-b-[1px] w-full"
+                      type="text"
+                      name="nachname"
+                    ></input>
+                  </Form.Item>
                 </div>
               </div>
               <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-full">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    className="border-t-0 border-x-0 border-b-[1px]"
-                    type="text"
+                  <Form.Item
                     name="email"
-                  ></input>
+                    label="Email"
+                    rules={[
+                      {
+                        type: "email",
+                        message:
+                          "Bitte geben Sie eine gültige Email-Adresse ein",
+                      },
+                      {
+                        required: true,
+                        message: "Bitte geben Sie Ihre E-Mail-Adresse ein",
+                      },
+                    ]}
+                  >
+                    <input
+                      className="border-t-0 border-x-0 border-b-[1px] w-full"
+                      type="text"
+                      name="email"
+                    ></input>
+                  </Form.Item>
                 </div>
                 <div className="flex flex-col w-full">
-                  <label htmlFor="nummer">Handy Nummer</label>
-                  <input
-                    className="border-t-0 border-x-0 border-b-[1px]"
-                    type="text"
+                  <Form.Item
                     name="nummer"
-                  ></input>
+                    label="Handy Nummer"
+                    rules={[
+                      {
+                        validator: validatePhoneNumber,
+                        message: "Die Zahlenlänge sollte 10 Ziffern betragen",
+                      },
+                      {
+                        required: true,
+                        message: "Bitte geben Sie Ihre Nummer ein",
+                      },
+                    ]}
+                  >
+                    <Input
+                      type="number"
+                      maxLength={10}
+                      addonBefore={prefixSelector}
+                      style={{ width: "100%" }}
+                    />
+                  </Form.Item>
                 </div>
               </div>
               <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-full">
-                  <label htmlFor="nachricht">Nachricht</label>
-                  <input
-                    className="border-t-0 border-x-0 border-b-[1px] "
-                    type="text"
+                  <Form.Item
                     name="nachricht"
-                  ></input>
+                    label="Nachricht"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Bitte geben Sie Ihre Nachricht ein",
+                      },
+                    ]}
+                  >
+                    <input
+                      className="border-t-0 border-x-0 border-b-[1px] w-full"
+                      type="text"
+                      name="nachricht"
+                    ></input>
+                  </Form.Item>
                 </div>
               </div>
               <button type="submit" className="btn-primary self-end">
                 Senden
               </button>
-            </form>
+            </Form>
           </div>
         </div>
       </div>
