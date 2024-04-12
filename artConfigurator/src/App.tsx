@@ -1,5 +1,10 @@
 import "./App.css";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  Navigate
+} from "react-router-dom";
 import "./App.css";
 import "./output.css";
 import LogIn from "./pages/Login";
@@ -9,6 +14,12 @@ import { Pictures } from "./pages/Pictures";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
 import { Biography } from "./pages/Biography";
 import { Videos } from "./pages/Videos";
+//
+import { useEffect, useState } from "react";
+
+import axios from "axios";
+import React from "react";
+import { Get } from "./api/axiosInstance";
 
 export const menuItemsWithPaths = [
   {
@@ -16,7 +27,7 @@ export const menuItemsWithPaths = [
     visibilty: true,
     name: "Biografie",
     path: "/biography",
-    element: Biography,
+    element: Biography
   },
   {
     id: 2,
@@ -28,7 +39,7 @@ export const menuItemsWithPaths = [
         visibilty: true,
         name: "Liste der Gemälde" /* список картин */,
         path: "/painting_list",
-        element: Pictures,
+        element: Pictures
       },
       {
         id: 6,
@@ -36,7 +47,7 @@ export const menuItemsWithPaths = [
         name: "Bild hinzufügen" /* добавить картину */,
         path: "/add_paint",
         element: AddingEditingPaint,
-        isEditMode: false,
+        isEditMode: false
       },
       {
         id: 7,
@@ -44,9 +55,9 @@ export const menuItemsWithPaths = [
         name: "Bild bearbeiten" /* редактировать картину */,
         path: "/edit_paint/:uid",
         element: AddingEditingPaint,
-        isEditMode: true,
-      },
-    ],
+        isEditMode: true
+      }
+    ]
   },
   {
     id: 3,
@@ -58,7 +69,7 @@ export const menuItemsWithPaths = [
         visibilty: true,
         name: "Gemälde kopieren" /* список копий */,
         path: "/copy_paintings",
-        element: PaintingsKopien,
+        element: PaintingsKopien
       },
       {
         id: 9,
@@ -66,7 +77,7 @@ export const menuItemsWithPaths = [
         name: "Kopien hinzufügen" /* Добавить копии */,
         path: "/add_copy",
         element: AddingEditingKopien,
-        isEditMode: false,
+        isEditMode: false
       },
       {
         id: 10,
@@ -74,47 +85,119 @@ export const menuItemsWithPaths = [
         name: "Kopien bearbeiten" /* редактирование копий */,
         path: "/edit_copy",
         element: AddingEditingKopien,
-        isEditMode: true,
-      },
-    ],
+        isEditMode: true
+      }
+    ]
   },
   {
     id: 4,
     visibilty: true,
     name: "Videos",
     path: "/videos",
-    element: Videos,
-  },
+    element: Videos
+  }
 ];
 
 const App: React.FC = () => {
+  const [token, setToken] = useState<string>("");
+  const sc = import.meta?.env?.VITE_SCHEME;
+  const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+  const IMG = import.meta?.env?.VITE_API_IMAGE;
+  const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+
+  useEffect(() => {
+    getToken();
+  }, []);
+  console.log("token", token);
+  console.log(
+    "oke=====",
+    token ===
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA"
+  );
+  const getToken = async () => {
+    const storedToken = localStorage.getItem("access_token");
+    console.log("access_token11", storedToken);
+    console.log(
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA"
+    );
+    console.log(
+      "storedToken",
+      storedToken ===
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA"
+    );
+    setToken(storedToken || "");
+    if (storedToken) {
+      // Get(undefined, BURL, `${IMG}/${uid}`, false, params)
+      //   ;
+      // axios
+      //   .head("/api/check_me_out", {
+      //     headers: { Authorization: `Bearer ${storedToken}` }
+      //   })
+      //   .then((response) => {
+      //     if (response.status >= 200 && response.status < 300) {
+      //       setToken(storedToken);
+      //     } else {
+      //       localStorage.removeItem("access_token");
+      //       setToken("");
+      //     }
+      //   })
+      //   .catch(() => {
+      //     localStorage.removeItem("access_token");
+      //     setToken("");
+      //   });
+    }
+  };
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LogIn />} />
         {menuItemsWithPaths.map((item) => (
           <Route
-            key={item.id}
-            path={item.path}
-            element={item.element && <item.element />}
+            path={item.path || ""}
+            element={
+              item.element && (
+                <>
+                  111
+                  <item.element />
+                </>
+              )
+            }
+            // element={
+            //   token ===
+            //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA" ? (
+            //     item.element && (
+            //       <>
+            //         111
+            //         <item.element />
+            //       </>
+            //     )
+            //   ) : (
+            //     <Navigate to="/" replace />
+            //   )
+            // }
           />
         ))}
-        {menuItemsWithPaths.map((item) => {
-          if (item.children) {
-            return item.children.map((child) => (
-              <Route
-                key={child.id}
-                path={child.path}
-                element={
-                  child.element && (
+        {menuItemsWithPaths.map((item) =>
+          item.children
+            ? item.children.map((child) => (
+                <Route
+                  key={child.id}
+                  path={child.path}
+                  element={
                     <child.element isEditMode={child.isEditMode || false} />
-                  )
-                }
-              />
-            ));
-          }
-          return null;
-        })}
+
+                    // element={
+                    //   token ===
+                    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA" ? (
+                    //     <child.element isEditMode={child.isEditMode || false} />
+                    //   ) : (
+                    //     <Navigate to="/" replace />
+                    //   )
+                  }
+                />
+              ))
+            : null
+        )}
       </Routes>
     </Router>
   );
