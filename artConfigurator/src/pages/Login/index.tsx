@@ -15,7 +15,7 @@ const LogIn: React.FC = observer(() => {
 
   const [formData, setFormData] = useState<FormData>({
     username: "",
-    password: "",
+    password: ""
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,8 +28,7 @@ const LogIn: React.FC = observer(() => {
   const handleLogin = async () => {
     try {
       await AuthStore.login(formData);
-      console.log("AuthStore.isLoggedIn");
-      console.log(AuthStore.isLoggedIn);
+
       if (AuthStore.isLoggedIn) {
         const access_token = AuthStore.access_token;
         localStorage.setItem("access_token", access_token);
@@ -69,6 +68,7 @@ const LogIn: React.FC = observer(() => {
                   <div className="flex flex-col w-full">
                     <label htmlFor="username">Benutzername</label>
                     <input
+                      placeholder="Geben Sie Ihren Benutzernamen ein"
                       className="border-t-0 border-x-0 border-b-[1px]"
                       type="email"
                       name="username"
@@ -86,13 +86,20 @@ const LogIn: React.FC = observer(() => {
                       type="password"
                       name="password"
                       required
-                      placeholder="••••••••"
+                      placeholder="Geben Sie Ihr Passwort ein"
                       onChange={handleInputChange}
                       value={formData.password}
                     ></input>
                   </div>
                 </div>
-              </div>
+              </div>{" "}
+              <button
+                onClick={handleLogin}
+                type="button"
+                className="btn-primary w-[130px] h-[45px] m-10"
+              >
+                Sign In
+              </button>
             </div>
           </div>
         </div>

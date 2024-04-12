@@ -14,12 +14,9 @@ import { Pictures } from "./pages/Pictures";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
 import { Biography } from "./pages/Biography";
 import { Videos } from "./pages/Videos";
-//
 import { useEffect, useState } from "react";
-
-import axios from "axios";
 import React from "react";
-import { Get } from "./api/axiosInstance";
+import { Head } from "./api/axiosInstance";
 
 export const menuItemsWithPaths = [
   {
@@ -99,82 +96,60 @@ export const menuItemsWithPaths = [
 ];
 
 const App: React.FC = () => {
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(true);
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
-  const IMG = import.meta?.env?.VITE_API_IMAGE;
+
   const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
   useEffect(() => {
     getToken();
   }, []);
-  console.log("token", token);
-  console.log(
-    "oke=====",
-    token ===
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA"
-  );
+
   const getToken = async () => {
     const storedToken = localStorage.getItem("access_token");
-    console.log("access_token11", storedToken);
-    console.log(
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA"
-    );
-    console.log(
-      "storedToken",
-      storedToken ===
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA"
-    );
-    setToken(storedToken || "");
+
     if (storedToken) {
-      // Get(undefined, BURL, `${IMG}/${uid}`, false, params)
-      //   ;
-      // axios
-      //   .head("/api/check_me_out", {
-      //     headers: { Authorization: `Bearer ${storedToken}` }
-      //   })
-      //   .then((response) => {
-      //     if (response.status >= 200 && response.status < 300) {
-      //       setToken(storedToken);
-      //     } else {
-      //       localStorage.removeItem("access_token");
-      //       setToken("");
-      //     }
-      //   })
-      //   .catch(() => {
-      //     localStorage.removeItem("access_token");
-      //     setToken("");
-      //   });
+      Head({ Authorization: `Bearer ${storedToken}` }, BURL, "/check_me_out")
+        .then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            setToken(true);
+          } else {
+            localStorage.removeItem("access_token");
+            setToken(false);
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("access_token");
+          setToken(false);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LogIn />} />
         {menuItemsWithPaths.map((item) => (
           <Route
+            key={item.id}
             path={item.path || ""}
             element={
-              item.element && (
-                <>
-                  111
-                  <item.element />
-                </>
-              )
+              token
+                ? item.element && (
+                    <>
+                      <item.element />
+                    </>
+                  )
+                : item.element && <Navigate to="/" replace />
             }
-            // element={
-            //   token ===
-            //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA" ? (
-            //     item.element && (
-            //       <>
-            //         111
-            //         <item.element />
-            //       </>
-            //     )
-            //   ) : (
-            //     <Navigate to="/" replace />
-            //   )
-            // }
           />
         ))}
         {menuItemsWithPaths.map((item) =>
@@ -184,15 +159,11 @@ const App: React.FC = () => {
                   key={child.id}
                   path={child.path}
                   element={
-                    <child.element isEditMode={child.isEditMode || false} />
-
-                    // element={
-                    //   token ===
-                    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU5YTZiZjYwNDkwNzg2OGIwMDgxYzMiLCJlbWFpbCI6IjUyOWRhcmluYUBnbWFpbC5jb20iLCJpYXQiOjE3MTI5MTYwNjUsImV4cCI6MTcxMzAwMjQ2NX0.yP_LFrES3VA-_p_brI6W2ubPOpy3NZc7C-UeEy2wBiA" ? (
-                    //     <child.element isEditMode={child.isEditMode || false} />
-                    //   ) : (
-                    //     <Navigate to="/" replace />
-                    //   )
+                    token ? (
+                      <child.element isEditMode={child.isEditMode || false} />
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
                   }
                 />
               ))
