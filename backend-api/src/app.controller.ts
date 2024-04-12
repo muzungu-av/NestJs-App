@@ -1,4 +1,11 @@
-import { Controller, Get, Post, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+  Head,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { LocalAuthGuard } from 'auth/local-auth.guard';
 import { AuthService } from 'auth/auth.service';
@@ -17,11 +24,14 @@ export class AppController {
     return this.appService.getPublicHello();
   }
 
+  /**
+   * Проверка JWT токена
+   * Вернет 200 в случае успеха
+   * 401 Unauthorized или 403 Forbidden в обратном случае.
+   */
   @UseGuards(JwtAuthGuard)
-  @Get('/private')
-  getPrivateHello(): string {
-    return this.appService.getPrivateHello();
-  }
+  @Head('/check_me_out')
+  checkJwt(): void {}
 
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')

@@ -23,6 +23,7 @@ export class CreateImageDto {
   description: string;
   typeOfImage: string;
   imageUrl: string;
+  miniImageUrl: string;
   owner: User;
   dimension: AllDimension;
 
@@ -39,5 +40,7 @@ export class CreateImageDto {
     this.typeOfImage = imgFileProcessingResult.typeOfImage || '';
     this.owner = imgFileProcessingResult.owner;
     this.dimension = imgFileProcessingResult.dimension;
+    this.imageUrl = imgFileProcessingResult.imageUrl;
+    this.miniImageUrl = imgFileProcessingResult.miniImageUrl;
   }
 }

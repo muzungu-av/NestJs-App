@@ -8,6 +8,9 @@ import { CreateImageDto } from './dto/create-image.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import FilterDocs from './utils/alg';
 import { SliderMemoryService } from './utils/SliderMemoryService';
+import { Copy } from './schemas/copy.schema';
+import { CreateCopyDto } from './dto/create-copy.dto';
+import { message } from 'antd';
 
 interface CustomErrorOptions {
   message: string;
@@ -36,6 +39,7 @@ class CustomError extends Error {
 @Injectable()
 export class ImageService {
   constructor(
+    @InjectModel(Copy.name) private readonly copyModel: Model<Copy>,
     @InjectModel(Image.name) private readonly imageModel: Model<Image>,
     private readonly handler: ImageHandler,
     private readonly cloudinary: CloudinaryService,
@@ -100,11 +104,21 @@ export class ImageService {
   /**
    * Returns the list of documents with images from Mongo matching the typeOfImage condition
    *
-   * @param typeOfImage
+   * @param typeOfImage 'isPainting', 'isAtelier'
    * @returns Promise<any[]> document array
    */
   async findImagesByType(typeOfImage: string): Promise<Image[]> {
     return this.imageModel.find({ typeOfImage }).exec();
+  }
+
+  /**
+   * Returns the list of documents with images from Mongo matching the typeOfImage condition
+   *
+   * @param typeOfImage 'isPainting', 'isAtelier'
+   * @returns Promise<any[]> document array
+   */
+  async findCopies(typeOfImage: string): Promise<Copy[]> {
+    return this.copyModel.find({ typeOfImage }).exec();
   }
 
   /**
@@ -167,20 +181,41 @@ export class ImageService {
    * @param updatedData updated data
    * @returns updated document
    */
-  async updateImage(
+  async updateImage<T>(
+    model: Model<T>,
     uid: string,
-    updatedData: Partial<Image>,
-  ): Promise<Image | null> {
-    const result = await this.imageModel
-      .updateOne({ uid }, { $set: updatedData })
-      .exec();
+    updatedData: Partial<T>,
+  ): Promise<T | null> {
+    const result = await model.updateOne({ uid }, { $set: updatedData }).exec();
 
     if (result.modifiedCount === 1) {
-      return this.imageModel.findOne({ uid }).exec();
+      return model.findOne({ uid }).exec();
     } else {
       winstonLogger.error(`Failed to update the document ${uid}`);
     }
     return null;
+  }
+
+  async saveImageToCollection<T>(
+    model: Model<T>,
+    createImageDto: CreateImageDto,
+  ) {
+    try {
+      await model.create(createImageDto);
+    } catch (error) {
+      winstonLogger.error(`${error.message}`);
+      //No duplicates accepted
+      if (-1 != error.message.search('duplicate key error')) {
+        winstonLogger.error(`Failed to create image (No duplicates accepted)`);
+        throw new CustomError({
+          message: 'Failed to create image (No duplicates accepted)',
+        });
+      } else {
+        throw new CustomError({
+          message: 'Failed to create image (Unknown reason)',
+        });
+      }
+    }
   }
 
   /**
@@ -205,28 +240,41 @@ export class ImageService {
         .then(async (result) => {
           if (result.success === true) {
             // save to mongo
+            result.description = description;
+            result.typeOfImage = typeOfImage;
             try {
-              result.description = description;
-              result.typeOfImage = typeOfImage;
-              winstonLogger.info(`${JSON.stringify(result)}`);
-              const createImageDto = new CreateImageDto(result);
-              await this.imageModel.create(createImageDto);
-              winstonLogger.info(`An image is created: ${result.uid}`);
-              return result;
+              /* используем один и тот же DTO тк он не привязан к документу,
+              предполагается структура одинаоквая в монге у обычных картин и копий.
+              А вот Model другая - Mongoose нужна своя модель, чтобы хранить копии в другой коллекции */
+              if (typeOfImage === 'isCopy') {
+                const createCopyDto = new CreateCopyDto(result);
+                await this.saveImageToCollection<Copy>(
+                  this.copyModel,
+                  createCopyDto,
+                );
+              } else {
+                const createImageDto = new CreateImageDto(result);
+                await this.saveImageToCollection<Image>(
+                  this.imageModel,
+                  createImageDto,
+                );
+              }
             } catch (error) {
-              //No duplicates accepted
-              winstonLogger.error(
-                `Error creating image in DB: ${error.message}`,
-              );
               result.success = false;
-              result.errorMessage = `Error creating image in DB: ${error.message}`;
+              winstonLogger.error(
+                `260  Failed to create image (No duplicates accepted)`,
+              );
+
+              result.errorMessage = error.message;
               throw new CustomError({
-                message: 'Failed to create image (No duplicates accepted)',
+                message: result.errorMessage,
                 success: false,
                 path: result.path,
                 miniPath: result.miniPath,
               });
             }
+            winstonLogger.info(`An image is created: ${result.uid}`);
+            return result;
           } else {
             result.success = false;
             result.errorMessage = `Failed to create image (Failed validation)`;
@@ -279,6 +327,7 @@ export class ImageService {
                 result.miniPath,
                 result.miniFileName,
               );
+              winstonLogger.info(`sending to cloudinary mini file`);
             } catch (error) {
               winstonLogger.error(`Error during upload mini image: ${error}`);
               throw new CustomError({
@@ -300,13 +349,25 @@ export class ImageService {
           if (result && result.success) {
             this.handler.remove(result.path);
             this.handler.removeDir(result.miniPath);
-            resolve(result);
+            resolve(result); // ? не уверен что это правильно
           }
           const updatedData = {
             imageUrl: result.imageUrl,
             miniImageUrl: result.miniImageUrl,
           };
-          await this.updateImage(result.uid, updatedData);
+          if (result.typeOfImage === 'isCopy') {
+            await this.updateImage<Copy>(
+              this.copyModel,
+              result.uid,
+              updatedData,
+            );
+          } else {
+            await this.updateImage<Image>(
+              this.imageModel,
+              result.uid,
+              updatedData,
+            );
+          }
           winstonLogger.info(`Document update (URLs)`);
           return result;
         })
