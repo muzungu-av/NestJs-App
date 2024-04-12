@@ -1,5 +1,5 @@
 import MainLayout from "../../layouts/MainLayout";
-import { get } from "../../api/axiosInstance";
+import { Get } from "../../api/axiosInstance";
 import bgImgGemälde from "../../assets/images/GroupBg.jpg";
 import bgImgAtelier from "../../assets/images/bgImgAtelier.jpg";
 import bgImgKopien from "../../assets/images/bgImgKopien.jpg";
@@ -24,7 +24,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
 
   const getPictures = async () => {
     try {
-      const response = await get(BACKEND_API, `${ai}/`, false, false);
+      const response = await Get(undefined, BACKEND_API, `${ai}/`, false);
 
       if (pageType === "Gemälde") {
         setPaintings(

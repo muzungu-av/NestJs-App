@@ -4,7 +4,7 @@ export const Axios = (header: any, jwtAuth: boolean) => {
   //export const Axios = (header: any, credentials: boolean, jwtAuth: boolean) => {
   const token = jwtAuth ? localStorage.getItem("access_token") : "";
   let h = {
-    timeout: 5000,
+    timeout: 15000,
     headers: header
       ? header
       : ({
@@ -85,4 +85,22 @@ export const Delete = async (
     console.error("Error making DELETE request:", error);
     throw error;
   }
+};
+
+/**
+ * To verify the token.
+ *
+ * @param headers   ex. const headers = {"Content-Type":  Authorization: 'Bearer <token>',};
+ * @param baseUrl
+ * @param relatedUrl
+ * @returns
+ */
+export const Head = async (
+  headers: any,
+  baseUrl: string,
+  relatedUrl: string
+) => {
+  const instance = Axios(headers, true);
+  const response = await instance.head(baseUrl + relatedUrl);
+  return response;
 };

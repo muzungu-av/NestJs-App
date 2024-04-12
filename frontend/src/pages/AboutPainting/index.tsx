@@ -7,7 +7,7 @@ import boatPic from "../../assets/images/1.png";
 import autumnPic from "../../assets/images/3.png";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import { useNavigate, useParams } from "react-router";
-import { get } from "../../api/axiosInstance";
+import { Get } from "../../api/axiosInstance";
 import { CreateImageDto } from "../../../types.d";
 
 export const AboutPainting: React.FC = () => {
@@ -31,7 +31,7 @@ export const AboutPainting: React.FC = () => {
 
   const getPictureById = async () => {
     try {
-      const response = await get(BACKEND_API, `${ai}/${id}`, false, false);
+      const response = await Get(undefined, BACKEND_API, `${ai}/${id}`, false);
       setPaintingData(response.data);
     } catch (error) {
       console.error("Error fetching paintings:", error);
