@@ -10,30 +10,7 @@ import FilterDocs from './utils/alg';
 import { SliderMemoryService } from './utils/SliderMemoryService';
 import { Copy } from './schemas/copy.schema';
 import { CreateCopyDto } from './dto/create-copy.dto';
-
-interface CustomErrorOptions {
-  message: string;
-  uid?: string;
-  success?: any;
-  path?: string;
-  miniPath?: string;
-}
-
-class CustomError extends Error {
-  success?: any;
-  path?: any;
-  miniPath?: any;
-  uid?: string;
-
-  constructor(options: CustomErrorOptions) {
-    super(options.message);
-    this.name = 'CustomError';
-    this.success = options.success;
-    this.path = options.path;
-    this.miniPath = options.miniPath;
-    this.uid = options.uid;
-  }
-}
+import { CustomError } from './utils/customError';
 
 @Injectable()
 export class ImageService {

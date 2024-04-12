@@ -24,6 +24,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
 
   const getPictures = async () => {
     try {
+      //todo есть метод /type чтобы не загружать всё
       const response = await Get(undefined, BACKEND_API, `${ai}/`, false);
 
       if (pageType === "Gemälde") {
