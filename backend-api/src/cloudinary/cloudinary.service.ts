@@ -4,13 +4,14 @@ import { Model } from 'mongoose';
 import { Image } from '../image/schemas/image.schema';
 import { v2 } from 'cloudinary';
 import { winstonLogger } from 'winston.logger';
+import { Copy } from 'image/schemas/copy.schema';
 
 @Injectable()
 export class CloudinaryService {
   cloudinary: typeof v2;
   constructor(
     @InjectModel(Image.name) private readonly imageModel: Model<Image>,
-    // private readonly handler: ImageHandler,
+    @InjectModel(Copy.name) private readonly copyeModel: Model<Copy>,
   ) {
     this.cloudinary = v2;
     this.cloudinary.config({

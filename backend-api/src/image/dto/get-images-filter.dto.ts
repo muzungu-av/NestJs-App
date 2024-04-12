@@ -1,6 +1,6 @@
 import { IsIn } from 'class-validator';
 
 export class GetImagesFilterDto {
-  @IsIn(['isPainting', 'isAtelier'])
+  @IsIn(['isPainting', 'isAtelier', 'isCopy'])
   typeOfImage?: string;
 }

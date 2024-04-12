@@ -56,7 +56,7 @@ export class ImageController {
   ) {
     const { user } = request;
     winstonLogger.info(
-      `Post request 'uploadFile' from user: ${JSON.stringify(user.userId)}`,
+      `Post request 'upload File' from user: ${JSON.stringify(user.userId)}`,
     );
     try {
       const result = await this.imageService.processNewFile(
@@ -109,7 +109,10 @@ export class ImageController {
     @Query(new ValidationPipe({ transform: true }))
     filterDto: GetImagesFilterDto,
   ): Promise<any> {
-    return this.imageService.findImagesByType(filterDto.typeOfImage);
+    if (filterDto.typeOfImage === 'isCopy') {
+      // return this.imageService.findCopies(filterDto.typeOfImage);
+    }
+    return this.imageService.findImagesByType(filterDto.typeOfImage); //похоже пока не используется
   }
 
   /**

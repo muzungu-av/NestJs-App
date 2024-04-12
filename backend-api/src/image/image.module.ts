@@ -10,10 +10,12 @@ import { CryptoHash } from './crypto/crypto';
 import { CloudinaryModule } from 'cloudinary/cloudinary.module';
 import { UserModule } from 'user/user.module';
 import { SliderMemoryService } from './utils/SliderMemoryService';
+import { Copy, CopySchema } from './schemas/copy.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }]),
+    MongooseModule.forFeature([{ name: Copy.name, schema: CopySchema }]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
@@ -26,6 +28,7 @@ import { SliderMemoryService } from './utils/SliderMemoryService';
     ImageHandler,
     CryptoHash,
     Image,
+    Copy,
     SliderMemoryService,
   ],
 })
