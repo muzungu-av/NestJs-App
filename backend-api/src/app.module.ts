@@ -11,6 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { WinstonModule } from 'nest-winston';
 import { winstonLogger } from './winston.logger';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { VideoModule } from 'video/video.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     UserModule,
     AuthModule,
     CloudinaryModule,
+    VideoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
