@@ -3,9 +3,10 @@ import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
 import { post } from "../../api/axiosInstance";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Spinner } from "../../components/Spinner";
 import { message } from "antd";
-import { Button, Checkbox, Form, Input, Select } from "antd";
+import { Form, Input, Select } from "antd";
 export const Contacts: React.FC = () => {
   const phoneArr = [
     { country: "Germany", code: "49" },
@@ -18,9 +19,10 @@ export const Contacts: React.FC = () => {
   const URL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
   const formRef = useRef<HTMLFormElement>(null);
   const [form] = Form.useForm();
-
-  const handleSend = async (event: React.FormEvent<HTMLFormElement>) => {
+  const [loader, setLoader] = useState(false);
+  const handleSend = async () => {
     try {
+      setLoader(true);
       const payload = {
         email: form.getFieldValue("email"),
         text: form.getFieldValue("nachricht"),
@@ -39,6 +41,8 @@ export const Contacts: React.FC = () => {
     } catch (e) {
       console.error(e);
       message.error("Probleme beim Versenden der Bewerbung");
+    } finally {
+      setLoader(false);
     }
   };
   const validatePhoneNumber = (rule: object, value: string): Promise<void> => {
@@ -70,7 +74,7 @@ export const Contacts: React.FC = () => {
     </Form.Item>
   );
   return (
-    <div className="py-[10%] px-[5%]">
+    <div className={`py-[10%] px-[5%]  ${loader ? "opacity-50" : ""}`}>
       <div className="flex flex-col justify-center gap-6">
         <h2 className="font-italiana text-6xl hidden lg:block">Kontaktdaten</h2>
         <div className="lg:border-t-4 lg:border-black flex flex-col lg:flex-row gap-10">
@@ -112,11 +116,14 @@ export const Contacts: React.FC = () => {
             <h3 className="font-federo text-2xl py-10">
               Oder schreiben Sie mir
             </h3>
+            {loader && <Spinner />}
             <Form
               layout="vertical"
               form={form}
               onFinish={handleSend}
-              className="flex flex-col gap-5 font-poppins text-sm font-medium"
+              className={`flex flex-col gap-5 font-poppins text-sm font-medium ${
+                loader ? "opacity-50" : ""
+              }`}
             >
               <div className="flex gap-10 flex-col lg:flex-row">
                 <div className="flex flex-col w-[50%]">
