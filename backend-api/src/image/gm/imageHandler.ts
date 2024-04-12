@@ -61,7 +61,6 @@ export class ImageHandler {
     const originalFileName = file.originalname; // see MulterConfigService
     const newFileName = file.filename;
     const filePath = path.join(process.cwd(), this.dest, newFileName); // from MulterConfigService
-
     const miniFilePath = path.join(
       process.cwd(),
       this.dest,
@@ -72,22 +71,17 @@ export class ImageHandler {
     const miniFileName = this.mini_prefix + newFileName;
 
     const fileSize = file.size;
-
-    const uid = await this.crypto
-      .calculateFileHash(filePath)
-      .then((hash) => {
-        winstonLogger.info(`File hash ${filePath}: ${hash}`);
-        return hash;
-      })
-      .catch((error) => {
-        winstonLogger.info(`Error when calculating the file hash: ${error}`);
-        return '';
-      });
-
+    let uid;
+    try {
+      const hash = await this.crypto.calculateFileHash(filePath);
+      winstonLogger.info(`File hash ${filePath}: ${hash}`);
+      uid = hash;
+    } catch (error) {
+      winstonLogger.info(`Error when calculating the file hash: ${error}`);
+      uid = '';
+    }
     winstonLogger.info(`Work with the file begins (ImageHandler): ${filePath}`);
-
     const imageFileBuffer = await this.readFileAsync(filePath);
-
     const owner = await this.userService
       .findOneById(userId)
       .then((user: User | null) => {

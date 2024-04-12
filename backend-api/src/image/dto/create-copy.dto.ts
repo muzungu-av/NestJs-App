@@ -11,7 +11,7 @@ export interface AllDimension {
   mini?: Dimension;
 }
 
-export class CreateImageDto {
+export class CreateCopyDto {
   uid: string;
   originalName: string;
   fileName: string;

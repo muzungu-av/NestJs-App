@@ -2,7 +2,7 @@ import ContactPic from "../../assets/images/contactPic.jpg";
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-import AuthStore from "../../store/AuthStore";
+import AuthStore from "../../store/AuthStore.ts";
 import { menuItemsWithPaths } from "../../App.tsx";
 import { message } from "antd";
 type FormData = {

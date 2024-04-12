@@ -2,13 +2,13 @@ import "./App.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import "./output.css";
-import LogIn from "./pages/login";
+import LogIn from "./pages/Login";
 import { AddingEditingKopien } from "./pages/AddingEditingKopien";
 import { AddingEditingPaint } from "./pages/Paint";
-import { Pictures } from "./pages/pictures";
+import { Pictures } from "./pages/Pictures";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
-import { Biography } from "./pages/biography";
-import { Videos } from "./pages/Videos/Videos";
+import { Biography } from "./pages/Biography";
+import { Videos } from "./pages/Videos";
 
 export const menuItemsWithPaths = [
   {

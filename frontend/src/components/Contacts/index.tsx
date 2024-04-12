@@ -45,7 +45,8 @@ export const Contacts: React.FC = () => {
       setLoader(false);
     }
   };
-  const validatePhoneNumber = (rule: object, value: string): Promise<void> => {
+  const validatePhoneNumber = (_rule: object, value: string): Promise<void> => {
+    //_rule не используется
     return new Promise((resolve, reject) => {
       if (value && value.length !== 10) {
         reject("Phone number must be 10 digits long");

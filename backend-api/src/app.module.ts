@@ -12,6 +12,7 @@ import { WinstonModule } from 'nest-winston';
 import { winstonLogger } from './winston.logger';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { MailModule } from 'mailing/mailing.module';
+import { VideoModule } from 'video/video.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { MailModule } from 'mailing/mailing.module';
     UserModule,
     AuthModule,
     CloudinaryModule,
+    VideoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
