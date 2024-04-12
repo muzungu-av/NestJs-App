@@ -6,7 +6,7 @@ import GalleryPic2 from "../../assets/images/galleryPic2.jpg";
 import SitPic from "../../assets/images/SitPic.jpg";
 import { Contacts } from "../../components/Contacts";
 import { AboutMe } from "../AboutMe";
-import { get } from "../../api/axiosInstance";
+import { Get } from "../../api/axiosInstance";
 
 export const Main: React.FC = () => {
   // const slidesArr = [SmallPic, SmallPic, SmallPic, SmallPic];
@@ -20,8 +20,7 @@ export const Main: React.FC = () => {
 
   const getPictures = async () => {
     try {
-      const response = await get(BACKEND_API, `${ai}/`, false, false);
-
+      const response = await Get(undefined, BACKEND_API, `${ai}/`, false);
       setPaintings(response.data.map((item: any) => item.imageUrl));
     } catch (error) {
       console.error("Error fetching paintings:", error);

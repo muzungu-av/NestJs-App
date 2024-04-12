@@ -2,7 +2,7 @@ import ContactPic from "../../assets/images/contactPic.jpg";
 import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
-import { post } from "../../api/axiosInstance";
+import { Post } from "../../api/axiosInstance";
 import { useRef, useState } from "react";
 import { Spinner } from "../../components/Spinner";
 import { message } from "antd";
@@ -34,7 +34,7 @@ export const Contacts: React.FC = () => {
       const headers = {
         "Content-Type": "application/json",
       };
-      await post(headers, URL, mailing, true, payload).then(() =>
+      await Post(headers, URL, mailing, true, payload).then(() =>
         formRef.current?.reset()
       );
       message.success("Ihre Bewerbung wurde versendet");
