@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -62,5 +63,11 @@ export class VideoController {
   getVideoById(@Param('id') id: string): Promise<Video> {
     winstonLogger.info(`Retrieving video by id ${id}`);
     return this.videoService.getVideoById(id);
+  }
+
+  @Delete(':id')
+  deleteVideoById(@Param('id') id: string): Promise<boolean> {
+    winstonLogger.info(`Deleting a video by id ${id}`);
+    return this.videoService.deleteVideoById(id);
   }
 }

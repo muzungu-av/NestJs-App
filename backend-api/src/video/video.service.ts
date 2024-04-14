@@ -7,6 +7,7 @@ import { CloudinaryService } from 'cloudinary/cloudinary.service';
 import { winstonLogger } from 'winston.logger';
 import { CreateVideoDto } from './dto/create-video-dto';
 import { CustomError } from 'image/utils/customError';
+import { withLatestFrom } from 'rxjs';
 
 @Injectable()
 export class VideoService {
@@ -84,5 +85,17 @@ export class VideoService {
 
   async getVideoById(id: string): Promise<Video> {
     return await this.videoModel.findById(id).exec();
+  }
+
+  async deleteVideoById(_id: string): Promise<boolean> {
+    let r;
+    try {
+      r = await this.videoModel.deleteOne({ _id }).exec();
+      winstonLogger.info(`Video has been successfully deleted: ${_id}`);
+    } catch (error) {
+      winstonLogger.error(`${error.message}`);
+      return false;
+    }
+    return r?.deletedCount > 0;
   }
 }

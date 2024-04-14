@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Empty from "./../../assets/images/EmptyPhoto.png";
 import MainLayout from "../../layouts/MainLayout";
-import { Get } from "../../api/axiosInstance";
+import { Delete, Get } from "../../api/axiosInstance";
+import { message } from "antd";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -9,6 +10,7 @@ const vi = import.meta?.env?.VITE_API_VIDEO;
 const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
 interface VideoBlock {
+  _id: string;
   name: string;
   link: string;
   imgUrl: string;
@@ -38,7 +40,21 @@ export const Videos = () => {
   }, []);
 
   const [isNewClicked, setNewClicked] = useState<boolean>(false);
-  const VideoBlock = ({ name, link, imgUrl }: VideoBlock) => {
+
+  // НЕТ ЖЕ СТРАНИЦЫ ДЛЯ РЕДАКТИРОВАНИЯ ?
+  // const handleEditClick = (id: string) => {
+  //   console.log("EDIT - " + id);
+  // };
+
+  const handleDeleteClick = async (id: string) => {
+    const userAnswer = window.confirm("Do u want to delete?");
+    if (userAnswer) {
+      await Delete(url + vi, "/" + id, true);
+      message.success("Successfully deleted");
+    }
+  };
+
+  const VideoBlock = ({ _id, name, link, imgUrl }: VideoBlock) => {
     return (
       <div className="flex justify-between px-[5%]">
         {" "}
@@ -48,9 +64,17 @@ export const Videos = () => {
           <p className="text-base">Link:{link}</p>
         </div>
         <div className="self-end">
-          <button className="btn-primary w-[130px] h-[45px]">ändern</button>
-          <button className="btn-primary w-[130px] h-[45px] ml-2">
-            löschen
+          {/* <button
+            className="btn-primary w-[130px] h-[45px]"
+            onClick={() => handleEditClick(_id)}
+          >
+            ändern {/Change/}
+          </button> */}
+          <button
+            className="btn-primary w-[130px] h-[45px] ml-2"
+            onClick={() => handleDeleteClick(_id)}
+          >
+            löschen {/*Delete*/}
           </button>
         </div>
       </div>
@@ -83,10 +107,10 @@ export const Videos = () => {
             onClick={() => setNewClicked(false)}
             className="rounded-md bg-[#F5F5F5] font-federo w-[130px] h-[45px]"
           >
-            ändern
+            ändern {/*Change*/}
           </button>{" "}
           <button className="btn-rounded-md bg-[#F5F5F5] font-federo w-[130px] h-[45px] ml-2">
-            löschen
+            löschen {/*Delete*/}
           </button>
         </div>
       </div>
@@ -108,6 +132,7 @@ export const Videos = () => {
         {videos.map((v) => {
           return (
             <VideoBlock
+              _id={(v as VideoBlock)._id}
               name={(v as VideoBlock).name}
               link={(v as VideoBlock).link}
               imgUrl={(v as VideoBlock).imgUrl}
