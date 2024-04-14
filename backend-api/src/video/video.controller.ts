@@ -53,14 +53,14 @@ export class VideoController {
   }
 
   @Get()
-  findAll(): Promise<Video[]> {
+  getAll(): Promise<Video[]> {
     winstonLogger.info(`Getting all Videos`);
     return this.videoService.getAllVideos();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Video> {
-    winstonLogger.info(`Получение видео по id ${id}`);
+  getVideoById(@Param('id') id: string): Promise<Video> {
+    winstonLogger.info(`Retrieving video by id ${id}`);
     return this.videoService.getVideoById(id);
   }
 }

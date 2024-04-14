@@ -1,21 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Empty from "./../../assets/images/EmptyPhoto.png";
 import MainLayout from "../../layouts/MainLayout";
+import { Get } from "../../api/axiosInstance";
+
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const vi = import.meta?.env?.VITE_API_VIDEO;
+const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+
+interface VideoBlock {
+  name: string;
+  link: string;
+  imgUrl: string;
+}
+
 export const Videos = () => {
-  const data = [
-    { name: "Name des Videos", link: "https://pixabay.com/ru/illustrations/" },
-    { name: "Name des Videos", link: "https://pixabay.com/ru/illustrations/" },
-  ];
-  interface VideoBlock {
-    name: string;
-    link: string;
-  }
+  const [videos, setData] = useState([]);
+
+  const fetchDataFromApi = async () => {
+    try {
+      const response = await Get(undefined, url, vi, false, {});
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Videos from backend:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetchDataFromApi();
+      if (result) {
+        setData(result);
+      }
+    };
+    fetchData();
+  }, []);
+
   const [isNewClicked, setNewClicked] = useState<boolean>(false);
-  const VideoBlock = ({ name, link }: VideoBlock) => {
+  const VideoBlock = ({ name, link, imgUrl }: VideoBlock) => {
     return (
       <div className="flex justify-between px-[5%]">
         {" "}
-        <img src={Empty} />
+        <img src={imgUrl !== undefined ? imgUrl : Empty} />
         <div className="flex flex-col gap-6 ">
           <p className="text-xl">{name}</p>
           <p className="text-base">Link:{link}</p>
@@ -29,6 +56,7 @@ export const Videos = () => {
       </div>
     );
   };
+
   const NewVideoCreateBlock = () => {
     return (
       <div className="bg-[#FFEDCB] m-8 flex justify-between px-4">
@@ -77,8 +105,14 @@ export const Videos = () => {
       </button>
       {isNewClicked && <NewVideoCreateBlock />}
       <div className="flex flex-col gap-14">
-        {data.map((v) => {
-          return <VideoBlock name={v.name} link={v.link} />;
+        {videos.map((v) => {
+          return (
+            <VideoBlock
+              name={(v as VideoBlock).name}
+              link={(v as VideoBlock).link}
+              imgUrl={(v as VideoBlock).imgUrl}
+            />
+          );
         })}
       </div>
     </MainLayout>

@@ -13,6 +13,9 @@ export class Video {
   @Prop({ required: true })
   link: string;
 
+  @Prop({ required: true })
+  imgUrl: string;
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   owner: User;
 }
