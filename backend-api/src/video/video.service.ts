@@ -26,41 +26,54 @@ export class VideoService {
     name: string,
     link: string,
   ): Promise<ImgFileProcessingResult> {
-    try {
-      const result = await this.handler.do(userId, file); //validation and creation of a miniature
-      if (result.success !== true) {
-        winstonLogger.error(`Error in addVideo: Problems with the image`);
-      }
-      // добавляем в БД
-      const createVideoDto = new CreateVideoDto(name, link, result.owner);
-      await this.videoModel.create(createVideoDto);
-
-      // загрузка в клауд
-      winstonLogger.info(`Try uploading image to Cloudinary`);
-      result.imageUrl = undefined;
-      if (result && result.success) {
-        try {
-          result.imageUrl = await this.cloudinary.upload(
-            userId,
-            result.path,
-            result.fileName,
-          );
-        } catch (error) {
-          winstonLogger.error(`Error during upload: ${error}`);
-          throw new CustomError({
-            message: 'Error during upload images',
-            success: false,
-            path: result.path,
-            miniPath: result.miniPath,
-            uid: result.uid,
-          });
-        }
-      }
-      return result;
-    } catch (error) {
-      winstonLogger.error(`Error in addVideo: ${error}`);
-      throw error; // Пробросить ошибку выше для обработки в вызывающем коде
+    const result = await this.handler.do(userId, file); //validation and creation of a miniature
+    if (result.success !== true) {
+      winstonLogger.error(`Error in addVideo: Problems with the image`);
     }
+
+    // загрузка в клауд
+    winstonLogger.info(`Try uploading image to Cloudinary`);
+    if (result && result.success) {
+      try {
+        result.imageUrl = await this.cloudinary.upload(
+          userId,
+          result.miniPath,
+          result.fileName,
+        );
+      } catch (error) {
+        winstonLogger.error(
+          `Error during upload Video to Cloudinary: ${error}`,
+        );
+        result.success = false;
+        throw new CustomError({
+          message: 'Error during upload Video to Cloudinary',
+          success: false,
+          path: result.path,
+          miniPath: result.miniPath,
+          uid: result.uid,
+        });
+      }
+    }
+    try {
+      // добавляем в БД
+      const createVideoDto = new CreateVideoDto(
+        name,
+        result.imageUrl,
+        link,
+        result.owner,
+      );
+      await this.videoModel.create(createVideoDto);
+    } catch (error) {
+      winstonLogger.error(`'Error putting Video into the Database'`);
+      throw new CustomError({
+        message: 'Error putting Video into the Database',
+        success: false,
+        path: result.path,
+        miniPath: result.miniPath,
+        uid: result.uid,
+      });
+    }
+    return result;
   }
 
   async getAllVideos(): Promise<Video[]> {
