@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Put, Get, Post } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
 import { Spinner } from "../../components/Spinner";
+
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const IMG = import.meta?.env?.VITE_API_IMAGE;

@@ -25,21 +25,38 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
   const getPictures = async () => {
     try {
       //todo есть метод /type чтобы не загружать всё
-      const response = await Get(undefined, BACKEND_API, `${ai}/`, false);
+
+      let diffResponse;
+      if (pageType === "Kopien") {
+        // Выполнить новый запрос, если тип страницы "Kopien"
+        diffResponse = await Get(
+          undefined,
+          BACKEND_API,
+          `${ai}/type?typeOfImage=isCopy`,
+          false
+        );
+      } else {
+        // Иначе использовать существующий запрос
+        diffResponse = await Get(undefined, BACKEND_API, `${ai}/`, false);
+      }
 
       if (pageType === "Gemälde") {
         setPaintings(
-          response.data.filter((item: any) => item.typeOfImage === "isPainting")
+          diffResponse.data.filter(
+            (item: any) => item.typeOfImage === "isPainting"
+          )
         );
       }
       if (pageType === "Atelier") {
         setPaintings(
-          response.data.filter((item: any) => item.typeOfImage === "isAtelier")
+          diffResponse.data.filter(
+            (item: any) => item.typeOfImage === "isAtelier"
+          )
         );
       }
       if (pageType === "Kopien") {
         setPaintings(
-          response.data.filter((item: any) => item.typeOfImage === "isKopien")
+          diffResponse.data.filter((item: any) => item.typeOfImage === "isCopy")
         );
       }
     } catch (error) {

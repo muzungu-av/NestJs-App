@@ -110,7 +110,7 @@ export class ImageController {
     filterDto: GetImagesFilterDto,
   ): Promise<any> {
     if (filterDto.typeOfImage === 'isCopy') {
-      // return this.imageService.findCopies(filterDto.typeOfImage);
+      return this.imageService.findCopies(filterDto.typeOfImage);
     }
     return this.imageService.findImagesByType(filterDto.typeOfImage); //похоже пока не используется
   }

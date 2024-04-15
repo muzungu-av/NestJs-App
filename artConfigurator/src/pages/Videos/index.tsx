@@ -224,7 +224,6 @@ export const Videos = () => {
         >
           <img src={deletePhoto} /> Foto löschen {/*Delete photo*/}
         </button>
-        {/* <img src={img_resource} className="m-4" /> */}
         <input
           ref={fileInputRef}
           type="file"
