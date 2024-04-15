@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Put, Get, Post } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
 import { Spinner } from "../../components/Spinner";
+
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const IMG = import.meta?.env?.VITE_API_IMAGE;
@@ -18,7 +19,7 @@ interface AddingEditingPaintProps {
   isEditMode: boolean;
 }
 
-interface EntityDataStructure {
+interface ImageDataStructure {
   body: File | undefined;
   url: string | undefined;
   filename: String | undefined;
@@ -49,18 +50,18 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     }
   };
 
-  const [entityDataObject, setEntityDataObject] = useState<
-    EntityDataStructure | undefined
-  >(undefined);
+  const [imageData, setImageData] = useState<ImageDataStructure | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     fetchDataFromApi().then((result) =>
-      setEntityDataObject({
+      setImageData({
         body: undefined,
         url: result.miniImageUrl,
         filename: undefined,
         typeOfImage: result.typeOfImage || "",
-      } as EntityDataStructure)
+      } as ImageDataStructure)
     );
   }, []);
 
@@ -70,14 +71,14 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      const type = entityDataObject?.typeOfImage || "";
+      const type = imageData?.typeOfImage || "";
       reader.onloadend = () => {
-        setEntityDataObject({
+        setImageData({
           body: file,
           url: undefined,
           filename: file.name,
           typeOfImage: type,
-        } as EntityDataStructure);
+        } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
     }
@@ -90,7 +91,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
       "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
     );
     if (confirmation) {
-      setEntityDataObject(undefined); //если удалили фото - удаляем все данные о нем
+      setImageData(undefined); //если удалили фото - удаляем все данные о нем
       if (fileInputRef.current) {
         fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
       }
@@ -108,9 +109,9 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setEntityDataObject((prevEntityDataObject) => {
-      if (prevEntityDataObject) {
-        return { ...prevEntityDataObject, typeOfImage: value };
+    setImageData((prevImageData) => {
+      if (prevImageData) {
+        return { ...prevImageData, typeOfImage: value };
       } else {
         return {
           typeOfImage: value,
@@ -125,12 +126,12 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   // очистить контент
   const handleClearContent = () => {
     setEditorData(default_text);
-    setEntityDataObject(undefined);
+    setImageData(undefined);
   };
 
   // Проверка наличия необходимых данных
   const checkData = () => {
-    if (!entityDataObject || !entityDataObject.typeOfImage || !editorData) {
+    if (!imageData || !imageData.typeOfImage || !editorData) {
       message.error("Nicht alle Daten sind ausgefüllt");
       return false;
     }
@@ -145,15 +146,14 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         if (!isEditMode) {
           const formData = new FormData();
           formData.append("description", editorData);
-          formData.append("typeOfImage", entityDataObject!.typeOfImage);
-          if (entityDataObject?.body) {
-            formData.append("file", entityDataObject.body);
+          formData.append("typeOfImage", imageData!.typeOfImage);
+          if (imageData?.body) {
+            formData.append("file", imageData.body);
           }
           const headers = {
             "Content-Type": `multipart/form-data;`,
           };
           const response = await Post(headers, BURL, IMG, true, formData);
-          console.log(response);
           message.success("Painting successfully uploaded");
           return response.data;
         } else {
@@ -162,7 +162,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           };
           const payload = {
             description: editorData,
-            typeOfImage: entityDataObject?.typeOfImage,
+            typeOfImage: imageData?.typeOfImage,
           };
           const response = await Put(
             headers,
@@ -171,7 +171,6 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             true,
             payload
           );
-          console.log(response);
           message.success("Painting successfully uploaded");
           return response.data;
         }
@@ -184,10 +183,10 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   };
 
   let img_resource = emptyPhoto;
-  if (entityDataObject && entityDataObject.body) {
-    img_resource = URL.createObjectURL(entityDataObject.body);
-  } else if (entityDataObject && entityDataObject.url) {
-    img_resource = entityDataObject.url;
+  if (imageData && imageData.body) {
+    img_resource = URL.createObjectURL(imageData.body);
+  } else if (imageData && imageData.url) {
+    img_resource = imageData.url;
   }
 
   return (
@@ -249,7 +248,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                 <input
                   id="default-radio-1"
                   type="radio"
-                  checked={entityDataObject?.typeOfImage === "isPainting"}
+                  checked={imageData?.typeOfImage === "isPainting"}
                   value={type_P}
                   name="default-radio"
                   onChange={handleRadioChange}
@@ -266,7 +265,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                 <input
                   id="default-radio-2"
                   type="radio"
-                  checked={entityDataObject?.typeOfImage === "isAtelier"}
+                  checked={imageData?.typeOfImage === "isAtelier"}
                   value={type_A}
                   name="default-radio"
                   onChange={handleRadioChange}
