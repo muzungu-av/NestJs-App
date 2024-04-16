@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AuthStore from "../../store/AuthStore.ts";
 import { menuItemsWithPaths } from "../../App.tsx";
 import { message } from "antd";
+import { useAuth } from "../../context/AuthContext.tsx";
 type FormData = {
   username: string;
   password: string;
@@ -24,19 +25,20 @@ const LogIn: React.FC = observer(() => {
   };
 
   const first_rout = menuItemsWithPaths[0].path as string;
-
+  const { login } = useAuth();
   const handleLogin = async () => {
     try {
-      await AuthStore.login(formData);
-
-      if (AuthStore.isLoggedIn) {
-        const access_token = AuthStore.access_token;
-        localStorage.setItem("access_token", access_token);
-        navigate(first_rout);
-      } else {
-        console.error("Authentication error: Invalid response");
-        message.error("Please check your email and password");
-      }
+      AuthStore.login(formData).then(() => {
+        if (AuthStore.isLoggedIn) {
+          const access_token = AuthStore.access_token;
+          localStorage.setItem("access_token", access_token);
+          login(access_token);
+          navigate(first_rout);
+        } else {
+          console.error("Authentication error: Invalid response");
+          message.error("Please check your email and password");
+        }
+      });
     } catch (error) {
       console.error("Authentication error", error);
       message.error("Authentication error");

@@ -14,9 +14,8 @@ import { Pictures } from "./pages/Pictures";
 import { PaintingsKopien } from "./pages/PaintingsKopien";
 import { Biography } from "./pages/Biography";
 import { Videos } from "./pages/Videos";
-import { useEffect, useState } from "react";
 import React from "react";
-import { Head } from "./api/axiosInstance";
+import { useAuth } from "./context/AuthContext";
 
 export const menuItemsWithPaths = [
   {
@@ -96,39 +95,7 @@ export const menuItemsWithPaths = [
 ];
 
 const App: React.FC = () => {
-  const [token, setToken] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(true);
-  const sc = import.meta?.env?.VITE_SCHEME;
-  const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
-
-  const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
-
-  useEffect(() => {
-    getToken();
-  }, []);
-
-  const getToken = async () => {
-    const storedToken = localStorage.getItem("access_token");
-
-    if (storedToken) {
-      Head({ Authorization: `Bearer ${storedToken}` }, BURL, "/check_me_out")
-        .then((response) => {
-          if (response.status >= 200 && response.status < 300) {
-            setToken(true);
-          } else {
-            localStorage.removeItem("access_token");
-            setToken(false);
-          }
-        })
-        .catch(() => {
-          localStorage.removeItem("access_token");
-          setToken(false);
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  };
+  const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -142,7 +109,7 @@ const App: React.FC = () => {
             key={item.id}
             path={item.path || ""}
             element={
-              token
+              isAuthenticated
                 ? item.element && (
                     <>
                       <item.element />
@@ -159,7 +126,7 @@ const App: React.FC = () => {
                   key={child.id}
                   path={child.path}
                   element={
-                    token ? (
+                    isAuthenticated ? (
                       <child.element isEditMode={child.isEditMode || false} />
                     ) : (
                       <Navigate to="/" replace />
