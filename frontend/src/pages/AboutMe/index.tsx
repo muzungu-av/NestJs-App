@@ -1,14 +1,48 @@
+import { useEffect, useState } from "react";
 import Play from "../../assets/icons/Play.svg"; // (linux error) big Letter please
-import videoPic from "../../assets/images/videoPic.jpg";
-import videoPic2 from "../../assets/images/videoPic2.jpg";
 import { GallerySection } from "../../components/GallerySection";
 import { useNavigate } from "react-router";
+import { Get } from "../../api/axiosInstance";
 
 interface AboutMeProps {
   isMain: boolean;
 }
 
+interface VideoBlock {
+  _id: string;
+  name: string;
+  link: string;
+  imgUrl: string;
+}
+
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const vi = import.meta?.env?.VITE_API_VIDEO;
+const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+
 export const AboutMe = ({ isMain }: AboutMeProps) => {
+  const fetchDataFromApi = async () => {
+    try {
+      const response = await Get(undefined, url, vi, false, {});
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Videos from backend:", error);
+      return null;
+    }
+  };
+
+  const [videos, setVideoData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetchDataFromApi();
+      if (result) {
+        setVideoData(result);
+      }
+    };
+    fetchData();
+  }, []);
+
   const navigate = useNavigate();
   const AboutPainterSection: React.FC = () => {
     return (
@@ -95,19 +129,19 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
     );
   };
   const VideoSection: React.FC = () => {
-    const VideoBlock = ({ picture }: { picture: string }) => {
+    const VideoBlock = ({ name, imgUrl }: Partial<VideoBlock>) => {
       return (
         <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-10 py-[5%] px-[5%]">
           <div
             className="bg-no-repeat	bg-cover w-full h-[170px] sm:h-[250px] lg:w-[600px] lg:h-[300px] flex justify-center items-center"
-            style={{ backgroundImage: `url(${picture})` }}
+            style={{ backgroundImage: `url(${imgUrl})` }}
           >
             <div className="btn-play ">
               <img src={Play} />
             </div>
           </div>
           <div className="lg:w-[50%] flex flex-col gap-4">
-            <h3 className="font-italiana text-base lg:text-2xl ">Videoname</h3>
+            <h3 className="font-italiana text-base lg:text-2xl ">{name}</h3>
             <p className="font-federo text-sm lg:text-lg">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
@@ -122,8 +156,14 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
 
     return (
       <div className="py-[10%] flex flex-col gap-6">
-        <VideoBlock picture={videoPic} />
-        <VideoBlock picture={videoPic2} />
+        {videos.map((v) => {
+          return (
+            <VideoBlock
+              name={(v as VideoBlock).name}
+              imgUrl={(v as VideoBlock).imgUrl}
+            />
+          );
+        })}
       </div>
     );
   };

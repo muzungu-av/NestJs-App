@@ -1,16 +1,30 @@
-import React, { useState } from "react";
-import photo from "./../../assets/images/EmptyPhoto.png";
+import React, { useRef, useState } from "react";
 import addPhoto from "./../../assets/images/Add_photo.png";
+import Empty from "./../../assets/images/EmptyPhoto.png";
 import editPhoto from "./../../../../frontend/src/assets/images/BoatPicture.jpg";
 import editRecord from "./../../assets/images/EditRecord.svg";
 import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { loremIpsum } from "lorem-ipsum";
 import MainLayout from "../../layouts/MainLayout";
+import { message } from "antd";
+import { Post } from "../../api/axiosInstance";
+
 interface AddingEditingKopienProps {
   isEditMode: boolean;
 }
+
+interface ImageDataStructure {
+  body: File | undefined;
+  url: string | undefined;
+  filename: String | undefined;
+}
+
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const IMG = import.meta?.env?.VITE_API_IMAGE;
+const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+
 export const AddingEditingKopien = ({
   isEditMode,
 }: AddingEditingKopienProps) => {
@@ -22,14 +36,12 @@ export const AddingEditingKopien = ({
   const [sizes, setSizes] = useState<any>(sizesData);
   const handleCheckRow = (index: number) => {
     const newRow = { ...sizes[index], index };
-
     setCurrentRow(newRow);
   };
 
   const handleDeleteRow = (index: number) => {
     const newData = [...sizes];
     newData.splice(index, 1);
-
     setSizes(newData);
     setCurrentRow({});
   };
@@ -63,6 +75,101 @@ export const AddingEditingKopien = ({
     event.currentTarget.reset();
   };
 
+  //image
+  const [imageData, setImageData] = useState<ImageDataStructure | undefined>(
+    undefined
+  );
+
+  let img_resource = Empty;
+  if (imageData && imageData.body) {
+    img_resource = URL.createObjectURL(imageData.body);
+  } else if (imageData && imageData.url) {
+    img_resource = imageData.url;
+  }
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDeletePhoto = () => {
+    const confirmation = window.confirm(
+      "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
+    );
+    if (confirmation) {
+      setImageData(undefined); //если удалили фото - удаляем все данные о нем
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+      }
+    }
+  };
+
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageData({
+          body: file,
+          url: undefined,
+          filename: file.name,
+        } as ImageDataStructure);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // EDITOR
+  const default_text = "Geben Sie eine Beschreibung in dieses Feld ein...";
+
+  const [editorData, setEditorData] = useState(default_text);
+
+  const handleEditorChange = (_event: any, editor: any) => {
+    const data = editor.getData();
+    setEditorData(data);
+  };
+
+  // очистить контент
+  const handleClearContent = () => {
+    setEditorData(default_text);
+    setImageData(undefined);
+  };
+
+  // Проверка наличия необходимых данных
+  const checkData = () => {
+    if (!imageData || !imageData.body || !editorData) {
+      message.error("Nicht alle Daten sind ausgefüllt");
+      return false;
+    }
+    return true;
+  };
+  //отправка
+  const handleSaveClick = async () => {
+    if (checkData()) {
+      try {
+        // setLoader(true);
+        // if (!isEditMode) {
+        console.log(imageData);
+        const formData = new FormData();
+        formData.append("description", editorData);
+        formData.append("typeOfImage", "isCopy");
+        if (imageData?.body) {
+          formData.append("file", imageData.body);
+        }
+        const headers = {
+          "Content-Type": `multipart/form-data;`,
+        };
+        const response = await Post(headers, BURL, IMG, true, formData);
+        message.success("Painting successfully uploaded");
+        return response.data;
+        // }
+      } catch (e) {
+        message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
+      } finally {
+        // setLoader(false);
+      }
+    }
+  };
+
   return (
     <>
       <MainLayout>
@@ -70,19 +177,34 @@ export const AddingEditingKopien = ({
         <div className="flex justify-around m-[5%]">
           <div className="flex flex-col justify-start items-center w-[40%]">
             <div className="font-federo text-3xl mb-4">Foto</div>
-            {isEditMode ? (
-              <img className="mb-2" src={editPhoto} />
-            ) : (
-              <img className="mb-2" src={photo} />
-            )}
+            <label htmlFor="file-input">
+              {isEditMode ? (
+                <img className="mb-2" src={editPhoto} />
+              ) : (
+                <img className="mb-2" src={img_resource} />
+              )}
+            </label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              id="file-input"
+              className="hidden"
+              onChange={handleFileInputChange}
+            />
             {isEditMode ? (
               <button className="w-[100%] flex justify-center m-2 ">
                 <img src={addPhoto} /> Foto ändern
               </button>
-            ) : (
-              <button className="w-[100%] flex justify-center m-2">
-                <img src={deletePhoto} /> Foto löschen
+            ) : imageData && imageData.body ? (
+              <button
+                className="w-[100%] flex justify-center m-2"
+                onClick={handleDeletePhoto}
+              >
+                <img src={deletePhoto} /> Foto löschen {/*Delete photo*/}
               </button>
+            ) : (
+              <></>
             )}{" "}
           </div>{" "}
           <div className="w-[60%]">
@@ -266,20 +388,25 @@ export const AddingEditingKopien = ({
             <div className="font-federo text-3xl mb-4">Beschreibung</div>
             <CKEditor
               editor={ClassicEditor}
-              data={loremIpsum({
-                count: 13,
-                format: "plain",
-                units: "sentences",
-              })}
+              data={editorData}
               config={{
                 toolbar: [],
               }}
+              onChange={(event: any, editor: any) => {
+                handleEditorChange(event, editor);
+              }}
             />
             <div className="flex justify-end my-4">
-              <button className="btn-primary w-[130px] h-[45px]">
+              <button
+                className="btn-primary w-[130px] h-[45px]"
+                onClick={handleClearContent}
+              >
                 abbrechen
               </button>{" "}
-              <button className="btn-primary w-[130px] h-[45px] ml-2">
+              <button
+                className="btn-primary w-[130px] h-[45px] ml-2"
+                onClick={handleSaveClick}
+              >
                 speichern
               </button>
             </div>
@@ -289,3 +416,6 @@ export const AddingEditingKopien = ({
     </>
   );
 };
+// function setLoader(arg0: boolean) {
+//   throw new Error("Function not implemented.");
+// }
