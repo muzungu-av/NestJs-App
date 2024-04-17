@@ -396,7 +396,6 @@ export class ImageService {
 
   async updateFile(
     uid: string,
-    userId: string,
     description: string,
     typeOfImage: string,
   ): Promise<boolean> {
