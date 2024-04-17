@@ -13,7 +13,13 @@ export const OnePaintingSection = ({
   id: string;
   onClick: any;
 }) => {
+  function stripHtmlTags(html: string) {
+    let plainText = html.replace(/<[^>]*>/g, "");
+    plainText = plainText.replace(/&nbsp;/g, "\n");
+    return plainText;
+  }
   const sanitizedText = DOMPurify.sanitize(text);
+  console.log(sanitizedText, text);
   return (
     <div className="py-[5%] px-[5%]" id={id} onClick={onClick}>
       <div className="flex justify-between gap-2 lg:gap-6 lg:p-[30px]">
@@ -28,6 +34,7 @@ export const OnePaintingSection = ({
             Bildname
           </div>
           <p
+            title={stripHtmlTags(text)}
             style={{}}
             className={`font-['Federo'] text-sm lg:text-xl ${style.wrappedText}`}
             dangerouslySetInnerHTML={{ __html: sanitizedText }}

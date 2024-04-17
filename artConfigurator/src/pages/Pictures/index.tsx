@@ -26,7 +26,6 @@ const handleDeleteClick = async (uid: string) => {
     message.success("Successfully deleted");
   }
 };
-
 const PicSection: React.FC<PicSectionProps> = ({
   uid,
   typeOfImage,
@@ -35,11 +34,12 @@ const PicSection: React.FC<PicSectionProps> = ({
   description,
 }) => {
   const navigate = useNavigate();
-  const sanitizedDescription = DOMPurify.sanitize(description); //безопасный текст, санитаризация
+  const sanitizedDescription = DOMPurify.sanitize(description);
   return (
     <div className="flex justify-between gap-6 py-[5%]">
-      <img src={miniImageUrl} className="" />
+      <img src={miniImageUrl} className="max-w-[90%] h-full lg:max-w-[100%]" />
       <div
+        data-tooltip={sanitizedDescription}
         className="w-1/2 text-xl"
         dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
       />

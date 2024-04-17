@@ -203,7 +203,10 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         <div className="flex flex-col justify-start items-center w-[40%]">
           <div className="font-federo text-3xl mb-4">Foto</div>
           <label htmlFor="file-input">
-            <img className="mb-2" src={img_resource} />
+            <img
+              className="mb-2 "
+              src={img_resource}
+            />
           </label>
           {isEditMode ? (
             <button className="w-[100%] flex justify-center m-2 ">
