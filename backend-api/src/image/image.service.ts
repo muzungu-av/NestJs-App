@@ -400,9 +400,6 @@ export class ImageService {
     description: string,
     typeOfImage: string,
   ): Promise<boolean> {
-    winstonLogger.info(`User ${userId} updates image ${uid}`);
-    winstonLogger.info(`description - ${description}`);
-    winstonLogger.info(`typeOfImageid - ${typeOfImage}`);
     try {
       const result = await this.imageModel.findOneAndUpdate(
         { uid },
@@ -411,7 +408,6 @@ export class ImageService {
       );
       winstonLogger.info(`${result}`);
     } catch (error) {
-      // Обработка ошибок, если что-то пошло не так
       console.error('Error updating file:', error);
       return false;
     }
