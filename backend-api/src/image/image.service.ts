@@ -401,12 +401,11 @@ export class ImageService {
     typeOfImage: string,
   ): Promise<boolean> {
     try {
-      const result = await this.imageModel.findOneAndUpdate(
+      await this.imageModel.findOneAndUpdate(
         { uid },
         { description, typeOfImage },
         { new: true },
       );
-      winstonLogger.info(`${result}`);
     } catch (error) {
       console.error('Error updating file:', error);
       return false;
