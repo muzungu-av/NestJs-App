@@ -3,7 +3,7 @@ import Empty from "./../../assets/images/EmptyPhoto.png";
 import MainLayout from "../../layouts/MainLayout";
 import { Delete, Get, Post } from "../../api/axiosInstance";
 import { message } from "antd";
-import deletePhoto from "./../../assets/images/Delete.svg";
+// import deletePhoto from "./../../assets/images/Delete.svg";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -31,15 +31,14 @@ export const Videos = () => {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetchDataFromApi();
-      if (result) {
-        setAllVideosData(result);
-      }
-    };
     fetchData();
   }, []);
-
+  const fetchData = async () => {
+    const result = await fetchDataFromApi();
+    if (result) {
+      setAllVideosData(result);
+    }
+  };
   const [videoName, setVideoName] = useState<string>("");
   const [videoLink, setVideoLink] = useState<string | undefined>(undefined);
   // const [videoImgUrl, setVideoImgUrl] = useState<string | undefined>(undefined);
@@ -88,6 +87,9 @@ export const Videos = () => {
       await Delete(url + vi, "/" + id, true);
       message.success("Successfully deleted");
     }
+    setAllVideosData((prev) => {
+      return prev.filter((v: any) => v._id !== id);
+    });
   };
 
   const handleSaveClick = async () => {
@@ -106,13 +108,18 @@ export const Videos = () => {
         formData.append("file", imageData.body);
       }
       const headers = {
-        "Content-Type": `multipart/form-data;`,
+        "Content-Type": `multipart/form-data;`
       };
       const response = await Post(headers, url, vi, true, formData);
       console.log(response);
 
       message.success("Das Video wird auf der Startseite angezeigt");
       setNewClicked(false);
+      fetchData();
+      setVideoDescription("");
+      setVideoLink("");
+      setVideoName("");
+      setImageData(undefined);
     }
   };
 
@@ -160,17 +167,17 @@ export const Videos = () => {
     const videoDescriptionRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleDeletePhoto = () => {
-      const confirmation = window.confirm(
-        "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
-      );
-      if (confirmation) {
-        setImageData(undefined); //если удалили фото - удаляем все данные о нем
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
-        }
-      }
-    };
+    // const handleDeletePhoto = () => {
+    //   const confirmation = window.confirm(
+    //     "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
+    //   );
+    //   if (confirmation) {
+    //     setImageData(undefined); //если удалили фото - удаляем все данные о нем
+    //     if (fileInputRef.current) {
+    //       fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+    //     }
+    //   }
+    // };
 
     const handleFileInputChange = (
       event: React.ChangeEvent<HTMLInputElement>
@@ -182,7 +189,7 @@ export const Videos = () => {
           setImageData({
             body: file,
             url: undefined,
-            filename: file.name,
+            filename: file.name
           } as ImageDataStructure);
         };
         reader.readAsDataURL(file);
@@ -218,12 +225,6 @@ export const Videos = () => {
         <label htmlFor="file-input">
           <img className="m-4" src={img_resource} />
         </label>
-        <button
-          className="w-[100%] flex justify-center m-2"
-          onClick={handleDeletePhoto}
-        >
-          <img src={deletePhoto} /> Foto löschen {/*Delete photo*/}
-        </button>
         <input
           ref={fileInputRef}
           type="file"

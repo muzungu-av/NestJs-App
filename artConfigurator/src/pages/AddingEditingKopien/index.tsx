@@ -9,6 +9,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
 import { message } from "antd";
 import { Post } from "../../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 interface AddingEditingKopienProps {
   isEditMode: boolean;
@@ -26,11 +27,11 @@ const IMG = import.meta?.env?.VITE_API_IMAGE;
 const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
 export const AddingEditingKopien = ({
-  isEditMode,
+  isEditMode
 }: AddingEditingKopienProps) => {
   const sizesData = [
     { width: "40", height: "50", price: "120.00 " },
-    { width: "60", height: "70", price: "420.00 " },
+    { width: "60", height: "70", price: "420.00 " }
   ];
   const [currentRow, setCurrentRow] = useState<any>();
   const [sizes, setSizes] = useState<any>(sizesData);
@@ -38,7 +39,7 @@ export const AddingEditingKopien = ({
     const newRow = { ...sizes[index], index };
     setCurrentRow(newRow);
   };
-
+  const navigate = useNavigate();
   const handleDeleteRow = (index: number) => {
     const newData = [...sizes];
     newData.splice(index, 1);
@@ -52,7 +53,7 @@ export const AddingEditingKopien = ({
   ) => {
     setCurrentRow((prevState: any) => ({
       ...prevState,
-      [field]: value,
+      [field]: value
     }));
   };
 
@@ -89,17 +90,17 @@ export const AddingEditingKopien = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDeletePhoto = () => {
-    const confirmation = window.confirm(
-      "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
-    );
-    if (confirmation) {
-      setImageData(undefined); //если удалили фото - удаляем все данные о нем
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
-      }
-    }
-  };
+  // const handleDeletePhoto = () => {
+  //   const confirmation = window.confirm(
+  //     "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
+  //   );
+  //   if (confirmation) {
+  //     setImageData(undefined); //если удалили фото - удаляем все данные о нем
+  //     if (fileInputRef.current) {
+  //       fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+  //     }
+  //   }
+  // };
 
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -111,7 +112,7 @@ export const AddingEditingKopien = ({
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name,
+          filename: file.name
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -130,6 +131,7 @@ export const AddingEditingKopien = ({
 
   // очистить контент
   const handleClearContent = () => {
+    navigate("/copy_paintings");
     setEditorData(default_text);
     setImageData(undefined);
   };
@@ -156,7 +158,7 @@ export const AddingEditingKopien = ({
           formData.append("file", imageData.body);
         }
         const headers = {
-          "Content-Type": `multipart/form-data;`,
+          "Content-Type": `multipart/form-data;`
         };
         const response = await Post(headers, BURL, IMG, true, formData);
         message.success("Painting successfully uploaded");
@@ -169,7 +171,12 @@ export const AddingEditingKopien = ({
       }
     }
   };
-
+  const handleTextClick = () => {
+    // При клике на текст "Foto ändern" вызываем клик на скрытый input
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
   return (
     <>
       <MainLayout>
@@ -192,20 +199,13 @@ export const AddingEditingKopien = ({
               className="hidden"
               onChange={handleFileInputChange}
             />
-            {isEditMode ? (
-              <button className="w-[100%] flex justify-center m-2 ">
-                <img src={addPhoto} /> Foto ändern
-              </button>
-            ) : imageData && imageData.body ? (
-              <button
-                className="w-[100%] flex justify-center m-2"
-                onClick={handleDeletePhoto}
-              >
-                <img src={deletePhoto} /> Foto löschen {/*Delete photo*/}
-              </button>
-            ) : (
-              <></>
-            )}{" "}
+
+            <button
+              onClick={handleTextClick}
+              className="w-[100%] flex justify-center m-2 "
+            >
+              <img src={addPhoto} /> Foto ändern
+            </button>
           </div>{" "}
           <div className="w-[60%]">
             {isEditMode && (
@@ -390,7 +390,7 @@ export const AddingEditingKopien = ({
               editor={ClassicEditor}
               data={editorData}
               config={{
-                toolbar: [],
+                toolbar: []
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);
