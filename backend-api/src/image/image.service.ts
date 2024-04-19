@@ -398,13 +398,68 @@ export class ImageService {
     uid: string,
     description: string,
     typeOfImage: string,
+    file: Express.Multer.File,
+    prevfileName: string,
+    userId: string,
   ): Promise<boolean> {
+    const resp = await this.handler.do(userId, file); //validation and creation of a miniature
+    if (resp.success !== true) {
+      winstonLogger.error(`Error in addVideo: Problems with the image`);
+    }
+
+    winstonLogger.info(`User ${userId} updates image ${uid}`);
+    winstonLogger.info(`description - ${description}`);
+    winstonLogger.info(`typeOfImageid - ${typeOfImage}`);
+
+    if (resp && resp.success) {
+      try {
+        resp.imageUrl = await this.cloudinary.upload(
+          userId,
+          resp.miniPath,
+          resp.fileName,
+        );
+        resp.miniImageUrl = await this.cloudinary.upload(
+          userId,
+          resp.miniPath,
+          resp.miniFileName,
+        );
+      } catch (error) {
+        winstonLogger.error(
+          `Error during upload Video to Cloudinary: ${error}`,
+        );
+        resp.success = false;
+        throw new CustomError({
+          message: 'Error during upload Video to Cloudinary',
+          success: false,
+          path: resp.path,
+          miniPath: resp.miniPath,
+          uid: resp.uid,
+        });
+      }
+    }
+
     try {
       await this.imageModel.findOneAndUpdate(
         { uid },
-        { description, typeOfImage },
+        {
+          description,
+          typeOfImage,
+          fileName: resp.fileName,
+          path: resp.path,
+          miniPath: resp.miniPath,
+          originalName: resp.originalName,
+          imageUrl: resp.imageUrl,
+          miniImageUrl: resp.miniImageUrl,
+        },
         { new: true },
       );
+
+      const indexOfDot = prevfileName.lastIndexOf('.');
+      const nameWithoutDot = prevfileName.slice(0, indexOfDot);
+      const urlForDel = `${userId}/${nameWithoutDot}`;
+      const delRes = await this.cloudinary.delete(urlForDel);
+
+      winstonLogger.info(`delRes-${delRes}`);
     } catch (error) {
       console.error('Error updating file:', error);
       return false;

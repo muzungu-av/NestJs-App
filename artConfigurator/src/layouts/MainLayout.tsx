@@ -4,12 +4,11 @@ import SideBar from "../components/SideBar";
 import Header from "../components/Header";
 import { Spinner } from "../components/Spinner";
 const MainLayout = ({ children }: { children: ReactNode }) => {
-  const [isClicked, setIsClicked] = useState(true);
+  const [isClicked, setIsClicked] = useState(false);
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const [isLoader, setLoader] = useState(false);
   const location = useLocation();
   useEffect(() => {
-    console.log("location", location);
     setLoader(true);
     const changeState = () => {
       setTimeout(() => {

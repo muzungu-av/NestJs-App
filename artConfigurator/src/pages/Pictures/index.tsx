@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
-import { Delete, Get } from "../../api/axiosInstance";
+import { Delete, Get, Put } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
 import { message } from "antd";
+import { Spinner } from "../../components/Spinner";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -16,25 +17,45 @@ type PicSectionProps = {
   typeOfImage: string;
   miniImageUrl: string;
   description: string;
+  handleDeleteClick: (uid: string) => void;
 };
 
-const handleDeleteClick = async (uid: string) => {
-  const userAnswer = window.confirm("Do u want to delete?");
-
-  if (userAnswer) {
-    await Delete(url + img, "/" + uid, true);
-    message.success("Successfully deleted");
-  }
-};
 const PicSection: React.FC<PicSectionProps> = ({
   uid,
   typeOfImage,
   groupName,
   miniImageUrl,
   description,
+  handleDeleteClick
 }) => {
+  const [loader, setLoader] = useState(false);
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    handleSaveClick(value);
+  };
+  const handleSaveClick = async (typeOfImage: string) => {
+    try {
+      setLoader(true);
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      const payload = {
+        description: description,
+        typeOfImage: typeOfImage
+      };
+      const response = await Put(headers, url, img + "/" + uid, true, payload);
+
+      message.success("Painting successfully uploaded");
+      return response.data;
+    } catch (e) {
+      message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
+    } finally {
+      setLoader(false);
+    }
+  };
   const navigate = useNavigate();
   const sanitizedDescription = DOMPurify.sanitize(description);
+
   return (
     <div className="flex justify-between gap-6 py-[5%]">
       <img src={miniImageUrl} className="max-w-[90%] h-full lg:max-w-[100%]" />
@@ -46,10 +67,12 @@ const PicSection: React.FC<PicSectionProps> = ({
       <div className="w-1/4 flex justify-center">
         <div className="flex flex-col gap-6">
           <div className="flex gap-8 text-xl">
+            {loader && <Spinner />}
             <p>Auf Seite posten: </p>
             <div>
               <div className="flex items-center mb-4">
                 <input
+                  onChange={handleRadioChange}
                   id={groupName + "_P"}
                   type="radio"
                   value=""
@@ -66,6 +89,7 @@ const PicSection: React.FC<PicSectionProps> = ({
               </div>
               <div className="flex items-center">
                 <input
+                  onChange={handleRadioChange}
                   id={groupName + "_A"}
                   type="radio"
                   value=""
@@ -120,8 +144,18 @@ export const Pictures = () => {
   const handleAddNewClick = () => {
     navigate("/add_paint");
   };
-
   const [data, setData] = useState<PicSectionProps[] | null>(null);
+  const handleDeleteClick = async (uid: string) => {
+    const userAnswer = window.confirm("Do u want to delete?");
+
+    if (userAnswer) {
+      await Delete(url + img, "/" + uid, true);
+      message.success("Successfully deleted");
+      setData((prev: any) => {
+        return prev.filter((item: any) => item.uid !== uid);
+      });
+    }
+  };
 
   useEffect(() => {
     fetchDataFromApi().then((result) => setData(result));
@@ -148,6 +182,7 @@ export const Pictures = () => {
               groupName={"pic_section_" + ++j}
               miniImageUrl={item.miniImageUrl}
               description={item.description}
+              handleDeleteClick={handleDeleteClick}
             />
           ))}
       </div>

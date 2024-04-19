@@ -79,7 +79,7 @@ export const PaintingsKopien = () => {
                   <div className="w-1/2 pr-2 ">
                     {" "}
                     {v.sizes
-                      .slice(0, Math.ceil(v.sizes.length / 2))
+                      ?.slice(0, Math.ceil(v.sizes?.length / 2))
                       .map((size: string) => (
                         <button
                           key={size}
@@ -92,7 +92,7 @@ export const PaintingsKopien = () => {
                   <div className="w-1/2 pl-2">
                     {" "}
                     {v.sizes
-                      .slice(Math.ceil(v.sizes.length / 2))
+                      ?.slice(Math.ceil(v.sizes?.length / 2))
                       .map((size: string) => (
                         <button
                           key={size}
@@ -107,7 +107,7 @@ export const PaintingsKopien = () => {
                   <div className=" absolute h-[80%] bg-black w-1 top-0 left-0 "></div>{" "}
                   <div className=" mx-8 self-center h-[80%] font-federo text-xl">
                     {" "}
-                    {v.sizes.length} verfügbare Formate von {v.price[0]}€ bis{" "}
+                    {v.sizes?.length} verfügbare Formate von {v.price[0]}€ bis{" "}
                     {v.price[1]}€
                   </div>
                 </div>

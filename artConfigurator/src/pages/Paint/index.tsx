@@ -1,13 +1,13 @@
 import emptyPhoto from "./../../assets/images/EmptyPhoto.png";
 import addPhoto from "./../../assets/images/Add_photo.png";
 import { message } from "antd";
-import deletePhoto from "./../../assets/images/Delete.svg";
+// import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useRef, useState } from "react";
 import { Put, Get, Post } from "../../api/axiosInstance";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Spinner } from "../../components/Spinner";
 
 const sc = import.meta?.env?.VITE_SCHEME;
@@ -32,6 +32,7 @@ const type_P = "isPainting";
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const { uid } = useParams();
+  const navigate = useNavigate();
   //Photo
   const fetchDataFromApi = async () => {
     try {
@@ -55,14 +56,15 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   );
 
   useEffect(() => {
-    fetchDataFromApi().then((result) =>
+    fetchDataFromApi().then((result) => {
+      setEditorData(result.description);
       setImageData({
         body: undefined,
         url: result.miniImageUrl,
         filename: undefined,
-        typeOfImage: result.typeOfImage || "",
-      } as ImageDataStructure)
-    );
+        typeOfImage: result.typeOfImage || ""
+      } as ImageDataStructure);
+    });
   }, []);
 
   const handleFileInputChange = (
@@ -77,7 +79,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           body: file,
           url: undefined,
           filename: file.name,
-          typeOfImage: type,
+          typeOfImage: type
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -86,17 +88,17 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDeletePhoto = () => {
-    const confirmation = window.confirm(
-      "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
-    );
-    if (confirmation) {
-      setImageData(undefined); //если удалили фото - удаляем все данные о нем
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
-      }
-    }
-  };
+  // const handleDeletePhoto = () => {
+  //   const confirmation = window.confirm(
+  //     "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
+  //   );
+  //   if (confirmation) {
+  //     setImageData(undefined); //если удалили фото - удаляем все данные о нем
+  //     if (fileInputRef.current) {
+  //       fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+  //     }
+  //   }
+  // };
 
   const default_text = "Geben Sie eine Beschreibung in dieses Feld ein...";
 
@@ -117,14 +119,15 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           typeOfImage: value,
           body: undefined,
           url: undefined,
-          filename: undefined,
+          filename: undefined
         };
       }
     });
   };
 
   // очистить контент
-  const handleClearContent = () => {
+  const handleCancel = () => {
+    navigate("/painting_list");
     setEditorData(default_text);
     setImageData(undefined);
   };
@@ -151,25 +154,29 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             formData.append("file", imageData.body);
           }
           const headers = {
-            "Content-Type": `multipart/form-data;`,
+            "Content-Type": `multipart/form-data;`
           };
           const response = await Post(headers, BURL, IMG, true, formData);
           message.success("Painting successfully uploaded");
           return response.data;
         } else {
+          const formData = new FormData();
+          formData.append("description", editorData);
+          formData.append("typeOfImage", imageData!.typeOfImage);
+          if (imageData?.body) {
+            formData.append("file", imageData.body);
+          }
+
           const headers = {
-            "Content-Type": "application/json",
+            "Content-Type": `multipart/form-data;`
           };
-          const payload = {
-            description: editorData,
-            typeOfImage: imageData?.typeOfImage,
-          };
+
           const response = await Put(
             headers,
             BURL,
             IMG + "/" + uid,
             true,
-            payload
+            formData
           );
           message.success("Painting successfully uploaded");
           return response.data;
@@ -178,10 +185,16 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
       } finally {
         setLoader(false);
+        navigate("/painting_list");
       }
     }
   };
-
+  const handleTextClick = () => {
+    // При клике на текст "Foto ändern" вызываем клик на скрытый input
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
   let img_resource = emptyPhoto;
   if (imageData && imageData.body) {
     img_resource = URL.createObjectURL(imageData.body);
@@ -193,7 +206,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     <MainLayout>
       {loader && <Spinner />}
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
-        Bearbeiten der Gemälde Seite
+        Bearbeiten der Gemälde Seite111
       </div>
       <div
         className={`flex gap-6 justify-around m-[5%] ${
@@ -203,23 +216,15 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         <div className="flex flex-col justify-start items-center w-[40%]">
           <div className="font-federo text-3xl mb-4">Foto</div>
           <label htmlFor="file-input">
-            <img
-              className="mb-2 "
-              src={img_resource}
-            />
+            <img className="mb-2 " src={img_resource} />
           </label>
-          {isEditMode ? (
-            <button className="w-[100%] flex justify-center m-2 ">
-              <img src={addPhoto} /> Foto ändern {/* Change photo */}
-            </button>
-          ) : (
-            <button
-              className="w-[100%] flex justify-center m-2"
-              onClick={handleDeletePhoto}
-            >
-              <img src={deletePhoto} /> Foto löschen {/*Delete photo*/}
-            </button>
-          )}{" "}
+
+          <button
+            onClick={handleTextClick}
+            className="w-[100%] flex justify-center m-2 "
+          >
+            <img src={addPhoto} /> Foto ändern {/* Change photo */}
+          </button>
         </div>{" "}
         <div className="w-[60%]">
           <div className="font-federo text-3xl mb-4">Beschreibung</div>
@@ -227,7 +232,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             editor={ClassicEditor}
             data={editorData}
             config={{
-              toolbar: [],
+              toolbar: []
             }}
             onChange={(event: any, editor: any) => {
               handleEditorChange(event, editor);
@@ -236,6 +241,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           <div className="flex justify-end m-6">
             <div className="font-federo text-2xl mr-6">Auf Seite posten: </div>
             <div className="flex flex-col items-start mb-4 w-[20%]">
+              {" "}
               <input
                 ref={fileInputRef}
                 type="file"
@@ -281,7 +287,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             </div>
           </div>
           <div className="flex justify-end my-4">
-            <button className="btn-primary" onClick={handleClearContent}>
+            <button className="btn-primary" onClick={handleCancel}>
               abbrechen {/* cancel */}
             </button>{" "}
             <button className="btn-primary ml-2" onClick={handleSaveClick}>
