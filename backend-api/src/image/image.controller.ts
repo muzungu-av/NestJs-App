@@ -195,6 +195,7 @@ export class ImageController {
         typeOfImage,
         file,
         fileName,
+        user.userId,
       );
       return response.status(200).json({ result });
     } catch (error) {
