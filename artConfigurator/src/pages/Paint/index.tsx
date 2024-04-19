@@ -160,19 +160,23 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           message.success("Painting successfully uploaded");
           return response.data;
         } else {
+          const formData = new FormData();
+          formData.append("description", editorData);
+          formData.append("typeOfImage", imageData!.typeOfImage);
+          if (imageData?.body) {
+            formData.append("file", imageData.body);
+          }
+
           const headers = {
-            "Content-Type": "application/json"
+            "Content-Type": `multipart/form-data;`
           };
-          const payload = {
-            description: editorData,
-            typeOfImage: imageData?.typeOfImage
-          };
+
           const response = await Put(
             headers,
             BURL,
             IMG + "/" + uid,
             true,
-            payload
+            formData
           );
           message.success("Painting successfully uploaded");
           return response.data;

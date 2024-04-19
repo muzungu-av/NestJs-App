@@ -13,8 +13,14 @@ export class Video {
   @Prop({ required: true })
   link: string;
 
+  @Prop({ description: true })
+  description: string;
+
   @Prop({ required: true })
   imgUrl: string;
+
+  @Prop({ required: true })
+  fileName: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   owner: User;
