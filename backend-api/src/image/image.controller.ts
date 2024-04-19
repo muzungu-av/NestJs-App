@@ -191,7 +191,6 @@ export class ImageController {
       // Предположим, что ваш сервис имеет метод для обновления данных файла по его uid
       const result = await this.imageService.updateFile(
         uid,
-        user.userId,
         description,
         typeOfImage,
         file,

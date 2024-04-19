@@ -13,6 +13,7 @@ import { winstonLogger } from './winston.logger';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { MailModule } from 'mailing/mailing.module';
 import { VideoModule } from 'video/video.module';
+import { BioModule } from './bio/bio.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { VideoModule } from 'video/video.module';
     AuthModule,
     CloudinaryModule,
     VideoModule,
+    BioModule,
   ],
   controllers: [AppController],
   providers: [AppService],

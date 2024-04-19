@@ -396,11 +396,11 @@ export class ImageService {
 
   async updateFile(
     uid: string,
-    userId: string,
     description: string,
     typeOfImage: string,
     file: Express.Multer.File,
     prevfileName: string,
+    userId: string,
   ): Promise<boolean> {
     const resp = await this.handler.do(userId, file); //validation and creation of a miniature
     if (resp.success !== true) {
@@ -439,7 +439,7 @@ export class ImageService {
     }
 
     try {
-      const result = await this.imageModel.findOneAndUpdate(
+      await this.imageModel.findOneAndUpdate(
         { uid },
         {
           description,
@@ -453,7 +453,7 @@ export class ImageService {
         },
         { new: true },
       );
-      winstonLogger.info(`${result}`);
+
       const indexOfDot = prevfileName.lastIndexOf('.');
       const nameWithoutDot = prevfileName.slice(0, indexOfDot);
       const urlForDel = `${userId}/${nameWithoutDot}`;
@@ -461,7 +461,6 @@ export class ImageService {
 
       winstonLogger.info(`delRes-${delRes}`);
     } catch (error) {
-      // Обработка ошибок, если что-то пошло не так
       console.error('Error updating file:', error);
       return false;
     }

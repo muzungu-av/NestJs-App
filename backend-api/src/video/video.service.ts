@@ -7,7 +7,6 @@ import { CloudinaryService } from 'cloudinary/cloudinary.service';
 import { winstonLogger } from 'winston.logger';
 import { CreateVideoDto } from './dto/create-video-dto';
 import { CustomError } from 'image/utils/customError';
-import { withLatestFrom } from 'rxjs';
 
 @Injectable()
 export class VideoService {
