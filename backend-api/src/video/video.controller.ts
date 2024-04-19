@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   Req,
   Res,
@@ -36,6 +37,7 @@ export class VideoController {
     @UploadedFile() file: Express.Multer.File,
     @Body('name') name: string,
     @Body('link') link: string,
+    @Body('description') description: string,
     @Req() request: any,
     @Res() response: any,
   ) {
@@ -49,6 +51,7 @@ export class VideoController {
         file,
         name,
         link,
+        description,
       );
       return response.status(201).json(result);
     } catch (error) {
@@ -68,13 +71,53 @@ export class VideoController {
     return this.videoService.getVideoById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete()
   deleteVideoById(
+    @Req() request: any,
     @Query(new ValidationPipe({ transform: true }))
-    @Query(new ValidationPipe())
     dto: DeleteVideoDto,
   ): Promise<boolean> {
-    winstonLogger.info(`Deleting a video by id ${dto.id}  -  ${dto.fileName}`);
-    return this.videoService.deleteVideoById(dto.id, dto.fileName);
+    const { user } = request;
+    console.log('dto', dto);
+    winstonLogger.info(
+      `Deleting a video ${user} by id ${dto.id}, filename=${dto.fileName}`,
+    );
+    return this.videoService.deleteVideoById(dto.id, dto.fileName, user.userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':uid') // Используем PUT метод и ожидаем параметр uid в URL
+  @UseInterceptors(FileInterceptor('file'))
+  async update(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('uid') uid: string, // Получаем параметр uid из URL
+    @Body('name') name: string,
+    @Body('link') link: string,
+    @Body('description') description: string,
+    @Body('fileName') fileName: string,
+    @Req() request: any,
+    @Res() response: any,
+  ) {
+    const { user } = request;
+    winstonLogger.info(
+      `PUT request 'updateFile' from user: ${JSON.stringify(user.userId)}`,
+    );
+    try {
+      // Предположим, что ваш сервис имеет метод для обновления данных файла по его uid
+
+      const result = await this.videoService.updateFile(
+        uid,
+        user.userId,
+        name,
+        link,
+        description,
+        file,
+        fileName,
+      );
+      return response.status(200).json({ result });
+    } catch (error) {
+      return response.status(500).json({ message: `${error}` });
+    }
   }
 }

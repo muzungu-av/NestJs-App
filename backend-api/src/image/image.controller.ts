@@ -186,10 +186,13 @@ export class ImageController {
 
   @UseGuards(JwtAuthGuard)
   @Put(':uid') // Используем PUT метод и ожидаем параметр uid в URL
+  @UseInterceptors(FileInterceptor('file'))
   async update(
+    @UploadedFile() file: Express.Multer.File,
     @Param('uid') uid: string, // Получаем параметр uid из URL
     @Body('description') description: string,
     @Body('typeOfImage') typeOfImage: string,
+    @Body('fileName') fileName: string,
     @Req() request: any,
     @Res() response: any,
   ) {
@@ -203,6 +206,9 @@ export class ImageController {
         uid,
         description,
         typeOfImage,
+        file,
+        fileName,
+        user.userId,
       );
       return response.status(200).json({ result });
     } catch (error) {

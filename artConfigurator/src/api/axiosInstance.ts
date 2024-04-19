@@ -8,8 +8,8 @@ export const Axios = (header: any, jwtAuth: boolean) => {
     headers: header
       ? header
       : ({
-          "Content-Type": "application/json",
-        } as { [key: string]: string }),
+          "Content-Type": "application/json"
+        } as { [key: string]: string })
     // withCredentials: credentials,
   };
 
@@ -75,11 +75,13 @@ export const Put = async (
 export const Delete = async (
   baseUrl: string,
   relatedUrl: string,
-  jwtAuth: boolean
+  jwtAuth: boolean,
+  params?: Record<string, string | number>
 ) => {
   try {
     const instance = Axios(undefined, jwtAuth);
-    const response = await instance.delete(baseUrl + relatedUrl);
+    const response = await instance.delete(baseUrl + relatedUrl, { params });
+
     return response.data;
   } catch (error) {
     console.error("Error making DELETE request:", error);

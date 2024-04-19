@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import addPhoto from "./../../assets/images/Add_photo.png";
 import Empty from "./../../assets/images/EmptyPhoto.png";
-import editPhoto from "./../../../../frontend/src/assets/images/BoatPicture.jpg";
 import editRecord from "./../../assets/images/EditRecord.svg";
 import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -9,7 +8,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
 import { message } from "antd";
 import { Get, Post } from "../../api/axiosInstance";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -39,7 +38,7 @@ export const AddingEditingKopien = ({
   const [sizes, setSizes] = useState<CopyData[]>([]);
 
   const { uid } = useParams();
-
+  console.log(isEditMode);
   const fetchDataFromApi = async () => {
     try {
       const params = {
@@ -79,7 +78,7 @@ export const AddingEditingKopien = ({
     const newRow = { ...sizes[index], index };
     setCurrentRow(newRow);
   };
-
+  const navigate = useNavigate();
   const handleDeleteRow = (index: number) => {
     const newData = [...sizes];
     newData.splice(index, 1);
@@ -135,17 +134,17 @@ export const AddingEditingKopien = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDeletePhoto = () => {
-    const confirmation = window.confirm(
-      "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
-    );
-    if (confirmation) {
-      setImageData(undefined); //если удалили фото - удаляем все данные о нем
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
-      }
-    }
-  };
+  // const handleDeletePhoto = () => {
+  //   const confirmation = window.confirm(
+  //     "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
+  //   );
+  //   if (confirmation) {
+  //     setImageData(undefined); //если удалили фото - удаляем все данные о нем
+  //     if (fileInputRef.current) {
+  //       fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
+  //     }
+  //   }
+  // };
 
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -176,6 +175,7 @@ export const AddingEditingKopien = ({
 
   // очистить контент
   const handleClearContent = () => {
+    navigate("/copy_paintings");
     setEditorData(default_text);
     setImageData(undefined);
     setSizes([]);
@@ -261,20 +261,13 @@ export const AddingEditingKopien = ({
               className="hidden"
               onChange={handleFileInputChange}
             />
-            {isEditMode ? (
-              <button className="w-[100%] flex justify-center m-2 ">
-                <img src={addPhoto} /> Foto ändern
-              </button>
-            ) : imageData && imageData.body ? (
-              <button
-                className="w-[100%] flex justify-center m-2"
-                onClick={handleDeletePhoto}
-              >
-                <img src={deletePhoto} /> Foto löschen {/*Delete photo*/}
-              </button>
-            ) : (
-              <></>
-            )}{" "}
+
+            <button
+              // onClick={handleTextClick}
+              className="w-[100%] flex justify-center m-2 "
+            >
+              <img src={addPhoto} /> Foto ändern
+            </button>
           </div>{" "}
           <div className="w-[60%]">
             {/* {isEditMode && */}
