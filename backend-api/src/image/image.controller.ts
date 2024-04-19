@@ -22,7 +22,6 @@ import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { GetImagesFilterDto } from './dto/get-images-filter.dto';
 import { DocumentCountDto } from './dto/document-count.dto';
 import { FindAllDto } from './dto/find-all.dto';
-import { FindOneDto } from './dto/find-one.dto';
 import { GetForBlockDto } from './dto/get-for-block.dto';
 
 /**
@@ -64,6 +63,7 @@ export class ImageController {
         file,
         description,
         typeOfImage,
+        null,
       );
       return response.status(201).json({ uid: result.uid });
     } catch (error) {
@@ -106,15 +106,28 @@ export class ImageController {
    */
   @Get('type')
   findImagesByType(
-    @Query(new ValidationPipe({ transform: true }))
-    filterDto: GetImagesFilterDto,
+    // @Query(new ValidationPipe({ transform: true }))
+    @Query(new ValidationPipe())
+    fieldsDto: GetImagesFilterDto,
   ): Promise<any> {
-    if (filterDto.typeOfImage === 'isCopy') {
-      return this.imageService.findCopies(filterDto.typeOfImage);
+    if (fieldsDto.typeOfImage === 'isCopy') {
+      const fieldsArray: string[] = fieldsDto.fields.split(',');
+      return this.imageService.findCopies(fieldsDto.typeOfImage, fieldsArray);
     }
-    return this.imageService.findImagesByType(filterDto.typeOfImage); //похоже пока не используется
+    return this.imageService.findImagesByType(fieldsDto.typeOfImage); //похоже пока не используется
   }
 
+  @Get('type/:uid')
+  findCopyByUid(
+    @Param('uid') uid: string,
+    @Query(new ValidationPipe())
+    fieldsDto: GetImagesFilterDto,
+  ): Promise<any> {
+    if (fieldsDto.typeOfImage === 'isCopy') {
+      winstonLogger.info(`Getting one Copy bu Uid: ${uid}`);
+      return this.imageService.findOneCopy(uid, fieldsDto.fields);
+    }
+  }
   /**
    * Produces pictures in batches.
    * Each new access with the same token will result in the next batch of pictures.
@@ -151,7 +164,7 @@ export class ImageController {
   @Get(':uid')
   findOne(
     @Param('uid') uid: string,
-    @Query(new ValidationPipe()) dto: FindOneDto,
+    @Query(new ValidationPipe()) dto: GetImagesFilterDto,
   ): Promise<any> {
     return this.imageService.findOne(uid, dto.fields);
   }
@@ -203,6 +216,40 @@ export class ImageController {
   @Delete(':uid')
   deleteOne(@Param('uid', ValidationPipe) uid: string): Promise<boolean> {
     winstonLogger.info(`Request for deletion of this document: ${uid}`);
-    return this.imageService.deleteOne(uid);
+    return this.imageService.deleteOne(uid, undefined);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/copy')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadCopy(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('description') description: string,
+    @Body('sizes') sizes: string,
+    @Req() request: any,
+    @Res() response: any,
+  ) {
+    const { user } = request;
+    winstonLogger.info(
+      `Post request 'upload Copy' from user: ${JSON.stringify(user.userId)}`,
+    );
+    try {
+      const result = await this.imageService.processNewFile(
+        user.userId,
+        file,
+        description,
+        'isCopy',
+        sizes,
+      );
+      return response.status(201).json({ uid: result.uid });
+    } catch (error) {
+      return response.status(500).json({ message: `${error}` });
+    }
+  }
+
+  @Delete('/copy/:uid')
+  deleteOneCopy(@Param('uid', ValidationPipe) uid: string): Promise<boolean> {
+    winstonLogger.info(`Request for deletion of this Copy: ${uid}`);
+    return this.imageService.deleteOne(uid, 'isCopy');
   }
 }

@@ -86,9 +86,10 @@ export class VideoService {
     return await this.videoModel.findById(id).exec();
   }
 
-  async deleteVideoById(_id: string): Promise<boolean> {
+  async deleteVideoById(_id: string, fileName: string): Promise<boolean> {
     let r;
     try {
+      console.log(fileName);
       r = await this.videoModel.deleteOne({ _id }).exec();
       winstonLogger.info(`Video has been successfully deleted: ${_id}`);
     } catch (error) {

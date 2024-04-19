@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import addPhoto from "./../../assets/images/Add_photo.png";
 import Empty from "./../../assets/images/EmptyPhoto.png";
 import editPhoto from "./../../../../frontend/src/assets/images/BoatPicture.jpg";
@@ -8,7 +8,14 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
 import { message } from "antd";
-import { Post } from "../../api/axiosInstance";
+import { Get, Post } from "../../api/axiosInstance";
+import { useParams } from "react-router-dom";
+
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const cp = import.meta?.env?.VITE_API_COPY;
+const img = import.meta?.env?.VITE_API_IMAGE;
+const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
 interface AddingEditingKopienProps {
   isEditMode: boolean;
@@ -20,20 +27,54 @@ interface ImageDataStructure {
   filename: String | undefined;
 }
 
-const sc = import.meta?.env?.VITE_SCHEME;
-const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
-const IMG = import.meta?.env?.VITE_API_IMAGE;
-const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+interface CopyData {
+  width: number;
+  height: number;
+  price: number;
+}
 
 export const AddingEditingKopien = ({
   isEditMode,
 }: AddingEditingKopienProps) => {
-  const sizesData = [
-    { width: "40", height: "50", price: "120.00 " },
-    { width: "60", height: "70", price: "420.00 " },
-  ];
+  const [sizes, setSizes] = useState<CopyData[]>([]);
+
+  const { uid } = useParams();
+
+  const fetchDataFromApi = async () => {
+    try {
+      const params = {
+        typeOfImage: "isCopy",
+        fields: "uid,miniImageUrl,description,typeOfImage",
+      };
+      const response = await Get(
+        undefined,
+        url,
+        img + `/type/${uid}`,
+        false,
+        params
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data from backend:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    if (uid) {
+      fetchDataFromApi().then((result) =>
+        setImageData({
+          body: undefined,
+          url: result.miniImageUrl,
+          filename: undefined,
+          typeOfImage: result.typeOfImage || "",
+        } as ImageDataStructure)
+      );
+      imgUpd();
+    }
+  }, []);
+
   const [currentRow, setCurrentRow] = useState<any>();
-  const [sizes, setSizes] = useState<any>(sizesData);
   const handleCheckRow = (index: number) => {
     const newRow = { ...sizes[index], index };
     setCurrentRow(newRow);
@@ -63,17 +104,17 @@ export const AddingEditingKopien = ({
     setCurrentRow({});
   };
 
-  const handleAddSize = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const formObject: { [key: string]: string } = {};
-    formData.forEach((value, key) => {
-      formObject[key as string] = value as string;
-    });
+  // const handleAddSize = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const formData = new FormData(event.currentTarget);
+  //   const formObject: { [key: string]: string } = {};
+  //   formData.forEach((value, key) => {
+  //     formObject[key as string] = value as string;
+  //   });
 
-    setSizes((prev: any) => [...prev, formObject]);
-    event.currentTarget.reset();
-  };
+  //   setSizes((prev: any) => [...prev, formObject]);
+  //   event.currentTarget.reset();
+  // };
 
   //image
   const [imageData, setImageData] = useState<ImageDataStructure | undefined>(
@@ -81,11 +122,16 @@ export const AddingEditingKopien = ({
   );
 
   let img_resource = Empty;
-  if (imageData && imageData.body) {
-    img_resource = URL.createObjectURL(imageData.body);
-  } else if (imageData && imageData.url) {
-    img_resource = imageData.url;
-  }
+
+  const imgUpd = () => {
+    if (imageData && imageData.body) {
+      img_resource = URL.createObjectURL(imageData.body);
+    } else if (imageData && imageData.url) {
+      img_resource = imageData.url;
+    }
+  };
+
+  imgUpd();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -132,6 +178,7 @@ export const AddingEditingKopien = ({
   const handleClearContent = () => {
     setEditorData(default_text);
     setImageData(undefined);
+    setSizes([]);
   };
 
   // Проверка наличия необходимых данных
@@ -148,17 +195,16 @@ export const AddingEditingKopien = ({
       try {
         // setLoader(true);
         // if (!isEditMode) {
-        console.log(imageData);
         const formData = new FormData();
         formData.append("description", editorData);
-        formData.append("typeOfImage", "isCopy");
+        formData.append("sizes", JSON.stringify(sizes));
         if (imageData?.body) {
           formData.append("file", imageData.body);
         }
         const headers = {
           "Content-Type": `multipart/form-data;`,
         };
-        const response = await Post(headers, BURL, IMG, true, formData);
+        const response = await Post(headers, url, cp, true, formData);
         message.success("Painting successfully uploaded");
         return response.data;
         // }
@@ -170,6 +216,33 @@ export const AddingEditingKopien = ({
     }
   };
 
+  const refWidth = useRef<HTMLInputElement>(null);
+  const refHeigth = useRef<HTMLInputElement>(null);
+  const refPrice = useRef<HTMLInputElement>(null);
+
+  const addAttributes = () => {
+    if (
+      refPrice.current &&
+      refPrice.current.value &&
+      refHeigth.current &&
+      refHeigth.current.value &&
+      refWidth.current &&
+      refWidth.current.value
+    ) {
+      const newSize = {
+        width: parseFloat(refWidth.current.value),
+        height: parseFloat(refHeigth.current.value),
+        price: parseFloat(refPrice.current.value),
+      };
+      setSizes((prevSizes) => [...prevSizes, newSize]);
+      refPrice.current.value = "";
+      refHeigth.current.value = "";
+      refWidth.current.value = "";
+    } else {
+      message.error("Nicht alle Daten sind ausgefüllt");
+    }
+  };
+
   return (
     <>
       <MainLayout>
@@ -178,11 +251,7 @@ export const AddingEditingKopien = ({
           <div className="flex flex-col justify-start items-center w-[40%]">
             <div className="font-federo text-3xl mb-4">Foto</div>
             <label htmlFor="file-input">
-              {isEditMode ? (
-                <img className="mb-2" src={editPhoto} />
-              ) : (
-                <img className="mb-2" src={img_resource} />
-              )}
+              <img className="mb-2" src={img_resource} />
             </label>
             <input
               ref={fileInputRef}
@@ -208,7 +277,8 @@ export const AddingEditingKopien = ({
             )}{" "}
           </div>{" "}
           <div className="w-[60%]">
-            {isEditMode && (
+            {/* {isEditMode && */}
+            {sizes && sizes.length > 0 && (
               <div className="bg-[#FFEDCB] w-[60%]">
                 <div className="overflow-x-auto">
                   <table className="min-w-full ">
@@ -283,9 +353,9 @@ export const AddingEditingKopien = ({
                                 >
                                   <path
                                     stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
                                     d="M5 11.917 9.724 16.5 19 7.5"
                                   />
                                 </svg>
@@ -302,9 +372,9 @@ export const AddingEditingKopien = ({
                                 >
                                   <path
                                     stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
                                     d="M6 18 17.94 6M18 18 6.06 6"
                                   />
                                 </svg>
@@ -339,17 +409,23 @@ export const AddingEditingKopien = ({
                 </div>
               </div>
             )}
+            {/* КОНЕЦ РЕЖИМА РЕДАКТИРОВАНИЯ */}
             <div>
               <div className="py-4 font-federo text-2xl ">
                 {" "}
                 Einstellungen auswählen:
               </div>
-              <form className="flex" onSubmit={handleAddSize}>
+              {}
+              <form
+                className="flex"
+                // onSubmit={handleAddSize}
+              >
                 <div className="flex flex-col w-[30%] pb-4 font-federo text-xl ">
                   {" "}
                   Größe:{" "}
                   <div className=" flex justify-center items-center border border-black rounded-md w-[70%] mt-2">
                     <input
+                      ref={refWidth}
                       id="newWidth"
                       name="width"
                       type="text"
@@ -357,6 +433,8 @@ export const AddingEditingKopien = ({
                     />{" "}
                     X
                     <input
+                      ref={refHeigth}
+                      id="newHeigth"
                       type="text"
                       name="height"
                       className="w-[30%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
@@ -368,6 +446,8 @@ export const AddingEditingKopien = ({
                   Preis:{" "}
                   <div className=" flex justify-center items-center border border-black rounded-md w-[70%] mt-2">
                     <input
+                      ref={refPrice}
+                      id="newPrice"
                       type="text"
                       name="price"
                       className="w-[80%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
@@ -376,12 +456,12 @@ export const AddingEditingKopien = ({
                 </div>{" "}
                 <div className="flex items-end justify-end flex-col w-[20%] pb-4 ">
                   {" "}
-                  <button
-                    type="submit"
-                    className="btn-primary w-[130px] h-[45px] ml-2"
+                  <div
+                    className="btn-primary w-[130px] h-[45px] ml-2 flex items-center justify-center"
+                    onClick={addAttributes}
                   >
                     speichern
-                  </button>
+                  </div>
                 </div>
               </form>
             </div>

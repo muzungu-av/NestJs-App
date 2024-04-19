@@ -5,17 +5,20 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  ValidationPipe,
 } from '@nestjs/common';
 import { VideoService } from './video.service';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { winstonLogger } from 'winston.logger';
 import { Video } from './schemas/video.schema';
+import { DeleteVideoDto } from './dto/gelete-video-dto';
 
 @Controller('/api/video')
 export class VideoController {
@@ -65,9 +68,13 @@ export class VideoController {
     return this.videoService.getVideoById(id);
   }
 
-  @Delete(':id')
-  deleteVideoById(@Param('id') id: string): Promise<boolean> {
-    winstonLogger.info(`Deleting a video by id ${id}`);
-    return this.videoService.deleteVideoById(id);
+  @Delete()
+  deleteVideoById(
+    @Query(new ValidationPipe({ transform: true }))
+    @Query(new ValidationPipe())
+    dto: DeleteVideoDto,
+  ): Promise<boolean> {
+    winstonLogger.info(`Deleting a video by id ${dto.id}  -  ${dto.fileName}`);
+    return this.videoService.deleteVideoById(dto.id, dto.fileName);
   }
 }
