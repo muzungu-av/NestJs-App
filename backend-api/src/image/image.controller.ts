@@ -110,8 +110,17 @@ export class ImageController {
     @Query(new ValidationPipe())
     fieldsDto: GetImagesFilterDto,
   ): Promise<any> {
+    winstonLogger.info(`Try getting image by type: ${fieldsDto.typeOfImage}`);
     if (fieldsDto.typeOfImage === 'isCopy') {
-      const fieldsArray: string[] = fieldsDto.fields.split(',');
+      let fieldsArray: string[] = [];
+      try {
+        if (fieldsDto.fields && fieldsDto.fields.length > 0) {
+          fieldsArray = fieldsDto.fields.split(',');
+        }
+      } catch (e) {
+        winstonLogger.error(`fieldsArray: ${fieldsArray}`);
+      }
+      winstonLogger.info(`fieldsArray: ${fieldsArray}`);
       return this.imageService.findCopies(fieldsDto.typeOfImage, fieldsArray);
     }
     return this.imageService.findImagesByType(fieldsDto.typeOfImage); //похоже пока не используется
@@ -209,6 +218,7 @@ export class ImageController {
         file,
         fileName,
         user.userId,
+        undefined,
       );
       return response.status(200).json({ result });
     } catch (error) {
@@ -248,6 +258,44 @@ export class ImageController {
         sizes,
       );
       return response.status(201).json({ uid: result.uid });
+    } catch (error) {
+      return response.status(500).json({ message: `${error}` });
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/copy/:uid') // Используем PUT метод и ожидаем параметр uid в URL
+  @UseInterceptors(FileInterceptor('file'))
+  async updateCopy(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('uid') uid: string, // Получаем параметр uid из URL
+    @Body('description') description: string,
+    @Body('typeOfImage') typeOfImage: string,
+    @Body('fileName') fileName: string,
+    @Body('sizes') sizes: string,
+    @Req() request: any,
+    @Res() response: any,
+  ) {
+    const { user } = request;
+    winstonLogger.info(
+      `PUT request 'updateFile' from user: ${JSON.stringify(user.userId)}`,
+    );
+    try {
+      winstonLogger.info(`description = ${description}`);
+      winstonLogger.info(`typeOfImage = ${typeOfImage}`);
+      winstonLogger.info(`fileName = ${fileName}`);
+      winstonLogger.info(`sizes = ${sizes}`);
+      // Предположим, что ваш сервис имеет метод для обновления данных файла по его uid
+      const result = await this.imageService.updateFile(
+        uid,
+        description,
+        typeOfImage,
+        file,
+        fileName,
+        user.userId,
+        sizes,
+      );
+      return response.status(200).json({ result });
     } catch (error) {
       return response.status(500).json({ message: `${error}` });
     }

@@ -7,8 +7,9 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
 import { message } from "antd";
-import { Get, Post } from "../../api/axiosInstance";
+import { Get, Post, Put } from "../../api/axiosInstance";
 import { useNavigate, useParams } from "react-router-dom";
+import { Spinner } from "../../components/Spinner";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -24,6 +25,7 @@ interface ImageDataStructure {
   body: File | undefined;
   url: string | undefined;
   filename: String | undefined;
+  // priceAttr: CopyData[] | undefined;
 }
 
 interface CopyData {
@@ -35,6 +37,7 @@ interface CopyData {
 export const AddingEditingKopien = ({
   isEditMode,
 }: AddingEditingKopienProps) => {
+  const [loader, setLoader] = useState<boolean>(false);
   const [sizes, setSizes] = useState<CopyData[]>([]);
 
   const { uid } = useParams();
@@ -43,7 +46,7 @@ export const AddingEditingKopien = ({
     try {
       const params = {
         typeOfImage: "isCopy",
-        fields: "uid,miniImageUrl,description,typeOfImage",
+        fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
       };
       const response = await Get(
         undefined,
@@ -61,14 +64,21 @@ export const AddingEditingKopien = ({
 
   useEffect(() => {
     if (uid) {
-      fetchDataFromApi().then((result) =>
+      fetchDataFromApi().then((result) => {
         setImageData({
           body: undefined,
           url: result.miniImageUrl,
           filename: undefined,
           typeOfImage: result.typeOfImage || "",
-        } as ImageDataStructure)
-      );
+        } as ImageDataStructure);
+
+        if (result && result.copyAttribute) {
+          setSizes(result.copyAttribute);
+        }
+        if (result && result.description) {
+          setEditorData(result.description);
+        }
+      });
       imgUpd();
     }
   }, []);
@@ -103,23 +113,12 @@ export const AddingEditingKopien = ({
     setCurrentRow({});
   };
 
-  // const handleAddSize = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const formData = new FormData(event.currentTarget);
-  //   const formObject: { [key: string]: string } = {};
-  //   formData.forEach((value, key) => {
-  //     formObject[key as string] = value as string;
-  //   });
-
-  //   setSizes((prev: any) => [...prev, formObject]);
-  //   event.currentTarget.reset();
-  // };
-
   //image
   const [imageData, setImageData] = useState<ImageDataStructure | undefined>(
     undefined
   );
 
+  /* единый источник изображения для тега img */
   let img_resource = Empty;
 
   const imgUpd = () => {
@@ -133,18 +132,6 @@ export const AddingEditingKopien = ({
   imgUpd();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // const handleDeletePhoto = () => {
-  //   const confirmation = window.confirm(
-  //     "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
-  //   );
-  //   if (confirmation) {
-  //     setImageData(undefined); //если удалили фото - удаляем все данные о нем
-  //     if (fileInputRef.current) {
-  //       fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
-  //     }
-  //   }
-  // };
 
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -181,38 +168,113 @@ export const AddingEditingKopien = ({
     setSizes([]);
   };
 
+  enum HttpMethod {
+    POST,
+    PUT,
+  }
+
+  interface ExChanges {
+    result: boolean;
+    method: HttpMethod | undefined;
+    imgFile: Partial<ImageDataStructure>;
+    text: string | undefined;
+    sizes: CopyData[] | undefined;
+  }
+
   // Проверка наличия необходимых данных
-  const checkData = () => {
-    if (!imageData || !imageData.body || !editorData) {
-      message.error("Nicht alle Daten sind ausgefüllt");
-      return false;
+  const checkNewData = () => {
+    let ex: ExChanges = {
+      result: false,
+      method: undefined,
+      imgFile: { body: undefined, filename: undefined },
+      text: undefined,
+      sizes: undefined,
+    };
+    // режим добавления - должны быть все данные: файл(body), текст, размеры-цены
+    if (!isEditMode) {
+      if (
+        sizes &&
+        sizes.length > 0 &&
+        imageData &&
+        imageData.body &&
+        editorData
+      ) {
+        ex.method = HttpMethod.POST;
+        ex.imgFile = { body: imageData.body, filename: imageData.filename };
+        ex.text = editorData;
+        ex.result = true;
+        ex.sizes = sizes;
+        console.log("POST");
+        console.log(JSON.stringify(ex));
+        return ex;
+      }
+    } else {
+      // режим РЕДАКТИРОВАНИЯ - должны быть что-то одно: файл(body), текст, размеры-цены
+      if (
+        (sizes && sizes.length > 0) ||
+        (imageData && imageData.body) ||
+        editorData
+      ) {
+        console.log("PUT");
+        ex.method = HttpMethod.PUT;
+        if (imageData && imageData.body) {
+          ex.imgFile = { body: imageData.body, filename: imageData.filename };
+        }
+        if (editorData) {
+          ex.text = editorData;
+        }
+        if (sizes && sizes.length > 0) {
+          ex.sizes = sizes;
+        }
+        ex.result = true;
+        console.log(JSON.stringify(ex));
+        return ex;
+      }
     }
-    return true;
+    console.log("Nicht alle Daten sind ausgefüllt");
+    message.error("Nicht alle Daten sind ausgefüllt");
+    ex.result = false;
+    return ex;
   };
+
   //отправка
   const handleSaveClick = async () => {
-    if (checkData()) {
-      try {
-        // setLoader(true);
-        // if (!isEditMode) {
-        const formData = new FormData();
+    const newData = checkNewData();
+    if (newData.result == false) {
+      return;
+    }
+
+    try {
+      setLoader(true);
+      const formData = new FormData();
+      if (newData.text) {
         formData.append("description", editorData);
-        formData.append("sizes", JSON.stringify(sizes));
-        if (imageData?.body) {
-          formData.append("file", imageData.body);
-        }
-        const headers = {
-          "Content-Type": `multipart/form-data;`,
-        };
-        const response = await Post(headers, url, cp, true, formData);
-        message.success("Painting successfully uploaded");
-        return response.data;
-        // }
-      } catch (e) {
-        message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
-      } finally {
-        // setLoader(false);
       }
+      if (newData.sizes) {
+        formData.append("sizes", JSON.stringify(sizes));
+      }
+      if (newData.imgFile.body) {
+        formData.append("file", newData.imgFile.body);
+        formData.append("fileName", newData.imgFile.filename as string);
+      }
+      formData.append("typeOfImage", "isCopy");
+      const headers = {
+        "Content-Type": `multipart/form-data;`,
+      };
+      let response;
+      if (newData.method == HttpMethod.POST) {
+        response = await Post(headers, url, cp, true, formData);
+      }
+      if (newData.method == HttpMethod.PUT) {
+        response = await Put(headers, url, cp + `/${uid}`, true, formData);
+      }
+      message.success("Painting successfully uploaded");
+      return response.data;
+      // }
+    } catch (e) {
+      message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -246,7 +308,13 @@ export const AddingEditingKopien = ({
   return (
     <>
       <MainLayout>
+        {loader && <Spinner />}
         <div className="font-italiana text-5xl mx-[5%] my-[2%]">Kopien</div>
+        <div
+          className={`flex gap-6 justify-around m-[5%] ${
+            loader ? "opacity-50" : "opacity-100"
+          }`}
+        ></div>
         <div className="flex justify-around m-[5%]">
           <div className="flex flex-col justify-start items-center w-[40%]">
             <div className="font-federo text-3xl mb-4">Foto</div>

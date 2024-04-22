@@ -94,6 +94,7 @@ export class ImageService {
    * @returns Promise<any[]> document array
    */
   async findCopies(typeOfImage: string, fields: string[]): Promise<Copy[]> {
+    winstonLogger.info(`fields = ${fields}`);
     const groupFields: any = {};
     fields.forEach((field) => {
       groupFields[field] = { $first: '$' + field };
@@ -250,9 +251,6 @@ export class ImageService {
             result.description = description;
             result.typeOfImage = typeOfImage;
             try {
-              /* используем один и тот же DTO тк он не привязан к документу,
-              предполагается структура одинаоквая в монге у обычных картин и копий.
-              А вот Model другая - Mongoose нужна своя модель, чтобы хранить копии в другой коллекции */
               if (typeOfImage === 'isCopy') {
                 const createCopyDto = new CreateCopyDto(
                   result,
@@ -441,17 +439,22 @@ export class ImageService {
     file: Express.Multer.File,
     prevfileName: string,
     userId: string,
+    sizes: string,
   ): Promise<boolean> {
-    const resp = await this.handler.do(userId, file); //validation and creation of a miniature
-    if (resp.success !== true) {
-      winstonLogger.error(`Error in addVideo: Problems with the image`);
+    let resp;
+    if (file !== undefined) {
+      resp = await this.handler.do(userId, file); //validation and creation of a miniature
+      if (resp.success !== true) {
+        winstonLogger.error(`Error in addVideo: Problems with the image`);
+      }
     }
 
     winstonLogger.info(`User ${userId} updates image ${uid}`);
     winstonLogger.info(`description - ${description}`);
     winstonLogger.info(`typeOfImageid - ${typeOfImage}`);
+    winstonLogger.info(`sizes - ${JSON.parse(sizes)}`);
 
-    if (resp && resp.success) {
+    if (file && resp && resp.success) {
       try {
         resp.imageUrl = await this.cloudinary.upload(
           userId,
@@ -479,20 +482,28 @@ export class ImageService {
     }
 
     try {
-      await this.imageModel.findOneAndUpdate(
-        { uid },
-        {
-          description,
-          typeOfImage,
+      let updatedData = {};
+      if (file && resp && resp.success) {
+        // eslint-disable-next-line prefer-const
+        updatedData = {
           fileName: resp.fileName,
           path: resp.path,
           miniPath: resp.miniPath,
           originalName: resp.originalName,
           imageUrl: resp.imageUrl,
           miniImageUrl: resp.miniImageUrl,
-        },
-        { new: true },
-      );
+          dimension: resp.dimension,
+        };
+      }
+      updatedData['description'] = description;
+      updatedData['typeOfImage'] = typeOfImage;
+
+      if (typeOfImage === 'isCopy') {
+        updatedData['copyAttribute'] = JSON.parse(sizes);
+        await this.updateImage<Copy>(this.copyModel, uid, updatedData);
+      } else {
+        await this.updateImage<Image>(this.imageModel, uid, updatedData);
+      }
 
       const indexOfDot = prevfileName.lastIndexOf('.');
       const nameWithoutDot = prevfileName.slice(0, indexOfDot);

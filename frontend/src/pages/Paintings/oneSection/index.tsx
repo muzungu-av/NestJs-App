@@ -19,7 +19,6 @@ export const OnePaintingSection = ({
     return plainText;
   }
   const sanitizedText = DOMPurify.sanitize(text);
-  console.log(sanitizedText, text);
   return (
     <div className="py-[5%] px-[5%]" id={id} onClick={onClick}>
       <div className="flex justify-between gap-2 lg:gap-6 lg:p-[30px]">
