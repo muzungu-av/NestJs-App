@@ -6,7 +6,7 @@ export const OnePaintingSection = ({
   text,
   imgURL,
   id,
-  onClick,
+  onClick
 }: {
   text: string;
   imgURL: any;
@@ -31,14 +31,14 @@ export const OnePaintingSection = ({
         <div className="h-auto relative flex flex-col gap-6 w-[60%]">
           <div className="font-['Italiana'] lg:text-2xl text-base">
             Bildname
-          </div>
+          </div>{" "}
           <p
             title={stripHtmlTags(text)}
             style={{}}
             className={`font-['Federo'] text-sm lg:text-xl ${style.wrappedText}`}
             dangerouslySetInnerHTML={{ __html: sanitizedText }}
           ></p>{" "}
-          <div className=" mt-2">
+          <div className=" mt-8">
             <button
               type="button"
               className=" absolute lg:h-[45px] h-[30px] bottom-0 right-0 lg:w-[140px] w-[100px] font-federo rounded-[6px] text-#000 bg-[#FFEDCB]"

@@ -11,6 +11,7 @@ interface AboutMeProps {
 interface VideoBlock {
   _id: string;
   name: string;
+  description: string;
   link: string;
   imgUrl: string;
 }
@@ -129,7 +130,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
     );
   };
   const VideoSection: React.FC = () => {
-    const VideoBlock = ({ name, imgUrl }: Partial<VideoBlock>) => {
+    const VideoBlock = ({ name, imgUrl, description }: Partial<VideoBlock>) => {
       return (
         <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-10 py-[5%] px-[5%]">
           <div
@@ -142,12 +143,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
           </div>
           <div className="lg:w-[50%] flex flex-col gap-4">
             <h3 className="font-italiana text-base lg:text-2xl ">{name}</h3>
-            <p className="font-federo text-sm lg:text-lg">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.
-            </p>
+            <p className="font-federo text-sm lg:text-lg">{description}</p>
             <button className="btn-primary">Mehr erfahren</button>
           </div>
         </div>
@@ -155,16 +151,24 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
     };
 
     return (
-      <div className="py-[10%] flex flex-col gap-6">
-        {videos.map((v) => {
-          return (
-            <VideoBlock
-              name={(v as VideoBlock).name}
-              imgUrl={(v as VideoBlock).imgUrl}
-            />
-          );
-        })}
-      </div>
+      <>
+        {" "}
+        (
+        {!!videos.length && (
+          <div className=" flex flex-col gap-6">
+            {videos.map((v) => {
+              return (
+                <VideoBlock
+                  name={(v as VideoBlock).name}
+                  imgUrl={(v as VideoBlock).imgUrl}
+                  description={(v as VideoBlock).description}
+                />
+              );
+            })}
+          </div>
+        )}
+        );
+      </>
     );
   };
 

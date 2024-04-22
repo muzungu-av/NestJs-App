@@ -53,6 +53,7 @@ export const Videos = () => {
   const [currentEditingId, setCurrentEditingId] = useState<string>("");
   const handleEditClick = (id: string) => {
     setCurrentEditingId(id);
+    setNewClicked(false);
   };
 
   const handleDeleteClick = async (v: Video) => {
@@ -124,7 +125,10 @@ export const Videos = () => {
       {" "}
       <div className="font-italiana text-5xl px-[5%] my-[2%]">Videos</div>
       <button
-        onClick={() => setNewClicked(true)}
+        onClick={() => {
+          setNewClicked(true);
+          setCurrentEditingId("");
+        }}
         className="btn-primary w-[230px] h-[45px] p-0 text-base  mx-[5%] my-[5%]"
       >
         Neues Video hinzufügen +
