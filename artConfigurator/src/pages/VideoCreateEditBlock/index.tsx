@@ -73,7 +73,6 @@ export const VideoCreateEditBlock = ({
   const handleAddVideo = (event: React.FormEvent<HTMLFormElement>) => {
     handleSaveClick(formData, imageData, data._id, data.fileName);
     event.preventDefault();
-    setFormData({ videoDescription: "", videoLink: "", videoName: "" });
   };
   let img_resource = Empty;
   if (imageData && imageData.body) {
@@ -87,56 +86,62 @@ export const VideoCreateEditBlock = ({
         {" "}
         <form
           onSubmit={handleAddVideo}
-          className="bg-[#FFEDCB] m-8 flex justify-between px-4"
+          className="bg-[#FFEDCB] m-8 flex justify-between items-center px-4"
         >
           {" "}
-          <label htmlFor="file-input">
-            <img className="m-4" src={img_resource} />
-          </label>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            id="file-input"
-            className="hidden"
-            onChange={handleFileInputChange}
-          />
-          <div className="flex flex-col w-[40%]">
-            <div className=" flex m-4 justify-center border border-black rounded-md w-full">
+          <div className="w-[30%] m-4 ">
+            <label htmlFor="file-input">
+              <img className=" w-full  " src={img_resource} />
+            </label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              id="file-input"
+              className="hidden self-center"
+              onChange={handleFileInputChange}
+            />
+          </div>
+          <div className="flex flex-col w-[40%] m-4">
+            {" "}
+            Name:
+            <div className=" flex my-4 justify-center border border-black rounded-md w-full">
               <input
                 id="idvideoName"
                 name="videoName"
                 type="text"
                 value={formData.videoName}
                 onChange={handleChange}
-                className="w-full px-2  m-2  h-6 bg-transparent border-none outline-none"
+                className="w-full px-2  my-2  h-6 bg-transparent border-none outline-none"
                 placeholder="Name des Videos..."
               />
-            </div>
-            <div className=" flex m-4 justify-center border border-black rounded-md w-full">
+            </div>{" "}
+            Link:
+            <div className=" flex my-4 justify-center border border-black rounded-md w-full">
               <input
                 id="idvideoLink"
                 name="videoLink"
                 type="text"
-                className="w-full px-2  m-2  h-6 bg-transparent border-none outline-none"
+                className="w-full px-2  my-2  h-6 bg-transparent border-none outline-none"
                 placeholder="Link zum Video..."
                 value={formData.videoLink}
                 onChange={handleChange}
               />
-            </div>
-            <div className=" flex m-4 justify-center border border-black rounded-md w-full">
+            </div>{" "}
+            Video-Beschreibung:
+            <div className=" flex my-4 justify-center border border-black rounded-md w-full">
               <input
                 id="idvideoDescription"
                 name="videoDescription"
                 type="text"
-                className="w-full px-2  m-2  h-6 bg-transparent border-none outline-none"
+                className="w-full px-2  my-2  h-6 bg-transparent border-none outline-none"
                 placeholder="Video-Beschreibung..."
                 value={formData.videoDescription}
                 onChange={handleChange}
               />
             </div>{" "}
           </div>
-          <div className="flex justify-end items-end my-4">
+          <div className="flex justify-end items-end my-4  mt-auto">
             <button
               type="submit"
               className="rounded-md bg-[#F5F5F5] font-federo w-[130px] h-[45px]"
@@ -144,7 +149,7 @@ export const VideoCreateEditBlock = ({
               Speichern {/*Save*/}
             </button>{" "}
             <button className="btn-rounded-md bg-[#F5F5F5] font-federo w-[130px] h-[45px] ml-2">
-              löschen
+              abbrechen
               {/* Delete */}
             </button>
           </div>
