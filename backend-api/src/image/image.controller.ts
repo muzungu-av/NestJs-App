@@ -281,11 +281,6 @@ export class ImageController {
       `PUT request 'updateFile' from user: ${JSON.stringify(user.userId)}`,
     );
     try {
-      winstonLogger.info(`description = ${description}`);
-      winstonLogger.info(`typeOfImage = ${typeOfImage}`);
-      winstonLogger.info(`fileName = ${fileName}`);
-      winstonLogger.info(`sizes = ${sizes}`);
-      // Предположим, что ваш сервис имеет метод для обновления данных файла по его uid
       const result = await this.imageService.updateFile(
         uid,
         description,
