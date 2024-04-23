@@ -35,7 +35,7 @@ interface CopyData {
 }
 
 export const AddingEditingKopien = ({
-  isEditMode,
+  isEditMode
 }: AddingEditingKopienProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sizes, setSizes] = useState<CopyData[]>([]);
@@ -46,7 +46,7 @@ export const AddingEditingKopien = ({
     try {
       const params = {
         typeOfImage: "isCopy",
-        fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
+        fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute"
       };
       const response = await Get(
         undefined,
@@ -69,7 +69,7 @@ export const AddingEditingKopien = ({
           body: undefined,
           url: result.miniImageUrl,
           filename: undefined,
-          typeOfImage: result.typeOfImage || "",
+          typeOfImage: result.typeOfImage || ""
         } as ImageDataStructure);
 
         if (result && result.copyAttribute) {
@@ -102,7 +102,7 @@ export const AddingEditingKopien = ({
   ) => {
     setCurrentRow((prevState: any) => ({
       ...prevState,
-      [field]: value,
+      [field]: value
     }));
   };
 
@@ -143,7 +143,7 @@ export const AddingEditingKopien = ({
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name,
+          filename: file.name
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -170,7 +170,7 @@ export const AddingEditingKopien = ({
 
   enum HttpMethod {
     POST,
-    PUT,
+    PUT
   }
 
   interface ExChanges {
@@ -188,7 +188,7 @@ export const AddingEditingKopien = ({
       method: undefined,
       imgFile: { body: undefined, filename: undefined },
       text: undefined,
-      sizes: undefined,
+      sizes: undefined
     };
     // режим добавления - должны быть все данные: файл(body), текст, размеры-цены
     if (!isEditMode) {
@@ -259,7 +259,7 @@ export const AddingEditingKopien = ({
       }
       formData.append("typeOfImage", "isCopy");
       const headers = {
-        "Content-Type": `multipart/form-data;`,
+        "Content-Type": `multipart/form-data;`
       };
       let response;
       if (newData.method == HttpMethod.POST) {
@@ -269,6 +269,7 @@ export const AddingEditingKopien = ({
         response = await Put(headers, url, cp + `/${uid}`, true, formData);
       }
       message.success("Painting successfully uploaded");
+      navigate("/copy_paintings");
       return response.data;
       // }
     } catch (e) {
@@ -294,7 +295,7 @@ export const AddingEditingKopien = ({
       const newSize = {
         width: parseFloat(refWidth.current.value),
         height: parseFloat(refHeigth.current.value),
-        price: parseFloat(refPrice.current.value),
+        price: parseFloat(refPrice.current.value)
       };
       setSizes((prevSizes) => [...prevSizes, newSize]);
       refPrice.current.value = "";
@@ -337,25 +338,25 @@ export const AddingEditingKopien = ({
               <img src={addPhoto} /> Foto ändern
             </button>
           </div>{" "}
-          <div className="w-[60%]">
+          <div className="w-[60%] m-6">
             {/* {isEditMode && */}
             {sizes && sizes.length > 0 && (
-              <div className="bg-[#FFEDCB] w-[60%]">
+              <div className="bg-[#FFEDCB] w-[80%]">
                 <div className="overflow-x-auto">
                   <table className="min-w-full ">
                     <thead className="bg-[#FFEDCB]">
                       <tr>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left font-medium font-federo text-xl"
+                          className="px-6 py-3 text-left font-medium font-federo text-base lg:text-xl"
                         >
-                          Größe (cm) :
+                          Größe (cm):
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left font-medium font-federo text-xl "
+                          className="px-6 py-3 text-left font-medium font-federo text-base lg:text-xl "
                         >
-                          Preis (Euro) :
+                          Preis (Euro):
                         </th>
                       </tr>
                     </thead>
@@ -443,10 +444,10 @@ export const AddingEditingKopien = ({
                             </tr>
                           ) : (
                             <tr key={index}>
-                              <td className="px-6 py-2 whitespace-nowrap font-federo text-xl ">
+                              <td className="px-6 py-2 whitespace-nowrap font-federo text-base lg:text-xl ">
                                 {row.width} x {row.height}
                               </td>
-                              <td className="px-6 py-2 whitespace-nowrap font-federo text-xl ">
+                              <td className="px-6 py-2 whitespace-nowrap font-federo text-base lg:text-xl ">
                                 {row.price}
                               </td>
                               <td className="px-2 py-2 flex justify-around">
@@ -515,10 +516,10 @@ export const AddingEditingKopien = ({
                     />{" "}
                   </div>
                 </div>{" "}
-                <div className="flex items-end justify-end flex-col w-[20%] pb-4 ">
+                <div className="flex items-end justify-end flex-col pb-4  ">
                   {" "}
                   <div
-                    className="btn-primary w-[130px] h-[45px] ml-2 flex items-center justify-center"
+                    className="btn-primary cursor-pointer w-[130px] h-[45px] ml-2 flex items-center justify-center"
                     onClick={addAttributes}
                   >
                     speichern
@@ -531,7 +532,7 @@ export const AddingEditingKopien = ({
               editor={ClassicEditor}
               data={editorData}
               config={{
-                toolbar: [],
+                toolbar: []
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);
