@@ -439,7 +439,7 @@ export class ImageService {
     file: Express.Multer.File,
     prevfileName: string,
     userId: string,
-    sizes: string,
+    sizes?: string,
   ): Promise<boolean> {
     let resp;
     if (file !== undefined) {
@@ -451,8 +451,10 @@ export class ImageService {
 
     winstonLogger.info(`User ${userId} updates image ${uid}`);
     winstonLogger.info(`description - ${description}`);
-    winstonLogger.info(`typeOfImageid - ${typeOfImage}`);
-    winstonLogger.info(`sizes - ${JSON.parse(sizes)}`);
+    winstonLogger.info(`typeOfImage - ${typeOfImage}`);
+    if (sizes) {
+      winstonLogger.info(`sizes - ${JSON.parse(sizes)}`);
+    }
 
     if (file && resp && resp.success) {
       try {
@@ -498,7 +500,7 @@ export class ImageService {
       updatedData['description'] = description;
       updatedData['typeOfImage'] = typeOfImage;
 
-      if (typeOfImage === 'isCopy') {
+      if (typeOfImage === 'isCopy' && sizes) {
         updatedData['copyAttribute'] = JSON.parse(sizes);
         await this.updateImage<Copy>(this.copyModel, uid, updatedData);
       } else {
@@ -511,6 +513,7 @@ export class ImageService {
       const delRes = await this.cloudinary.delete(urlForDel);
 
       winstonLogger.info(`delRes-${delRes}`);
+      return true;
     } catch (error) {
       console.error('Error updating file:', error);
       return false;
