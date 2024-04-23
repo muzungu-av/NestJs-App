@@ -161,7 +161,7 @@ export const AddingEditingKopien = ({
           "Content-Type": `multipart/form-data;`
         };
         const response = await Post(headers, BURL, IMG, true, formData);
-        message.success("Painting successfully uploaded");
+        message.success("Kopien erfolgreich hochgeladen");
         return response.data;
         // }
       } catch (e) {

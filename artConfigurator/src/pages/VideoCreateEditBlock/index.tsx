@@ -18,9 +18,9 @@ interface VideoBlock {
       videoLink: string;
       videoName: string;
     },
-    imageData: ImageDataStructure,
     id: string,
-    fileName: string
+    fileName: string,
+    imageData?: ImageDataStructure | null
   ) => void;
 }
 interface ImageDataStructure {
@@ -71,7 +71,8 @@ export const VideoCreateEditBlock = ({
     }
   };
   const handleAddVideo = (event: React.FormEvent<HTMLFormElement>) => {
-    handleSaveClick(formData, imageData, data._id, data.fileName);
+    const actualImageData = imageData?.body ? imageData : null;
+    handleSaveClick(formData, data._id, data.fileName, actualImageData);
     event.preventDefault();
   };
   let img_resource = Empty;
