@@ -180,9 +180,15 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
       <AboutPainterSection />
       <VideoSection />
       <GallerySection />
-      <BeforeSlider />
-      <PaintingSlider />
-      <Contacts />
+      {!isMain ? (
+        <>
+          <BeforeSlider />
+          <PaintingSlider />
+          <Contacts />
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
