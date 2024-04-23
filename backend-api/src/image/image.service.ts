@@ -88,13 +88,44 @@ export class ImageService {
   }
 
   /**
-   * Returns the list of documents with images from Mongo matching the typeOfImage condition
+   *
    *
    * @param typeOfImage 'isPainting', 'isAtelier'
    * @returns Promise<any[]> document array
    */
-  async findCopies(typeOfImage: string): Promise<Copy[]> {
-    return this.copyModel.find({ typeOfImage }).exec();
+  async findCopies(typeOfImage: string, fields: string[]): Promise<Copy[]> {
+    winstonLogger.info(`fields = ${fields}`);
+    const groupFields: any = {};
+    fields.forEach((field) => {
+      groupFields[field] = { $first: '$' + field };
+    });
+    return this.copyModel
+      .aggregate([
+        { $match: { typeOfImage: typeOfImage } },
+        { $unwind: '$copyAttribute' },
+        { $sort: { 'copyAttribute.price': 1 } },
+        {
+          $group: {
+            _id: '$_id',
+            ...groupFields,
+            copyAttribute: { $push: '$copyAttribute' },
+          },
+        },
+      ])
+      .exec();
+  }
+
+  async findOneCopy(uid: string, fields: string): Promise<Copy> {
+    let query = this.copyModel.findOne({ uid: uid });
+    if (fields) {
+      const selectedFields = fields.split(',').join(' ');
+      query = query.select(`${selectedFields} -_id`);
+    } else {
+      query = query.select('-_id -__v');
+    }
+    const r = await query.lean().exec();
+    winstonLogger.info(`${JSON.stringify(r)}`);
+    return r;
   }
 
   /**
@@ -179,7 +210,6 @@ export class ImageService {
     try {
       await model.create(createImageDto);
     } catch (error) {
-      winstonLogger.error(`${error.message}`);
       //No duplicates accepted
       if (-1 != error.message.search('duplicate key error')) {
         winstonLogger.error(`Failed to create image (No duplicates accepted)`);
@@ -187,6 +217,7 @@ export class ImageService {
           message: 'Failed to create image (No duplicates accepted)',
         });
       } else {
+        winstonLogger.error(`${error.message}`);
         throw new CustomError({
           message: 'Failed to create image (Unknown reason)',
         });
@@ -209,6 +240,7 @@ export class ImageService {
     file: Express.Multer.File,
     description: string,
     typeOfImage: string,
+    size: string,
   ): Promise<ImgFileProcessingResult> {
     return new Promise((resolve, reject) => {
       this.handler
@@ -219,11 +251,11 @@ export class ImageService {
             result.description = description;
             result.typeOfImage = typeOfImage;
             try {
-              /* используем один и тот же DTO тк он не привязан к документу,
-              предполагается структура одинаоквая в монге у обычных картин и копий.
-              А вот Model другая - Mongoose нужна своя модель, чтобы хранить копии в другой коллекции */
               if (typeOfImage === 'isCopy') {
-                const createCopyDto = new CreateCopyDto(result);
+                const createCopyDto = new CreateCopyDto(
+                  result,
+                  JSON.parse(size),
+                );
                 await this.saveImageToCollection<Copy>(
                   this.copyModel,
                   createCopyDto,
@@ -380,14 +412,20 @@ export class ImageService {
    * @param uid document's UID
    * @returns Promise<any> one document
    */
-  async deleteOne(uid: string): Promise<boolean> {
+  async deleteOne(uid: string, type: string): Promise<boolean> {
     try {
-      const result = await this.imageModel.deleteOne({ uid }).exec();
-      if (result.deletedCount === 1) {
+      let result;
+      if (type === 'isCopy') {
+        result = await this.copyModel.deleteOne({ uid }).exec();
+      } else {
+        result = await this.imageModel.deleteOne({ uid }).exec();
+      }
+      if (result && result.deletedCount === 1) {
         return true;
       } else {
         return false;
       }
+      //todo удаление в cloud
     } catch (error) {
       winstonLogger.error(`Error when deleting an image ${uid} : ${error}`);
       return false;
@@ -401,17 +439,22 @@ export class ImageService {
     file: Express.Multer.File,
     prevfileName: string,
     userId: string,
+    sizes: string,
   ): Promise<boolean> {
-    const resp = await this.handler.do(userId, file); //validation and creation of a miniature
-    if (resp.success !== true) {
-      winstonLogger.error(`Error in addVideo: Problems with the image`);
+    let resp;
+    if (file !== undefined) {
+      resp = await this.handler.do(userId, file); //validation and creation of a miniature
+      if (resp.success !== true) {
+        winstonLogger.error(`Error in addVideo: Problems with the image`);
+      }
     }
 
     winstonLogger.info(`User ${userId} updates image ${uid}`);
     winstonLogger.info(`description - ${description}`);
     winstonLogger.info(`typeOfImageid - ${typeOfImage}`);
+    winstonLogger.info(`sizes - ${JSON.parse(sizes)}`);
 
-    if (resp && resp.success) {
+    if (file && resp && resp.success) {
       try {
         resp.imageUrl = await this.cloudinary.upload(
           userId,
@@ -439,20 +482,28 @@ export class ImageService {
     }
 
     try {
-      await this.imageModel.findOneAndUpdate(
-        { uid },
-        {
-          description,
-          typeOfImage,
+      let updatedData = {};
+      if (file && resp && resp.success) {
+        // eslint-disable-next-line prefer-const
+        updatedData = {
           fileName: resp.fileName,
           path: resp.path,
           miniPath: resp.miniPath,
           originalName: resp.originalName,
           imageUrl: resp.imageUrl,
           miniImageUrl: resp.miniImageUrl,
-        },
-        { new: true },
-      );
+          dimension: resp.dimension,
+        };
+      }
+      updatedData['description'] = description;
+      updatedData['typeOfImage'] = typeOfImage;
+
+      if (typeOfImage === 'isCopy') {
+        updatedData['copyAttribute'] = JSON.parse(sizes);
+        await this.updateImage<Copy>(this.copyModel, uid, updatedData);
+      } else {
+        await this.updateImage<Image>(this.imageModel, uid, updatedData);
+      }
 
       const indexOfDot = prevfileName.lastIndexOf('.');
       const nameWithoutDot = prevfileName.slice(0, indexOfDot);

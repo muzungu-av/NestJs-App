@@ -2,6 +2,7 @@ import { ReactNode, useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import { Spinner } from "../components/Spinner";
+
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const [isClicked, setIsClicked] = useState(false);
   const buttonRef = useRef<HTMLDivElement | null>(null);

@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
-import { Get } from "../../api/axiosInstance";
+import { Delete, Get } from "../../api/axiosInstance";
+import { message } from "antd";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -17,25 +18,7 @@ type CopiesSectionProps = {
 
 export const PaintingsKopien = () => {
   const navigate = useNavigate();
-  // const copies = [
-  //   {
-  //     img: photo,
-  //     sizes: [
-  //       "40x60 cm",
-  //       "50x70 cm",
-  //       "60x80 cm",
-  //       "110x133 cm",
-  //       "120x160 cm",
-  //       "150x200 cm",
-  //     ],
-  //     price: ["99,00", "4.700,00"],
-  //   },
-  //   {
-  //     img: photo,
-  //     sizes: ["40x60 cm", "50x70 cm", "60x80 cm"],
-  //     price: ["99,00", "4.700,00"],
-  //   },
-  // ];
+
   //todo isKopien еще осталось везде на фронте
   const fetchDataFromApi = async () => {
     try {
@@ -51,6 +34,16 @@ export const PaintingsKopien = () => {
     } catch (error) {
       console.error("Error fetching data from backend:", error);
       return null;
+    }
+  };
+
+  const handleDeleteClick = async (uid: string) => {
+    const confirmation = window.confirm(
+      "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
+    );
+    if (confirmation) {
+      await Delete(url + img, "/copy/" + uid, true);
+      message.success("Successfully deleted");
     }
   };
 
@@ -71,51 +64,84 @@ export const PaintingsKopien = () => {
       </button>
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
         {copies &&
-          copies.map((v: any) => {
+          copies.length > 0 &&
+          copies.map((v: any, index: number) => {
+            const firstSix = v.copyAttribute.slice(0, 6);
+            const firstThree = firstSix.slice(0, 3);
+            const secondThree = firstSix.slice(3);
             return (
-              <div className="flex my-[5%] ">
-                <img src={v.img} />{" "}
-                <div className="flex flex-wrap justify-end w-[20%] mx-14 ">
-                  <div className="w-1/2 pr-2 ">
-                    {" "}
-                    {v.sizes
-                      ?.slice(0, Math.ceil(v.sizes?.length / 2))
-                      .map((size: string) => (
-                        <button
-                          key={size}
-                          className="btn-size w-full h-[35px]  text-sm"
-                        >
-                          {size}
-                        </button>
-                      ))}
+              <div className="flex my-[5%] " key={index}>
+                <div className="min-w-[30%] lg:w-[20%] max-w-[30%] h-auto">
+                  {" "}
+                  <img src={v.miniImageUrl} className="w-full" />
+                </div>
+                <div className="flex min-w-[30%] lg:min-w-[20%] mr-4">
+                  <div className="flex flex-col w-[50%] mx-4">
+                    {v.copyAttribute
+                      .slice(0, Math.ceil(v.copyAttribute.length / 2))
+                      .map(
+                        (
+                          { width, height }: { width: number; height: number },
+                          index: number
+                        ) => (
+                          <button
+                            key={index}
+                            className="btn-size w-full lg:max-w-[150px] h-[35px] m-2 text-sm"
+                          >
+                            {width} x {height} cm
+                          </button>
+                        )
+                      )}
                   </div>
-                  <div className="w-1/2 pl-2">
-                    {" "}
-                    {v.sizes
-                      ?.slice(Math.ceil(v.sizes?.length / 2))
-                      .map((size: string) => (
-                        <button
-                          key={size}
-                          className="btn-size w-full h-[35px]   text-sm"
-                        >
-                          {size}
-                        </button>
-                      ))}
+                  <div className="flex flex-col w-[50%]  mr-4">
+                    {v.copyAttribute
+                      .slice(Math.ceil(v.copyAttribute.length / 2))
+                      .map(
+                        (
+                          { width, height }: { width: number; height: number },
+                          index: number
+                        ) => (
+                          <button
+                            key={index}
+                            className="btn-size w-full h-[35px] lg:max-w-[150px] m-2 text-sm"
+                          >
+                            {width} x {height} cm
+                          </button>
+                        )
+                      )}
                   </div>
                 </div>
                 <div className=" relative flex ">
                   <div className=" absolute h-[80%] bg-black w-1 top-0 left-0 "></div>{" "}
                   <div className=" mx-8 self-center h-[80%] font-federo text-xl">
                     {" "}
-                    {v.sizes?.length} verfügbare Formate von {v.price[0]}€ bis{" "}
-                    {v.price[1]}€
+                    {v && v.copyAttribute && v.copyAttribute.length} verfügbare
+                    Formate von {v.copyAttribute[0].price}€
+                    {v &&
+                      v.copyAttribute &&
+                      v.copyAttribute.length > 1 &&
+                      " bis"}{" "}
+                    {v &&
+                      v.copyAttribute &&
+                      v.copyAttribute.length > 1 &&
+                      v.copyAttribute[v.copyAttribute.length - 1].price}
+                    {v && v.copyAttribute && v.copyAttribute.length > 1 && "€"}
                   </div>
                 </div>
-                <div className="flex justify-end my-4 items-end">
-                  <button className="btn-primary font-federo text-base h-10 w-28">
+                <div className="flex lg:flex-row flex-col justify-end my-4 items-end">
+                  <button
+                    className="btn-primary font-federo text-base m-4 h-10 w-28"
+                    onClick={() => {
+                      console.log(`/edit_copy/${v.uid}`);
+                      navigate(`/edit_copy/${v.uid}`);
+                    }}
+                  >
                     ändern
                   </button>{" "}
-                  <button className="btn-primary ml-2 font-federo text-base h-10 w-28">
+                  <button
+                    className="btn-primary ml-2 font-federo text-base m-4 h-10 w-28"
+                    onClick={() => handleDeleteClick(v.uid)}
+                  >
                     löschen
                   </button>
                 </div>

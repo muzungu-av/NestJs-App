@@ -3,7 +3,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
 import { Delete, Get, Put } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
-import { message } from "antd";
+import { Modal, message } from "antd";
 import { Spinner } from "../../components/Spinner";
 import styles from "./style.module.scss";
 const sc = import.meta?.env?.VITE_SCHEME;
@@ -45,7 +45,7 @@ const PicSection: React.FC<PicSectionProps> = ({
       };
       const response = await Put(headers, url, img + "/" + uid, true, payload);
 
-      message.success("Painting successfully uploaded");
+      message.success("Gemälde erfolgreich hochgeladen");
       return response.data;
     } catch (e) {
       message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
@@ -149,15 +149,27 @@ export const Pictures = () => {
   };
   const [data, setData] = useState<PicSectionProps[] | null>(null);
   const handleDeleteClick = async (uid: string) => {
-    const userAnswer = window.confirm("Do u want to delete?");
+    Modal.confirm({
+      title: "Möchten Sie löschen?",
+      icon: null, // Чтобы убрать значок (по умолчанию он есть)
+      okText: "Ja",
+      okType: "danger",
+      cancelText: "Nein",
+      async onOk() {
+        try {
+          await Delete(url + img, "/" + uid, true);
+          message.success("Erfolgreich gelöscht");
+          setData((prev: any) => {
+            return prev.filter((item: any) => item.uid !== uid);
+          });
+        } catch (error) {
+          console.error("Fehler beim Löschen:", error);
+          message.error("Fehler beim Löschen");
+        }
+      },
 
-    if (userAnswer) {
-      await Delete(url + img, "/" + uid, true);
-      message.success("Successfully deleted");
-      setData((prev: any) => {
-        return prev.filter((item: any) => item.uid !== uid);
-      });
-    }
+      onCancel() {}
+    });
   };
 
   useEffect(() => {
