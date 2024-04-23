@@ -71,38 +71,39 @@ export const PaintingsKopien = () => {
             const secondThree = firstSix.slice(3);
             return (
               <div className="flex my-[5%] " key={index}>
-                <img src={v.miniImageUrl} />{" "}
-                <div className="flex flex-wrap justify-end w-[20%] mx-14 ">
-                  <div className="w-1/2 pr-2 ">
-                    {" "}
-                    {firstThree &&
-                      firstThree.length > 0 &&
-                      firstThree.map(
+                <div className="min-w-[30%] lg:w-[20%] max-w-[30%] h-auto">
+                  {" "}
+                  <img src={v.miniImageUrl} className="w-full" />
+                </div>
+                <div className="flex min-w-[30%] lg:min-w-[20%] mr-4">
+                  <div className="flex flex-col w-[50%] mx-4">
+                    {v.copyAttribute
+                      .slice(0, Math.ceil(v.copyAttribute.length / 2))
+                      .map(
                         (
                           { width, height }: { width: number; height: number },
                           index: number
                         ) => (
                           <button
                             key={index}
-                            className="btn-size w-full h-[35px]  text-sm"
+                            className="btn-size w-full lg:max-w-[150px] h-[35px] m-2 text-sm"
                           >
                             {width} x {height} cm
                           </button>
                         )
                       )}
                   </div>
-                  <div className="w-1/2 pl-2">
-                    {" "}
-                    {secondThree &&
-                      secondThree.length > 0 &&
-                      secondThree.map(
+                  <div className="flex flex-col w-[50%]  mr-4">
+                    {v.copyAttribute
+                      .slice(Math.ceil(v.copyAttribute.length / 2))
+                      .map(
                         (
                           { width, height }: { width: number; height: number },
                           index: number
                         ) => (
                           <button
                             key={index}
-                            className="btn-size w-full h-[35px]  text-sm"
+                            className="btn-size w-full h-[35px] lg:max-w-[150px] m-2 text-sm"
                           >
                             {width} x {height} cm
                           </button>
@@ -127,9 +128,9 @@ export const PaintingsKopien = () => {
                     {v && v.copyAttribute && v.copyAttribute.length > 1 && "€"}
                   </div>
                 </div>
-                <div className="flex justify-end my-4 items-end">
+                <div className="flex lg:flex-row flex-col justify-end my-4 items-end">
                   <button
-                    className="btn-primary font-federo text-base h-10 w-28"
+                    className="btn-primary font-federo text-base m-4 h-10 w-28"
                     onClick={() => {
                       console.log(`/edit_copy/${v.uid}`);
                       navigate(`/edit_copy/${v.uid}`);
@@ -138,7 +139,7 @@ export const PaintingsKopien = () => {
                     ändern
                   </button>{" "}
                   <button
-                    className="btn-primary ml-2 font-federo text-base h-10 w-28"
+                    className="btn-primary ml-2 font-federo text-base m-4 h-10 w-28"
                     onClick={() => handleDeleteClick(v.uid)}
                   >
                     löschen
