@@ -23,7 +23,9 @@ export const PaintingSlider = () => {
   const getPictures = async () => {
     try {
       const response = await Get(undefined, BACKEND_API, `${ai}/`, false);
-      setPaintings(response.data);
+      setPaintings(
+        response.data.filter((item: any) => item.typeOfImage === "isCopy")
+      );
     } catch (error) {
       console.error("Error fetching paintings:", error);
     } finally {
@@ -46,7 +48,7 @@ export const PaintingSlider = () => {
     sliderRef?.current?.swiper.slideNext();
   }, []);
 
-  return (
+  return paintings.length !== 0 ? (
     <div className="px-6 py-[5%] relative my-6">
       <Swiper
         ref={sliderRef}
@@ -86,5 +88,7 @@ export const PaintingSlider = () => {
         onClick={handleNext}
       ></img>
     </div>
+  ) : (
+    <></>
   );
 };
