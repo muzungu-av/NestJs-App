@@ -9,6 +9,7 @@ import { Get, Put } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
 import { message } from "antd";
 import { Spinner } from "../../components/Spinner";
+
 interface ImageDataStructure {
   body: File | undefined;
   url: string | undefined;
@@ -35,7 +36,7 @@ export const Biography = () => {
         body: undefined,
         url: result.miniImageUrl,
         filename: undefined,
-        typeOfImage: result.typeOfImage || ""
+        typeOfImage: result.typeOfImage || "",
       } as ImageDataStructure);
     });
   }, []);
@@ -69,7 +70,7 @@ export const Biography = () => {
           body: file,
           url: undefined,
           filename: file.name,
-          typeOfImage: type
+          typeOfImage: type,
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -106,11 +107,11 @@ export const Biography = () => {
         setLoader(true);
 
         const headers = {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         };
         const payload = {
           description: editorData,
-          typeOfImage: imageData?.typeOfImage
+          typeOfImage: imageData?.typeOfImage,
         };
         const response = await Put(
           headers,
@@ -193,7 +194,7 @@ export const Biography = () => {
               editor={ClassicEditor}
               data={editorData}
               config={{
-                toolbar: []
+                toolbar: [],
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);

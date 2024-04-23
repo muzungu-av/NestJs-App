@@ -29,11 +29,16 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
       let diffResponse;
       if (pageType === "Kopien") {
         // Выполнить новый запрос, если тип страницы "Kopien"
+        const params = {
+          typeOfImage: "isCopy",
+          fields: "miniImageUrl,description,uid,typeOfImage",
+        };
         diffResponse = await Get(
           undefined,
           BACKEND_API,
-          `${ai}/type?typeOfImage=isCopy`,
-          false
+          `${ai}/type`,
+          false,
+          params
         );
       } else {
         // Иначе использовать существующий запрос
@@ -97,25 +102,30 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
               : " “ Malerei ist Poesie, die man sieht, und Poesie ist Malerei, die man hört. ”"}
           </div>
         </div>
-        {paintings.map((painting: any, index: number) => (
-          <OnePaintingSection
-            key={index}
-            text={painting.description}
-            imgURL={painting.miniImageUrl}
-            id={painting.id}
-            onClick={() => {
-              if (pageType === "Gemälde") {
-                navigate(`/contacts`);
-              }
-              if (pageType === "Atelier") {
-                navigate(`/contacts`);
-              }
-              if (pageType === "Kopien") {
-                navigate(`/painting/${painting.uid}`);
-              }
-            }}
-          />
-        ))}
+        {paintings.map(
+          (painting: any, index: number) => {
+            return (
+              <OnePaintingSection
+                key={index}
+                text={painting.description}
+                imgURL={painting.miniImageUrl}
+                id={painting.id}
+                onClick={() => {
+                  if (pageType === "Gemälde") {
+                    navigate(`/contacts`);
+                  }
+                  if (pageType === "Atelier") {
+                    navigate(`/contacts`);
+                  }
+                  if (pageType === "Kopien") {
+                    navigate(`/painting/${painting.uid}`);
+                  }
+                }}
+              />
+            );
+          }
+          //))
+        )}
       </>
     </MainLayout>
   );

@@ -1,14 +1,10 @@
 import { ImgFileProcessingResult } from 'image/gm/imageHandler';
 import { User } from 'user/schemas/user.schema';
+import { AllDimension, Dimension } from './create-image.dto';
 
-export interface Dimension {
-  width: number;
-  height: number;
-}
-
-export interface AllDimension {
-  basic?: Dimension;
-  mini?: Dimension;
+export interface CopyAttribute {
+  size?: Dimension;
+  price?: number;
 }
 
 export class CreateCopyDto {
@@ -26,8 +22,12 @@ export class CreateCopyDto {
   miniImageUrl: string;
   owner: User;
   dimension: AllDimension;
+  copyAttribute: CopyAttribute[];
 
-  constructor(imgFileProcessingResult: ImgFileProcessingResult) {
+  constructor(
+    imgFileProcessingResult: ImgFileProcessingResult,
+    copyAttribute: CopyAttribute[],
+  ) {
     this.uid = imgFileProcessingResult.uid;
     this.originalName = imgFileProcessingResult.originalName || '';
     this.fileName = imgFileProcessingResult.fileName || '';
@@ -42,5 +42,6 @@ export class CreateCopyDto {
     this.dimension = imgFileProcessingResult.dimension;
     this.imageUrl = imgFileProcessingResult.imageUrl;
     this.miniImageUrl = imgFileProcessingResult.miniImageUrl;
+    this.copyAttribute = copyAttribute;
   }
 }
