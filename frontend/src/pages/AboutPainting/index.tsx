@@ -4,7 +4,6 @@ import ShoppingCart from "../../assets/icons/ShoppingCart.svg";
 import mini1 from "../../assets/images/Group_1000001764.png";
 import mini2 from "../../assets/images/photo_2024-02-10_18-54-36.png";
 import boatPic from "../../assets/images/1.png";
-import autumnPic from "../../assets/images/3.png";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import { useNavigate, useParams } from "react-router";
 import { Get } from "../../api/axiosInstance";
@@ -12,7 +11,6 @@ import { CreateImageDto } from "../../../types.d";
 
 export const AboutPainting: React.FC = () => {
   const [paintingData, setPaintingData] = useState<CreateImageDto>();
-  const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
   const objPaint = {
     img: boatPic,
     isLandscape: false,
@@ -28,11 +26,11 @@ export const AboutPainting: React.FC = () => {
   const { id } = useParams();
   const BACKEND_API =
     sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
-
   const getPictureById = async () => {
     try {
       const response = await Get(undefined, BACKEND_API, `${ai}/${id}`, false);
       setPaintingData(response.data);
+      console.log("image", response.data);
     } catch (error) {
       console.error("Error fetching paintings:", error);
     }
@@ -41,8 +39,6 @@ export const AboutPainting: React.FC = () => {
     getPictureById();
   }, []);
   console.log("paintingData", paintingData);
-  // type Paint = { isMain: boolean; img: any; w?: number; h?: number };
-  useEffect(() => {}, []);
   const navigate = useNavigate();
 
   const PaintingSection = () => {
@@ -67,7 +63,7 @@ export const AboutPainting: React.FC = () => {
                   }
                 >
                   <img
-                    src={paintingData?.imageUrl}
+                    src={paintingData?.miniImageUrl}
                     alt="Main"
                     style={{
                       border: "15px solid #240909",
@@ -170,7 +166,7 @@ export const AboutPainting: React.FC = () => {
     <MainLayout>
       <>
         <PaintingSection />
-        <PaintingSlider slides={slidesArr} />
+        <PaintingSlider />
       </>
     </MainLayout>
   );

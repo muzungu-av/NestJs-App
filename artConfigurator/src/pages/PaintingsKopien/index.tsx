@@ -19,7 +19,6 @@ type CopiesSectionProps = {
 export const PaintingsKopien = () => {
   const navigate = useNavigate();
 
-  //todo isKopien еще осталось везде на фронте
   const fetchDataFromApi = async () => {
     try {
       const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
@@ -43,6 +42,7 @@ export const PaintingsKopien = () => {
     );
     if (confirmation) {
       await Delete(url + img, "/copy/" + uid, true);
+      fetchDataFromApi().then((result) => setCopies(result));
       message.success("Successfully deleted");
     }
   };
