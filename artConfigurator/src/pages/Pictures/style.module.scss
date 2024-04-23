@@ -1,0 +1,7 @@
+.wrappedText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  height: 110px;
+  -webkit-box-orient: vertical;
+}

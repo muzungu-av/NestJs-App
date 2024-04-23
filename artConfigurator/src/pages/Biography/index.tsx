@@ -35,7 +35,7 @@ export const Biography = () => {
         body: undefined,
         url: result.miniImageUrl,
         filename: undefined,
-        typeOfImage: result.typeOfImage || ""
+        typeOfImage: result.typeOfImage || "",
       } as ImageDataStructure);
     });
   }, []);
@@ -69,7 +69,7 @@ export const Biography = () => {
           body: file,
           url: undefined,
           filename: file.name,
-          typeOfImage: type
+          typeOfImage: type,
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -106,11 +106,11 @@ export const Biography = () => {
         setLoader(true);
 
         const headers = {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         };
         const payload = {
           description: editorData,
-          typeOfImage: imageData?.typeOfImage
+          typeOfImage: imageData?.typeOfImage,
         };
         const response = await Put(
           headers,
@@ -146,68 +146,70 @@ export const Biography = () => {
     <>
       <MainLayout>
         {loader && <Spinner />}
-        <div className="font-italiana text-5xl mx-[5%] my-[2%]">
-          Bearbeiten der Biografie Seite
-        </div>
-        <div
-          className={`flex justify-around m-[5% ${
-            loader ? "opacity-50" : "opacity-100"
-          }`}
-        >
-          <div className="flex flex-col justify-start items-center w-[40%]">
-            <div className="font-federo text-3xl mb-4">Foto</div>
-            <div className="w-60 h-60 rounded-full overflow-hidden">
-              <img
-                className="w-full h-full object-cover"
-                src={img_resource}
-                alt="Avatar"
-              />
-            </div>
-            {/* <img className="mb-2" /> */}
-            <div
-              onClick={handleTextClick}
-              className="w-[100%] flex justify-center m-2 cursor-pointer "
-            >
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                id="file-input"
-                className="hidden"
-                onChange={handleFileInputChange}
-              />{" "}
-              <img src={addPhoto} /> Foto ändern
-            </div>{" "}
-            {/* <button
+        <div className="px-6">
+          <div className="font-italiana text-5xl mx-[5%] my-[2%]">
+            Bearbeiten der Biografie Seite
+          </div>
+          <div
+            className={`flex justify-around m-[5% ${
+              loader ? "opacity-50" : "opacity-100"
+            }`}
+          >
+            <div className="flex flex-col justify-start items-center w-[40%]">
+              <div className="font-federo text-3xl mb-4">Foto</div>
+              <div className="w-60 h-60 rounded-full overflow-hidden">
+                <img
+                  className="w-full h-full object-cover"
+                  src={img_resource}
+                  alt="Avatar"
+                />
+              </div>
+              {/* <img className="mb-2" /> */}
+              <div
+                onClick={handleTextClick}
+                className="w-[100%] flex justify-center m-2 cursor-pointer "
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  id="file-input"
+                  className="hidden"
+                  onChange={handleFileInputChange}
+                />{" "}
+                <img src={addPhoto} /> Foto ändern
+              </div>{" "}
+              {/* <button
               onClick={handleDeletePhoto}
               className="w-[100%] flex justify-center m-2"
             >
               <img src={deletePhoto} /> Foto löschen
             </button> */}
-          </div>{" "}
-          <div className="w-[60%]">
-            <div className="font-federo text-3xl mb-4">Beschreibung</div>
-            <CKEditor
-              editor={ClassicEditor}
-              data={editorData}
-              config={{
-                toolbar: []
-              }}
-              onChange={(event: any, editor: any) => {
-                handleEditorChange(event, editor);
-              }}
-              // onBlur={(event, editor) => {
-              //   console.log("Blur.", editor);
-              // }}
-              // onFocus={(event, editor) => {
-              //   console.log("Focus.", editor);
-              // }}
-            />
-            <div className="flex justify-end my-4">
-              <button className="btn-primary">abbrechen</button>{" "}
-              <button onClick={handleSaveClick} className="btn-primary ml-2">
-                speichern
-              </button>
+            </div>{" "}
+            <div className="w-[60%]">
+              <div className="font-federo text-3xl mb-4">Beschreibung</div>
+              <CKEditor
+                editor={ClassicEditor}
+                data={editorData}
+                config={{
+                  toolbar: [],
+                }}
+                onChange={(event: any, editor: any) => {
+                  handleEditorChange(event, editor);
+                }}
+                // onBlur={(event, editor) => {
+                //   console.log("Blur.", editor);
+                // }}
+                // onFocus={(event, editor) => {
+                //   console.log("Focus.", editor);
+                // }}
+              />
+              <div className="flex justify-end my-4">
+                <button className="btn-primary">abbrechen</button>{" "}
+                <button onClick={handleSaveClick} className="btn-primary ml-2">
+                  speichern
+                </button>
+              </div>
             </div>
           </div>
         </div>

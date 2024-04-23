@@ -1,7 +1,6 @@
 import { ReactNode, useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import SideBar from "../components/SideBar";
-import Header from "../components/Header";
 import { Spinner } from "../components/Spinner";
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -19,17 +18,16 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   }, [location]);
   return (
     <>
-      <Header
-        buttonRef={buttonRef}
-        isClicked={isClicked}
-        setIsClicked={setIsClicked}
-      />
       <SideBar
         buttonRef={buttonRef}
         isClicked={isClicked}
         setIsClicked={setIsClicked}
       />
-      {isLoader ? <Spinner /> : children}
+      {isLoader ? (
+        <Spinner />
+      ) : (
+        <div className="w-[75%] relative left-[25%]">{children}</div>
+      )}
     </>
   );
 };

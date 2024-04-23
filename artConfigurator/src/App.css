@@ -8,13 +8,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.header {
-  background-color: #ffedcb;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  /* padding: 10px; */
-}
+
 
 .navLinks {
   display: flex;

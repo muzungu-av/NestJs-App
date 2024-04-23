@@ -5,7 +5,7 @@ import { Delete, Get, Put } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
 import { message } from "antd";
 import { Spinner } from "../../components/Spinner";
-
+import styles from "./style.module.scss";
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const img = import.meta?.env?.VITE_API_IMAGE;
@@ -26,7 +26,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   groupName,
   miniImageUrl,
   description,
-  handleDeleteClick
+  handleDeleteClick,
 }) => {
   const [loader, setLoader] = useState(false);
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,11 +37,11 @@ const PicSection: React.FC<PicSectionProps> = ({
     try {
       setLoader(true);
       const headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       };
       const payload = {
         description: description,
-        typeOfImage: typeOfImage
+        typeOfImage: typeOfImage,
       };
       const response = await Put(headers, url, img + "/" + uid, true, payload);
 
@@ -57,11 +57,14 @@ const PicSection: React.FC<PicSectionProps> = ({
   const sanitizedDescription = DOMPurify.sanitize(description);
 
   return (
-    <div className="flex justify-between gap-6 py-[5%]">
-      <img src={miniImageUrl} className="max-w-[90%] h-full lg:max-w-[100%]" />
+    <div className="flex justify-between gap-8 py-[5%]">
+      <img
+        src={miniImageUrl}
+        className="max-w-[90%] h-full lg:max-w-[100%] min-w-[300px]"
+      />
       <div
         data-tooltip={sanitizedDescription}
-        className="w-1/2 text-xl"
+        className={`w-[60%] text-xl ${styles.wrappedText}`}
         dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
       />
       <div className="w-1/4 flex justify-center">
@@ -106,7 +109,7 @@ const PicSection: React.FC<PicSectionProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-6">
             <button
               className="btn-primary w-28"
               onClick={() => {
