@@ -6,7 +6,7 @@ import { Get, Post } from "../../api/axiosInstance";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "../../components/Spinner";
 import { message } from "antd";
-import { Form, Input, Select } from "antd";
+import { Form } from "antd";
 
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
