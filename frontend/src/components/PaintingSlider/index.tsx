@@ -1,17 +1,42 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useNavigate } from "react-router-dom";
 import { FreeMode, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import SwiperArrow from "../../assets/icons/SwiperArrow.svg";
+import { Get } from "../../api/axiosInstance";
+type Paintings = {
+  miniImageUrl: string;
+  uid: string;
+}[];
+const sc = import.meta?.env?.VITE_SCHEME;
+const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
+const ai = import.meta?.env?.VITE_API_IMAGE;
+const BACKEND_API =
+  sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
-type PaintingProps = {
-  slides: string[];
-};
-type SwiperRef = any | null;
+export const PaintingSlider = () => {
+  const [paintings, setPaintings] = useState<Paintings>([
+    { miniImageUrl: "", uid: "" },
+  ]);
 
-export const PaintingSlider = ({ slides }: PaintingProps) => {
+  const getPictures = async () => {
+    try {
+      const response = await Get(undefined, BACKEND_API, `${ai}/`, false);
+      setPaintings(
+        response.data.filter((item: any) => item.typeOfImage === "isCopy")
+      );
+    } catch (error) {
+      console.error("Error fetching paintings:", error);
+    } finally {
+    }
+  };
+  useEffect(() => {
+    getPictures();
+  }, []);
+  type SwiperRef = any | null;
   const sliderRef = useRef<SwiperRef>(null);
-
+  const navigate = useNavigate();
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
 
@@ -23,7 +48,7 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
     sliderRef?.current?.swiper.slideNext();
   }, []);
 
-  return (
+  return paintings.length !== 0 ? (
     <div className="px-6 py-[5%] relative my-6">
       <Swiper
         ref={sliderRef}
@@ -41,12 +66,13 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
         modules={[FreeMode, Pagination, Autoplay]}
         className="mySwiper"
       >
-        {slides.map((image: string, index: number) => (
-          <SwiperSlide key={index}>
+        {paintings?.map((slide) => (
+          <SwiperSlide key={slide.uid}>
             <img
-              src={image}
+              src={slide.miniImageUrl}
               alt="slide"
               className="rounded-xl px-4 w-full h-[300px]"
+              onClick={() => navigate(`/painting/${slide.uid}`)}
             />
           </SwiperSlide>
         ))}
@@ -62,5 +88,7 @@ export const PaintingSlider = ({ slides }: PaintingProps) => {
         onClick={handleNext}
       ></img>
     </div>
+  ) : (
+    <></>
   );
 };

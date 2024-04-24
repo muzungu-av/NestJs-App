@@ -89,7 +89,7 @@ export const Biography = () => {
   //   }
   // };
   const checkData = () => {
-    if (!imageData || !imageData.typeOfImage || !editorData) {
+    if (!imageData || !imageData?.typeOfImage || !editorData) {
       message.error("Nicht alle Daten sind ausgefüllt");
       return false;
     }
@@ -121,7 +121,7 @@ export const Biography = () => {
           payload
         );
         console.log("response2", response);
-        message.success("Painting successfully uploaded");
+        message.success("Gemälde erfolgreich hochgeladen");
         return response.data;
       } catch (e) {
         message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
@@ -158,11 +158,13 @@ export const Biography = () => {
           <div className="flex flex-col justify-start items-center w-[40%]">
             <div className="font-federo text-3xl mb-4">Foto</div>
             <div className="w-60 h-60 rounded-full overflow-hidden">
-              <img
-                className="w-full h-full object-cover"
-                src={img_resource}
-                alt="Avatar"
-              />
+              <label htmlFor="file-input">
+                <img
+                  className="w-full h-full object-cover"
+                  src={img_resource}
+                  alt="Avatar"
+                />
+              </label>
             </div>
             {/* <img className="mb-2" /> */}
             <div

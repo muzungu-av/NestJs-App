@@ -31,7 +31,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
     event: React.MouseEvent<HTMLAnchorElement | HTMLDivElement>
   ) => {
     if (item.children) {
-      event.preventDefault(); // Предотвращаем дальнейший переход по ссылке
+      event.preventDefault();
       handleToggle();
     }
   };
@@ -42,7 +42,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
           <Link to={item.path} onClick={handleClick}>
             <button
               type="button"
-              className={`${className} flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
+              className={`${className} bg-[#ffedcb] flex items-center w-full p-2 text-xl text-gray-900 transition duration-75 rounded-lg group `}
               aria-controls="dropdown-example"
               data-collapse-toggle="dropdown-example"
             >
@@ -55,7 +55,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
           <div onClick={handleClick}>
             <button
               type="button"
-              className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              className="flex bg-[#ffedcb] items-center w-full p-2 text-xl text-gray-900 transition duration-75 rounded-lg group "
               aria-controls="dropdown-example"
               data-collapse-toggle="dropdown-example"
             >

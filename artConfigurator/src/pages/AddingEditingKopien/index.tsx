@@ -269,6 +269,7 @@ export const AddingEditingKopien = ({
         response = await Put(headers, url, cp + `/${uid}`, true, formData);
       }
       message.success("Painting successfully uploaded");
+      navigate("/copy_paintings");
       return response.data;
       // }
     } catch (e) {
@@ -319,7 +320,7 @@ export const AddingEditingKopien = ({
           <div className="flex flex-col justify-start items-center w-[40%]">
             <div className="font-federo text-3xl mb-4">Foto</div>
             <label htmlFor="file-input">
-              <img className="mb-2" src={img_resource} />
+              <img className="mb-2 w-full" src={img_resource} />
             </label>
             <input
               ref={fileInputRef}
@@ -337,25 +338,25 @@ export const AddingEditingKopien = ({
               <img src={addPhoto} /> Foto ändern
             </button>
           </div>{" "}
-          <div className="w-[60%]">
+          <div className="w-[60%] m-6">
             {/* {isEditMode && */}
             {sizes && sizes.length > 0 && (
-              <div className="bg-[#FFEDCB] w-[60%]">
+              <div className="bg-[#FFEDCB] w-[80%]">
                 <div className="overflow-x-auto">
                   <table className="min-w-full ">
                     <thead className="bg-[#FFEDCB]">
                       <tr>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left font-medium font-federo text-xl"
+                          className="px-6 py-3 text-left font-medium font-federo text-base lg:text-xl"
                         >
-                          Größe (cm) :
+                          Größe (cm):
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left font-medium font-federo text-xl "
+                          className="px-6 py-3 text-left font-medium font-federo text-base lg:text-xl "
                         >
-                          Preis (Euro) :
+                          Preis (Euro):
                         </th>
                       </tr>
                     </thead>
@@ -443,10 +444,10 @@ export const AddingEditingKopien = ({
                             </tr>
                           ) : (
                             <tr key={index}>
-                              <td className="px-6 py-2 whitespace-nowrap font-federo text-xl ">
+                              <td className="px-6 py-2 whitespace-nowrap font-federo text-base lg:text-xl ">
                                 {row.width} x {row.height}
                               </td>
-                              <td className="px-6 py-2 whitespace-nowrap font-federo text-xl ">
+                              <td className="px-6 py-2 whitespace-nowrap font-federo text-base lg:text-xl ">
                                 {row.price}
                               </td>
                               <td className="px-2 py-2 flex justify-around">
@@ -515,10 +516,10 @@ export const AddingEditingKopien = ({
                     />{" "}
                   </div>
                 </div>{" "}
-                <div className="flex items-end justify-end flex-col w-[20%] pb-4 ">
+                <div className="flex items-end justify-end flex-col pb-4  ">
                   {" "}
                   <div
-                    className="btn-primary w-[130px] h-[45px] ml-2 flex items-center justify-center"
+                    className="btn-primary cursor-pointer w-[130px] h-[45px] ml-2 flex items-center justify-center"
                     onClick={addAttributes}
                   >
                     speichern

@@ -3,6 +3,9 @@ import Play from "../../assets/icons/Play.svg"; // (linux error) big Letter plea
 import { GallerySection } from "../../components/GallerySection";
 import { useNavigate } from "react-router";
 import { Get } from "../../api/axiosInstance";
+import { PaintingSlider } from "../../components/PaintingSlider";
+import { Contacts } from "../../components/Contacts";
+import { BeforeSlider } from "../../components/BeforeSlider";
 
 interface AboutMeProps {
   isMain: boolean;
@@ -177,6 +180,15 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
       <AboutPainterSection />
       <VideoSection />
       <GallerySection />
+      {!isMain ? (
+        <>
+          <BeforeSlider />
+          <PaintingSlider />
+          <Contacts />
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

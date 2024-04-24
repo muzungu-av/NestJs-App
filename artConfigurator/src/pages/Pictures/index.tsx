@@ -3,9 +3,9 @@ import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
 import { Delete, Get, Put } from "../../api/axiosInstance";
 import DOMPurify from "dompurify";
-import { message } from "antd";
+import { Modal, message } from "antd";
 import { Spinner } from "../../components/Spinner";
-
+import styles from "./style.module.scss";
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const img = import.meta?.env?.VITE_API_IMAGE;
@@ -26,7 +26,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   groupName,
   miniImageUrl,
   description,
-  handleDeleteClick
+  handleDeleteClick,
 }) => {
   const [loader, setLoader] = useState(false);
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,15 +37,15 @@ const PicSection: React.FC<PicSectionProps> = ({
     try {
       setLoader(true);
       const headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       };
       const payload = {
         description: description,
-        typeOfImage: typeOfImage
+        typeOfImage: typeOfImage,
       };
       const response = await Put(headers, url, img + "/" + uid, true, payload);
 
-      message.success("Painting successfully uploaded");
+      message.success("Gemälde erfolgreich hochgeladen");
       return response.data;
     } catch (e) {
       message.error("Das Bild ist nicht ausgewählt oder existiert bereits");
@@ -57,11 +57,14 @@ const PicSection: React.FC<PicSectionProps> = ({
   const sanitizedDescription = DOMPurify.sanitize(description);
 
   return (
-    <div className="flex justify-between gap-6 py-[5%]">
-      <img src={miniImageUrl} className="max-w-[90%] h-full lg:max-w-[100%]" />
+    <div className="flex justify-between gap-8 py-[5%]">
+      <img
+        src={miniImageUrl}
+        className="max-w-[90%] h-full lg:max-w-[100%] min-w-[300px]"
+      />
       <div
         data-tooltip={sanitizedDescription}
-        className="w-1/2 text-xl"
+        className={`w-[60%] text-xl ${styles.wrappedText}`}
         dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
       />
       <div className="w-1/4 flex justify-center">
@@ -106,7 +109,7 @@ const PicSection: React.FC<PicSectionProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-6">
             <button
               className="btn-primary w-28"
               onClick={() => {
@@ -146,15 +149,27 @@ export const Pictures = () => {
   };
   const [data, setData] = useState<PicSectionProps[] | null>(null);
   const handleDeleteClick = async (uid: string) => {
-    const userAnswer = window.confirm("Do u want to delete?");
+    Modal.confirm({
+      title: "Möchten Sie löschen?",
+      icon: null, // Чтобы убрать значок (по умолчанию он есть)
+      okText: "Ja",
+      okType: "danger",
+      cancelText: "Nein",
+      async onOk() {
+        try {
+          await Delete(url + img, "/" + uid, true);
+          message.success("Erfolgreich gelöscht");
+          setData((prev: any) => {
+            return prev.filter((item: any) => item.uid !== uid);
+          });
+        } catch (error) {
+          console.error("Fehler beim Löschen:", error);
+          message.error("Fehler beim Löschen");
+        }
+      },
 
-    if (userAnswer) {
-      await Delete(url + img, "/" + uid, true);
-      message.success("Successfully deleted");
-      setData((prev: any) => {
-        return prev.filter((item: any) => item.uid !== uid);
-      });
-    }
+      onCancel() {}
+    });
   };
 
   useEffect(() => {

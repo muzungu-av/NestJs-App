@@ -157,7 +157,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             "Content-Type": `multipart/form-data;`
           };
           const response = await Post(headers, BURL, IMG, true, formData);
-          message.success("Painting successfully uploaded");
+          message.success("Gemälde erfolgreich hochgeladen");
           return response.data;
         } else {
           const formData = new FormData();
@@ -178,7 +178,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             true,
             formData
           );
-          message.success("Painting successfully uploaded");
+          message.success("Gemälde erfolgreich hochgeladen");
           return response.data;
         }
       } catch (e) {

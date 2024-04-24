@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Empty from "./../../assets/images/EmptyPhoto.png";
 import MainLayout from "../../layouts/MainLayout";
 import { Delete, Get, Post, Put } from "../../api/axiosInstance";
-import { message } from "antd";
+import { Modal, message } from "antd";
 import { VideoCreateEditBlock } from "../VideoCreateEditBlock";
 
 // import deletePhoto from "./../../assets/images/Delete.svg";
@@ -57,16 +57,29 @@ export const Videos = () => {
   };
 
   const handleDeleteClick = async (v: Video) => {
-    const userAnswer = window.confirm("Do u want to delete?");
-    if (userAnswer) {
-      const params = { fileName: v.fileName, id: v._id };
-      const response = await Delete(url, vi, true, params);
-      console.log("response", response);
-      // await Delete(url + vi, "/" + v._id, true);
-      message.success("Successfully deleted");
-    }
-    setAllVideosData((prev) => {
-      return prev.filter((item: any) => item._id !== v._id);
+    Modal.confirm({
+      title: "Möchten Sie löschen?",
+      icon: null, // Чтобы убрать значок (по умолчанию он есть)
+      okText: "Ja",
+      okType: "danger",
+      cancelText: "Nein",
+      async onOk() {
+        try {
+          const params = { fileName: v.fileName, id: v._id };
+          await Delete(url, vi, true, params);
+
+          message.success("Erfolgreich gelöscht");
+
+          setAllVideosData((prev) => {
+            return prev.filter((item: any) => item._id !== v._id);
+          });
+        } catch (error) {
+          console.error("Fehler beim Löschen:", error);
+          message.error("Fehler beim Löschen");
+        }
+      },
+
+      onCancel() {}
     });
   };
 
@@ -76,47 +89,73 @@ export const Videos = () => {
       videoLink: string;
       videoName: string;
     },
-    imageData: ImageDataStructure,
     id?: string,
-    fileName?: string
+    fileName?: string,
+    imageData?: ImageDataStructure | null
   ) => {
     if (
-      !(textData.videoName && textData.videoLink && textData.videoDescription)
+      !(
+        (textData.videoName &&
+          textData.videoLink &&
+          textData.videoDescription) ||
+        !(id && imageData)
+      )
     ) {
       message.error("Nicht alle Daten sind ausgefüllt");
       return;
-    }
+    } else {
+      try {
+        Modal.confirm({
+          title: "Ein Video an die Website senden?",
+          icon: null, // Чтобы убрать значок (по умолчанию он есть)
+          okText: "Ja",
+          okType: "default",
+          cancelText: "Nein",
+          async onOk() {
+            try {
+              const formData = new FormData();
+              formData.append("name", textData.videoName);
+              formData.append("description", textData.videoDescription);
+              formData.append("link", textData.videoLink);
+              if (imageData?.body) {
+                formData.append("file", imageData.body);
+              }
+              fileName && formData.append("fileName", fileName);
+              const headers = {
+                "Content-Type": `multipart/form-data;`
+              };
+              if (!id) {
+                const response = await Post(headers, url, vi, true, formData);
+                console.log(response);
 
-    const userAnswer = window.confirm("Ein Video an die Website senden?");
-    if (userAnswer) {
-      const formData = new FormData();
-      formData.append("name", textData.videoName);
-      formData.append("description", textData.videoDescription);
-      formData.append("link", textData.videoLink);
-      if (imageData?.body) {
-        formData.append("file", imageData.body);
-      }
-      fileName && formData.append("fileName", fileName);
-      const headers = {
-        "Content-Type": `multipart/form-data;`
-      };
-      if (!id) {
-        const response = await Post(headers, url, vi, true, formData);
-        console.log(response);
+                message.success("Das Video wird auf der Startseite angezeigt");
+                setNewClicked(false);
+                setCurrentEditingId("");
+                fetchData();
+              } else {
+                const response = await Put(
+                  headers,
+                  url,
+                  vi + "/" + id,
+                  true,
+                  formData
+                );
+                console.log(response);
 
-        message.success("Das Video wird auf der Startseite angezeigt");
-        setNewClicked(false);
-        setCurrentEditingId("");
-        fetchData();
-      } else {
-        const response = await Put(headers, url, vi + "/" + id, true, formData);
-        console.log(response);
+                message.success("Das Video wird auf der Startseite angezeigt");
+                setNewClicked(false);
+                setCurrentEditingId("");
+                fetchData();
+              }
+            } catch (error) {
+              console.error("Fehler beim Löschen:", error);
+              message.error("Fehler beim Löschen");
+            }
+          },
 
-        message.success("Das Video wird auf der Startseite angezeigt");
-        setNewClicked(false);
-        setCurrentEditingId("");
-        fetchData();
-      }
+          onCancel() {}
+        });
+      } catch (error) {}
     }
   };
 
