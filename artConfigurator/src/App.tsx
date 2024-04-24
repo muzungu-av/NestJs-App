@@ -21,14 +21,14 @@ export const menuItemsWithPaths = [
   {
     id: 1,
     visibilty: true,
-    name: "Biografie",
+    name: "▪️ Biografie",
     path: "/biography",
     element: Biography,
   },
   {
     id: 2,
     visibilty: true,
-    name: "Gemälde" /* картины */,
+    name: "▪️ Gemälde" /* картины */,
     children: [
       {
         id: 5,
@@ -58,7 +58,7 @@ export const menuItemsWithPaths = [
   {
     id: 3,
     visibilty: true,
-    name: "Kopien",
+    name: "▪️ Kopien",
     children: [
       {
         id: 8,
@@ -88,7 +88,7 @@ export const menuItemsWithPaths = [
   {
     id: 4,
     visibilty: true,
-    name: "Videos",
+    name: "▪️ Videos",
     path: "/videos",
     element: Videos,
   },

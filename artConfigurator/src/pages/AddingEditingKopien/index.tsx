@@ -35,7 +35,7 @@ interface CopyData {
 }
 
 export const AddingEditingKopien = ({
-  isEditMode
+  isEditMode,
 }: AddingEditingKopienProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sizes, setSizes] = useState<CopyData[]>([]);
@@ -46,7 +46,7 @@ export const AddingEditingKopien = ({
     try {
       const params = {
         typeOfImage: "isCopy",
-        fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute"
+        fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
       };
       const response = await Get(
         undefined,
@@ -69,7 +69,7 @@ export const AddingEditingKopien = ({
           body: undefined,
           url: result.miniImageUrl,
           filename: undefined,
-          typeOfImage: result.typeOfImage || ""
+          typeOfImage: result.typeOfImage || "",
         } as ImageDataStructure);
 
         if (result && result.copyAttribute) {
@@ -102,7 +102,7 @@ export const AddingEditingKopien = ({
   ) => {
     setCurrentRow((prevState: any) => ({
       ...prevState,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -143,7 +143,7 @@ export const AddingEditingKopien = ({
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name
+          filename: file.name,
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -170,7 +170,7 @@ export const AddingEditingKopien = ({
 
   enum HttpMethod {
     POST,
-    PUT
+    PUT,
   }
 
   interface ExChanges {
@@ -188,7 +188,7 @@ export const AddingEditingKopien = ({
       method: undefined,
       imgFile: { body: undefined, filename: undefined },
       text: undefined,
-      sizes: undefined
+      sizes: undefined,
     };
     // режим добавления - должны быть все данные: файл(body), текст, размеры-цены
     if (!isEditMode) {
@@ -259,7 +259,7 @@ export const AddingEditingKopien = ({
       }
       formData.append("typeOfImage", "isCopy");
       const headers = {
-        "Content-Type": `multipart/form-data;`
+        "Content-Type": `multipart/form-data;`,
       };
       let response;
       if (newData.method == HttpMethod.POST) {
@@ -295,7 +295,7 @@ export const AddingEditingKopien = ({
       const newSize = {
         width: parseFloat(refWidth.current.value),
         height: parseFloat(refHeigth.current.value),
-        price: parseFloat(refPrice.current.value)
+        price: parseFloat(refPrice.current.value),
       };
       setSizes((prevSizes) => [...prevSizes, newSize]);
       refPrice.current.value = "";
@@ -320,7 +320,7 @@ export const AddingEditingKopien = ({
           <div className="flex flex-col justify-start items-center w-[40%]">
             <div className="font-federo text-3xl mb-4">Foto</div>
             <label htmlFor="file-input">
-              <img className="mb-2" src={img_resource} />
+              <img className="mb-2 w-full" src={img_resource} />
             </label>
             <input
               ref={fileInputRef}
@@ -532,7 +532,7 @@ export const AddingEditingKopien = ({
               editor={ClassicEditor}
               data={editorData}
               config={{
-                toolbar: []
+                toolbar: [],
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);

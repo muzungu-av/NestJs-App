@@ -105,8 +105,8 @@ const Header = () => {
             className="block lg:hidden"
           />
         </div>
+        <BurgerMenu />
       </div>
-      <BurgerMenu />
     </>
   );
 };

@@ -19,7 +19,6 @@ type CopiesSectionProps = {
 export const PaintingsKopien = () => {
   const navigate = useNavigate();
 
-  //todo isKopien еще осталось везде на фронте
   const fetchDataFromApi = async () => {
     try {
       const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
@@ -43,6 +42,7 @@ export const PaintingsKopien = () => {
     );
     if (confirmation) {
       await Delete(url + img, "/copy/" + uid, true);
+      fetchDataFromApi().then((result) => setCopies(result));
       message.success("Successfully deleted");
     }
   };
@@ -74,8 +74,8 @@ export const PaintingsKopien = () => {
                 </div>
                 <div className="flex min-w-[30%] lg:min-w-[20%] mr-4">
                   <div className="flex flex-col w-[50%] mx-4">
-                    {v.copyAttribute
-                      .slice(0, Math.ceil(v.copyAttribute.length / 2))
+                    {v?.copyAttribute
+                      ?.slice(0, Math.ceil(v.copyAttribute.length / 2))
                       .map(
                         (
                           { width, height }: { width: number; height: number },
@@ -92,7 +92,7 @@ export const PaintingsKopien = () => {
                   </div>
                   <div className="flex flex-col w-[50%]  mr-4">
                     {v.copyAttribute
-                      .slice(Math.ceil(v.copyAttribute.length / 2))
+                      ?.slice(Math.ceil(v?.copyAttribute.length / 2))
                       .map(
                         (
                           { width, height }: { width: number; height: number },
@@ -112,8 +112,8 @@ export const PaintingsKopien = () => {
                   <div className=" absolute h-[80%] bg-black w-1 top-0 left-0 "></div>{" "}
                   <div className=" mx-8 self-center h-[80%] font-federo text-xl">
                     {" "}
-                    {v && v.copyAttribute && v.copyAttribute.length} verfügbare
-                    Formate von {v.copyAttribute[0].price}€
+                    {v && v?.copyAttribute && v?.copyAttribute.length}{" "}
+                    verfügbare Formate von {v?.copyAttribute?.[0]?.price}€
                     {v &&
                       v.copyAttribute &&
                       v.copyAttribute.length > 1 &&

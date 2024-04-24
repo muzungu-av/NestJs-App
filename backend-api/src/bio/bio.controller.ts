@@ -26,8 +26,7 @@ export class BioController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFileAndPassValidation(
     @UploadedFile() file: Express.Multer.File,
-    @Body('name') name: string,
-    @Body('text') text: string,
+    @Body('text_bio') text: string,
     @Req() request: any,
     @Res() response: any,
   ) {
@@ -36,12 +35,7 @@ export class BioController {
       `Post request 'upload Bio' from user: ${JSON.stringify(user.userId)}`,
     );
     try {
-      const result = await this.bioService.addBio(
-        user.userId,
-        file,
-        name,
-        text,
-      );
+      const result = await this.bioService.addBio(user.userId, file, text);
       return response.status(201).json(result);
     } catch (error) {
       return response.status(500).json({ message: `${error}` });

@@ -4,15 +4,14 @@ import ShoppingCart from "../../assets/icons/ShoppingCart.svg";
 import mini1 from "../../assets/images/Group_1000001764.png";
 import mini2 from "../../assets/images/photo_2024-02-10_18-54-36.png";
 import boatPic from "../../assets/images/1.png";
-import autumnPic from "../../assets/images/3.png";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import { useNavigate, useParams } from "react-router";
 import { Get } from "../../api/axiosInstance";
 import { CreateImageDto } from "../../../types.d";
+import DOMPurify from "dompurify";
 
 export const AboutPainting: React.FC = () => {
   const [paintingData, setPaintingData] = useState<CreateImageDto>();
-  const slidesArr = [autumnPic, autumnPic, autumnPic, autumnPic, autumnPic];
   const objPaint = {
     img: boatPic,
     isLandscape: false,
@@ -28,21 +27,19 @@ export const AboutPainting: React.FC = () => {
   const { id } = useParams();
   const BACKEND_API =
     sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
-
   const getPictureById = async () => {
     try {
       const response = await Get(undefined, BACKEND_API, `${ai}/${id}`, false);
       setPaintingData(response.data);
+      console.log("image", response.data);
     } catch (error) {
       console.error("Error fetching paintings:", error);
     }
   };
   useEffect(() => {
     getPictureById();
-  }, []);
+  }, [id]);
   console.log("paintingData", paintingData);
-  // type Paint = { isMain: boolean; img: any; w?: number; h?: number };
-  useEffect(() => {}, []);
   const navigate = useNavigate();
 
   const PaintingSection = () => {
@@ -67,7 +64,7 @@ export const AboutPainting: React.FC = () => {
                   }
                 >
                   <img
-                    src={paintingData?.imageUrl}
+                    src={paintingData?.miniImageUrl}
                     alt="Main"
                     style={{
                       border: "15px solid #240909",
@@ -116,28 +113,28 @@ export const AboutPainting: React.FC = () => {
                 Wählen Sie Bildgröße
               </p>{" "}
               <div className="grid grid-cols-2 gap-4 justify-start w-[80%]">
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   40 х 60 cm
                 </button>
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   50 х 70 cm
                 </button>
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   60 х 80 cm
                 </button>
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   110 х 133 cm
                 </button>
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   120 х 160 cm
                 </button>{" "}
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   150 х 200 cm
                 </button>
               </div>{" "}
               <div className=" relative py-[10px]">
                 <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
-                <h3 className=" font-federo  text-2xl ml-5">
+                <h3 className=" font-federo text-lg lg:text-2xl ml-5">
                   Gesamtbetrag : 1.230,00€
                 </h3>{" "}
                 <button
@@ -154,12 +151,15 @@ export const AboutPainting: React.FC = () => {
             </div>
           </div>
           <div className="m-[5%]">
-            <p className="  font-federo text-base lg:text-xl m-2">
-              {paintingData?.description}
-            </p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(paintingData?.description || ""),
+              }}
+              className="  font-federo text-base lg:text-xl m-2"
+            ></p>
           </div>
         </div>
-        <div className="font-italiana flex justify-center text-4xl lg:text-[64px] mb-5 ">
+        <div className="font-italiana flex justify-center text-2xl lg:text-4xl lg:text-[64px] mb-5 ">
           Ähnliche Angebote
         </div>
       </>
@@ -170,7 +170,7 @@ export const AboutPainting: React.FC = () => {
     <MainLayout>
       <>
         <PaintingSection />
-        <PaintingSlider slides={slidesArr} />
+        <PaintingSlider />
       </>
     </MainLayout>
   );

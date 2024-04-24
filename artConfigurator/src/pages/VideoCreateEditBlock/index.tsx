@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import Empty from "./../../assets/images/EmptyPhoto.png";
+
 interface Video {
   _id: string;
   name: string;
@@ -8,6 +9,7 @@ interface Video {
   description: string;
   fileName: string;
 }
+
 interface VideoBlock {
   data: Video;
   isNew: boolean;
@@ -23,15 +25,17 @@ interface VideoBlock {
     imageData?: ImageDataStructure | null
   ) => void;
 }
+
 interface ImageDataStructure {
   body: File | undefined;
   url: string | undefined;
   filename: String | undefined;
 }
+
 export const VideoCreateEditBlock = ({
   data,
   isNew,
-  handleSaveClick
+  handleSaveClick,
 }: VideoBlock) => {
   const [imageData, setImageData] = useState<ImageDataStructure>(
     {} as ImageDataStructure
@@ -42,14 +46,14 @@ export const VideoCreateEditBlock = ({
       : {
           videoDescription: data.description,
           videoLink: data.link,
-          videoName: data.name
+          videoName: data.name,
         }
   );
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -64,7 +68,7 @@ export const VideoCreateEditBlock = ({
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name
+          filename: file.name,
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
