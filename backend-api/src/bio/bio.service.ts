@@ -19,16 +19,17 @@ export class BioService {
   async addBio(
     userId: string,
     file: Express.Multer.File,
-    name: string,
     text: string,
-  ): Promise<ImgFileProcessingResult> {
+  ): Promise<boolean> {
     const result = await this.handler.do(userId, file); //validation and creation of a miniature
     if (result.success !== true) {
-      winstonLogger.error(`Error in addVideo: Problems with the image`);
+      winstonLogger.error(
+        `Image processing error (Bio): Problems with the image`,
+      );
     }
 
     // загрузка в клауд
-    winstonLogger.info(`Try uploading image to Cloudinary`);
+    winstonLogger.info(`Try uploading Bio-image to Cloudinary`);
     if (result && result.success) {
       try {
         result.imageUrl = await this.cloudinary.upload(
@@ -51,9 +52,12 @@ export class BioService {
       }
     }
     try {
+      //сначала удалить старое, поэтому нет метода обновления - биография всегда одна
+      await this.deleteBio();
       // добавляем в БД
-      const createBioDto = new CreateBioDto(name, result.imageUrl, text);
+      const createBioDto = new CreateBioDto(result.imageUrl, text);
       await this.bioModel.create(createBioDto);
+      return Promise.resolve(true);
     } catch (error) {
       winstonLogger.error(`'Error putting Bio into the Database'`);
       throw new CustomError({
@@ -64,24 +68,39 @@ export class BioService {
         uid: result.uid,
       });
     }
-    return result;
+    return Promise.resolve(false);
   }
 
+  /**
+   *
+   * @returns
+   */
   async getBio(): Promise<Bio> {
     const r = await this.bioModel.findOne().exec();
     winstonLogger.info(`Getting Bio`);
     return r;
   }
 
+  /**
+   *
+   * @returns
+   */
   async deleteBio(): Promise<boolean> {
     let r;
     try {
       r = await this.bioModel.deleteMany().exec();
-      winstonLogger.info(`Bio has been successfully deleted`);
+      if (r.deletedCount > 0) {
+        winstonLogger.info(`Bio has been successfully deleted`);
+        return Promise.resolve(true);
+      } else {
+        winstonLogger.warning(
+          `Unsuccessful attempt to delete Biography during update (add)`,
+        );
+        return Promise.resolve(false);
+      }
     } catch (error) {
       winstonLogger.error(`${error.message}`);
-      return false;
     }
-    return r?.deletedCount > 0;
+    return Promise.resolve(false);
   }
 }
