@@ -65,10 +65,7 @@ export const PaintingsKopien = () => {
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
         {copies &&
           copies.length > 0 &&
-          copies?.map((v: any, index: number) => {
-            // const firstSix = v.copyAttribute.slice(0, 6);
-            // const firstThree = firstSix.slice(0, 3);
-            // const secondThree = firstSix.slice(3);
+          copies.map((v: any, index: number) => {
             return (
               <div className="flex my-[5%] " key={index}>
                 <div className="min-w-[30%] lg:w-[20%] max-w-[30%] h-auto">

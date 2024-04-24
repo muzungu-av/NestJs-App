@@ -6,6 +6,7 @@ import { Get } from "../../api/axiosInstance";
 import { PaintingSlider } from "../../components/PaintingSlider";
 import { Contacts } from "../../components/Contacts";
 import { BeforeSlider } from "../../components/BeforeSlider";
+import DOMPurify from "dompurify";
 
 interface AboutMeProps {
   isMain: boolean;
@@ -18,14 +19,23 @@ interface VideoBlock {
   link: string;
   imgUrl: string;
 }
-
+interface Biography {
+  imgUrl: string;
+  text_bio: string;
+  __v: number;
+  _id: string;
+}
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const vi = import.meta?.env?.VITE_API_VIDEO;
+const bio = import.meta?.env?.VITE_API_BIO;
+
 const url = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
 export const AboutMe = ({ isMain }: AboutMeProps) => {
-  const fetchDataFromApi = async () => {
+  const [videos, setVideoData] = useState([]);
+  const [biography, setBiography] = useState<Biography>({} as Biography);
+  const fetchVideoDataFromApi = async () => {
     try {
       const response = await Get(undefined, url, vi, false, {});
       return response.data;
@@ -34,14 +44,26 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
       return null;
     }
   };
+  const fetchBioDataFromApi = async () => {
+    try {
+      const response = await Get(undefined, url, `${bio}`, false, {});
 
-  const [videos, setVideoData] = useState([]);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Videos from backend:", error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetchDataFromApi();
+      const result = await fetchVideoDataFromApi();
       if (result) {
         setVideoData(result);
+      }
+      const resultBio = await fetchBioDataFromApi();
+      if (resultBio) {
+        setBiography(resultBio);
       }
     };
     fetchData();
@@ -56,47 +78,24 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
         </h3>
         <div className="flex items-center lg:justify-around lg:items-start flex-col lg:flex-row">
           <div>
-            <div className="rounded-full w-[220px] h-[220px] mb-4 bg-[#D9D9D9]"></div>
+            <img
+              src={biography.imgUrl}
+              className="rounded-full w-[220px] h-[220px]"
+            />
+
             <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
           </div>
           <div className="flex flex-col lg:w-[50%] gap-8">
-            <p className="font-federo text-sm lg:tex-base">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit
-              quam provident illum sapiente harum recusandae, atque et quisquam
-              consectetur cumque, nostrum, doloribus iure culpa consequuntur
-              aspernatur. Pariatur voluptate doloribus deleniti?
-            </p>
-            {!isMain && (
-              <>
-                <p className="font-federo text-sm lg:text-base">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. Lorem Ipsum is simply dummy text of the
-                  printing and typesetting industry. Lorem Ipsum has been the
-                  industry's standard dummy text ever since the 1500s, when an
-                  unknown printer took a galley of type and scrambled it to make
-                  a type specimen book. Lorem Ipsum is simply dummy text of the
-                  printing and typesetting industry. Lorem Ipsum has been the
-                  industry's standard dummy text ever since the 1500s, when an
-                  unknown printer took a galley of type and scrambled it to make
-                  a type specimen book.
-                </p>
-                <p className="font-federo text-s, lg:text-base">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
-                </p>
-              </>
-            )}
+            <p
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(biography?.text_bio || "")
+              }}
+              className="  font-federo text-base lg:text-xl m-2"
+            ></p>
 
             {isMain && (
               <p className="font-apple lg:w-[60%] self-center pt-5 text-sm lg:text-base">
-                “ Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry ”
+                “ Color meus est bonus amicus et ipsum loqui vellem. ”
               </p>
             )}
           </div>
@@ -117,8 +116,9 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
         {!isMain && (
           <div className=" flex flex-col  justify-center items-center ">
             <p className="font-apple text-base lg:text-2xl font-normal m-16 self-center ">
-              “ Lorem Ipsum is simply dummy text of <br /> the printing and
-              typesetting industry ”
+              “ Color meus est bonus
+              <br />
+              amicus et ipsum loqui vellem. ”
             </p>
 
             <button
