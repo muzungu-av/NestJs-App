@@ -125,20 +125,14 @@ export const Videos = () => {
                 "Content-Type": `multipart/form-data;`
               };
               if (!id) {
-                const response = await Post(headers, url, vi, true, formData);
+                await Post(headers, url, vi, true, formData);
 
                 message.success("Das Video wird auf der Startseite angezeigt");
                 setNewClicked(false);
                 setCurrentEditingId("");
                 fetchData();
               } else {
-                const response = await Put(
-                  headers,
-                  url,
-                  vi + "/" + id,
-                  true,
-                  formData
-                );
+                await Put(headers, url, vi + "/" + id, true, formData);
 
                 message.success("Das Video wird auf der Startseite angezeigt");
                 setNewClicked(false);
