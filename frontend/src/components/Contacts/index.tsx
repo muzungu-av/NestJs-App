@@ -2,24 +2,40 @@ import ContactPic from "../../assets/images/contactPic.jpg";
 import Gmail from "../../assets/icons/Gmail.svg";
 import Instagram from "../../assets/icons/Instagram.svg";
 import FaceBook from "../../assets/icons/Facebook.svg";
-import { Post } from "../../api/axiosInstance";
-import { useRef, useState } from "react";
+import { Get, Post } from "../../api/axiosInstance";
+import { useEffect, useRef, useState } from "react";
 import { Spinner } from "../../components/Spinner";
 import { message } from "antd";
 import { Form, Input, Select } from "antd";
+
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
 export const Contacts: React.FC = () => {
-  const phoneArr = [
-    { country: "Germany", code: "49" },
-    { country: "UK", code: "44" },
-    { country: "USA", code: "1" },
-  ];
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const mailing = import.meta?.env?.VITE_API_MAILING;
   const URL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
+  const bio = import.meta?.env?.VITE_API_BIO;
+
   const formRef = useRef<HTMLFormElement>(null);
   const [form] = Form.useForm();
   const [loader, setLoader] = useState(false);
+  const [bioImg, setBioImg] = useState();
+  useEffect(() => {
+    fetchBioDataFromApi().then((res) => setBioImg(res.imgUrl));
+  }, []);
+
+  const fetchBioDataFromApi = async () => {
+    try {
+      const response = await Get(undefined, URL, `${bio}`, false, {});
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Videos from backend:", error);
+      return null;
+    }
+  };
   const handleSend = async () => {
     try {
       setLoader(true);
@@ -27,12 +43,12 @@ export const Contacts: React.FC = () => {
         email: form.getFieldValue("email"),
         text: form.getFieldValue("nachricht"),
         name: form.getFieldValue("username"),
-        number: form.getFieldValue("prefix") + form.getFieldValue("nummer"),
-        surname: form.getFieldValue("nachname"),
+        number: `+${form.getFieldValue("nummer")}`,
+        surname: form.getFieldValue("nachname")
       };
-      console.log("payload", payload);
+
       const headers = {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       };
       await Post(headers, URL, mailing, true, payload).then(() =>
         formRef.current?.reset()
@@ -45,35 +61,7 @@ export const Contacts: React.FC = () => {
       setLoader(false);
     }
   };
-  const validatePhoneNumber = (_rule: object, value: string): Promise<void> => {
-    //_rule не используется
-    return new Promise((resolve, reject) => {
-      if (value && value.length !== 10) {
-        reject("Phone number must be 10 digits long");
-      } else {
-        resolve();
-      }
-    });
-  };
-  const { Option } = Select;
-  const prefixSelector = (
-    <Form.Item
-      name="prefix"
-      noStyle
-      rules={[
-        {
-          required: true,
-          message: "Bitte wählen Sie den Ländercode",
-        },
-      ]}
-    >
-      <Select style={{ width: 70 }}>
-        {phoneArr.map((item) => {
-          return <Option value={"+" + item.code}>{"+" + item.code}</Option>;
-        })}
-      </Select>
-    </Form.Item>
-  );
+
   return (
     <div className={`py-[10%] px-[5%]  ${loader ? "opacity-50" : ""}`}>
       <div className="flex flex-col justify-center gap-6">
@@ -87,7 +75,11 @@ export const Contacts: React.FC = () => {
               <h2 className="font-italiana text-white text-4xl block lg:hidden mb-10">
                 Kontaktdaten
               </h2>
-              <div className="bg-primary-100 rounded-full w-[120px] h-[120px] mb-4 " />
+              <img
+                className="bg-primary-100 rounded-full w-[120px] h-[120px] mb-4 "
+                src={bioImg}
+              ></img>
+
               <h4 className="font-apple text-center text-base text-white">
                 Calvin Calva
               </h4>
@@ -134,8 +126,8 @@ export const Contacts: React.FC = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihren Namen ein",
-                      },
+                        message: "Bitte geben Sie Ihren Namen ein"
+                      }
                     ]}
                   >
                     <input
@@ -152,8 +144,8 @@ export const Contacts: React.FC = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihren Nachnamen ein",
-                      },
+                        message: "Bitte geben Sie Ihren Nachnamen ein"
+                      }
                     ]}
                   >
                     <input
@@ -173,12 +165,12 @@ export const Contacts: React.FC = () => {
                       {
                         type: "email",
                         message:
-                          "Bitte geben Sie eine gültige Email-Adresse ein",
+                          "Bitte geben Sie eine gültige Email-Adresse ein"
                       },
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihre E-Mail-Adresse ein",
-                      },
+                        message: "Bitte geben Sie Ihre E-Mail-Adresse ein"
+                      }
                     ]}
                   >
                     <input
@@ -194,20 +186,17 @@ export const Contacts: React.FC = () => {
                     label="Handy Nummer"
                     rules={[
                       {
-                        validator: validatePhoneNumber,
-                        message: "Die Zahlenlänge sollte 10 Ziffern betragen",
-                      },
-                      {
                         required: true,
-                        message: "Bitte geben Sie Ihre Nummer ein",
-                      },
+                        message: "Bitte geben Sie Ihre Nummer ein"
+                      }
                     ]}
                   >
-                    <Input
-                      type="number"
-                      maxLength={10}
-                      addonBefore={prefixSelector}
-                      style={{ width: "100%" }}
+                    <PhoneInput
+                      country={"de"}
+                      preferredCountries={["de", "us", "at", "gb"]}
+                      countryCodeEditable={true}
+                      copyNumbersOnly={false}
+                      inputStyle={{ width: "80%" }}
                     />
                   </Form.Item>
                 </div>
@@ -220,8 +209,8 @@ export const Contacts: React.FC = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihre Nachricht ein",
-                      },
+                        message: "Bitte geben Sie Ihre Nachricht ein"
+                      }
                     ]}
                   >
                     <input

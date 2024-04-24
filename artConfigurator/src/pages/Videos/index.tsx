@@ -126,7 +126,6 @@ export const Videos = () => {
               };
               if (!id) {
                 const response = await Post(headers, url, vi, true, formData);
-                console.log(response);
 
                 message.success("Das Video wird auf der Startseite angezeigt");
                 setNewClicked(false);
@@ -140,7 +139,6 @@ export const Videos = () => {
                   true,
                   formData
                 );
-                console.log(response);
 
                 message.success("Das Video wird auf der Startseite angezeigt");
                 setNewClicked(false);
@@ -177,6 +175,7 @@ export const Videos = () => {
           isNew={true}
           data={{} as Video}
           handleSaveClick={handleSaveClick}
+          onCancel={() => setNewClicked(false)}
         />
       )}
       <div className="flex flex-col gap-14">
@@ -188,6 +187,7 @@ export const Videos = () => {
                   isNew={false}
                   data={v}
                   handleSaveClick={handleSaveClick}
+                  onCancel={() => setCurrentEditingId("")}
                 />
               ) : (
                 <div className="flex justify-between px-[5%]">
