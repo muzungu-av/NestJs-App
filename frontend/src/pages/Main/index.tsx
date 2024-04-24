@@ -15,7 +15,7 @@ export const Main: React.FC = () => {
   const BACKEND_API =
     sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
 
-  const [paintings, setPaintings] = useState<any>();
+  const [_paintings, setPaintings] = useState<any>();
 
   const getPictures = async () => {
     try {
@@ -50,8 +50,6 @@ export const Main: React.FC = () => {
       </div>
     );
   };
-
- 
 
   return (
     <MainLayout>

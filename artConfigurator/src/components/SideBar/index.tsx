@@ -9,7 +9,7 @@ interface SideBar {
   buttonRef: any;
 }
 
-const SideBar = ({ setIsClicked, isClicked, buttonRef }: SideBar) => {
+const SideBar = ({ setIsClicked, buttonRef }: SideBar) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
 

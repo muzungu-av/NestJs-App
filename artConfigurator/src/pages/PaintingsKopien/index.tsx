@@ -66,9 +66,9 @@ export const PaintingsKopien = () => {
         {copies &&
           copies.length > 0 &&
           copies.map((v: any, index: number) => {
-            const firstSix = v.copyAttribute.slice(0, 6);
-            const firstThree = firstSix.slice(0, 3);
-            const secondThree = firstSix.slice(3);
+            // const firstSix = v.copyAttribute.slice(0, 6);
+            // const firstThree = firstSix.slice(0, 3);
+            // const secondThree = firstSix.slice(3);
             return (
               <div className="flex my-[5%] " key={index}>
                 <div className="min-w-[30%] lg:w-[20%] max-w-[30%] h-auto">
