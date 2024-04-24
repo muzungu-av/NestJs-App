@@ -49,7 +49,7 @@ export class BioController {
   }
 
   @Delete()
-  deleteVideoById(): boolean {
+  deleteVideoById(): Promise<boolean> {
     winstonLogger.info(`Deleting a Bio`);
     return this.bioService.deleteBio();
   }
