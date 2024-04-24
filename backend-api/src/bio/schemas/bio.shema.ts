@@ -7,10 +7,7 @@ export type BioDocument = Bio & Document;
 @Schema()
 export class Bio {
   @Prop({ required: true })
-  name: string;
-
-  @Prop({ required: true })
-  text: string;
+  text_bio: string;
 
   @Prop({ required: false })
   imgUrl: string;

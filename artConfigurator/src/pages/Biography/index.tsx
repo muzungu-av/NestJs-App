@@ -5,8 +5,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useRef, useState } from "react";
-import { Get, Put } from "../../api/axiosInstance";
-import { useParams } from "react-router-dom";
+import { Get, Post } from "../../api/axiosInstance";
 import { message } from "antd";
 import { Spinner } from "../../components/Spinner";
 
@@ -14,7 +13,6 @@ interface ImageDataStructure {
   body: File | undefined;
   url: string | undefined;
   filename: String | undefined;
-  typeOfImage: string;
 }
 
 export const Biography = () => {
@@ -26,33 +24,28 @@ export const Biography = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
-  const IMG = import.meta?.env?.VITE_API_IMAGE;
+  const bio = import.meta?.env?.VITE_API_BIO;
   const BURL = sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
-  const { uid } = useParams();
+
   useEffect(() => {
     fetchDataFromApi().then((result) => {
-      setEditorData(result.description);
+      setEditorData(result.text_bio);
       setImageData({
         body: undefined,
-        url: result.miniImageUrl,
+        url: result.imgUrl,
         filename: undefined,
-        typeOfImage: result.typeOfImage || "",
       } as ImageDataStructure);
+      setEditorData(result.text_bio);
     });
   }, []);
 
   const fetchDataFromApi = async () => {
     try {
-      const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
-      const response = await Get(
-        undefined,
-        BURL,
-        `${IMG}/${uid}`,
-        false,
-        params
-      );
+      // const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
+      const response = await Get(undefined, BURL, `${bio}`, false);
       return response.data;
     } catch (error) {
+      message.error("Error fetching data from backend");
       console.error("Error fetching data from backend:", error);
       return null;
     }
@@ -64,13 +57,12 @@ export const Biography = () => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      const type = imageData?.typeOfImage || "";
+
       reader.onloadend = () => {
         setImageData({
           body: file,
           url: undefined,
           filename: file.name,
-          typeOfImage: type,
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -89,7 +81,9 @@ export const Biography = () => {
   //   }
   // };
   const checkData = () => {
-    if (!imageData || !imageData?.typeOfImage || !editorData) {
+    console.log("body = " + imageData?.body);
+    console.log("url = " + imageData?.url);
+    if (!imageData || !imageData?.body || !editorData) {
       message.error("Nicht alle Daten sind ausgefüllt");
       return false;
     }
@@ -99,6 +93,20 @@ export const Biography = () => {
     const data = editor.getData();
     setEditorData(data);
   };
+
+  //отмена - просто получим снова и вставим
+  const handleCancelClick = async () => {
+    fetchDataFromApi().then((result) => {
+      setEditorData(result.text_bio);
+      setImageData({
+        body: undefined,
+        url: result.imgUrl,
+        filename: undefined,
+      } as ImageDataStructure);
+      setEditorData(result.text_bio);
+    });
+  };
+
   // отправка данных
   const handleSaveClick = async () => {
     console.log("checkData()", checkData());
@@ -106,20 +114,15 @@ export const Biography = () => {
       try {
         setLoader(true);
 
+        const formData = new FormData();
+        formData.append("text_bio", editorData);
+        if (imageData?.body) {
+          formData.append("file", imageData.body);
+        }
         const headers = {
-          "Content-Type": "application/json",
+          "Content-Type": `multipart/form-data;`,
         };
-        const payload = {
-          description: editorData,
-          typeOfImage: imageData?.typeOfImage,
-        };
-        const response = await Put(
-          headers,
-          BURL,
-          IMG + "/" + uid,
-          true,
-          payload
-        );
+        const response = await Post(headers, BURL, bio, true, formData);
         console.log("response2", response);
         message.success("Gemälde erfolgreich hochgeladen");
         return response.data;
@@ -207,7 +210,9 @@ export const Biography = () => {
               // }}
             />
             <div className="flex justify-end my-4">
-              <button className="btn-primary">abbrechen</button>{" "}
+              <button className="btn-primary" onClick={handleCancelClick}>
+                abbrechen
+              </button>{" "}
               <button onClick={handleSaveClick} className="btn-primary ml-2">
                 speichern
               </button>

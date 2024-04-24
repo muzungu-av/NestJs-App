@@ -1,11 +1,9 @@
 export class CreateBioDto {
-  name: string;
   imgUrl: string;
-  text: string;
+  text_bio: string;
 
-  constructor(name: string, imgUrl: string, text: string) {
-    this.name = name;
+  constructor(imgUrl: string, text_bio: string) {
     this.imgUrl = imgUrl;
-    this.text = text;
+    this.text_bio = text_bio;
   }
 }
