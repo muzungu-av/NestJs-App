@@ -71,7 +71,7 @@ export const PaintingSlider = () => {
             <img
               src={slide.miniImageUrl}
               alt="slide"
-              className="rounded-xl px-4 w-full h-[300px]"
+              className="rounded-xl px-4 w-full h-[100px] sm:h-[200px] lg:h-[300px]"
               onClick={() => navigate(`/painting/${slide.uid}`)}
             />
           </SwiperSlide>

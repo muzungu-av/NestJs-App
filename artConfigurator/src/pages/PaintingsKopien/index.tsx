@@ -65,7 +65,7 @@ export const PaintingsKopien = () => {
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
         {copies &&
           copies.length > 0 &&
-          copies.map((v: any, index: number) => {
+          copies?.map((v: any, index: number) => {
             // const firstSix = v.copyAttribute.slice(0, 6);
             // const firstThree = firstSix.slice(0, 3);
             // const secondThree = firstSix.slice(3);
@@ -77,8 +77,8 @@ export const PaintingsKopien = () => {
                 </div>
                 <div className="flex min-w-[30%] lg:min-w-[20%] mr-4">
                   <div className="flex flex-col w-[50%] mx-4">
-                    {v.copyAttribute
-                      .slice(0, Math.ceil(v.copyAttribute.length / 2))
+                    {v?.copyAttribute
+                      ?.slice(0, Math.ceil(v.copyAttribute.length / 2))
                       .map(
                         (
                           { width, height }: { width: number; height: number },
@@ -95,7 +95,7 @@ export const PaintingsKopien = () => {
                   </div>
                   <div className="flex flex-col w-[50%]  mr-4">
                     {v.copyAttribute
-                      .slice(Math.ceil(v.copyAttribute.length / 2))
+                      ?.slice(Math.ceil(v?.copyAttribute.length / 2))
                       .map(
                         (
                           { width, height }: { width: number; height: number },
@@ -115,8 +115,8 @@ export const PaintingsKopien = () => {
                   <div className=" absolute h-[80%] bg-black w-1 top-0 left-0 "></div>{" "}
                   <div className=" mx-8 self-center h-[80%] font-federo text-xl">
                     {" "}
-                    {v && v.copyAttribute && v.copyAttribute.length} verfügbare
-                    Formate von {v.copyAttribute[0].price}€
+                    {v && v?.copyAttribute && v?.copyAttribute.length}{" "}
+                    verfügbare Formate von {v?.copyAttribute?.[0]?.price}€
                     {v &&
                       v.copyAttribute &&
                       v.copyAttribute.length > 1 &&

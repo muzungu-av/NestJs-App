@@ -8,6 +8,7 @@ import { PaintingSlider } from "../../components/PaintingSlider";
 import { useNavigate, useParams } from "react-router";
 import { Get } from "../../api/axiosInstance";
 import { CreateImageDto } from "../../../types.d";
+import DOMPurify from "dompurify";
 
 export const AboutPainting: React.FC = () => {
   const [paintingData, setPaintingData] = useState<CreateImageDto>();
@@ -37,7 +38,7 @@ export const AboutPainting: React.FC = () => {
   };
   useEffect(() => {
     getPictureById();
-  }, []);
+  }, [id]);
   console.log("paintingData", paintingData);
   const navigate = useNavigate();
 
@@ -112,28 +113,28 @@ export const AboutPainting: React.FC = () => {
                 Wählen Sie Bildgröße
               </p>{" "}
               <div className="grid grid-cols-2 gap-4 justify-start w-[80%]">
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   40 х 60 cm
                 </button>
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   50 х 70 cm
                 </button>
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   60 х 80 cm
                 </button>
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   110 х 133 cm
                 </button>
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   120 х 160 cm
                 </button>{" "}
-                <button className="btn-size w-[100%] h-[54px] text-2xl">
+                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
                   150 х 200 cm
                 </button>
               </div>{" "}
               <div className=" relative py-[10px]">
                 <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
-                <h3 className=" font-federo  text-2xl ml-5">
+                <h3 className=" font-federo text-lg lg:text-2xl ml-5">
                   Gesamtbetrag : 1.230,00€
                 </h3>{" "}
                 <button
@@ -150,12 +151,15 @@ export const AboutPainting: React.FC = () => {
             </div>
           </div>
           <div className="m-[5%]">
-            <p className="  font-federo text-base lg:text-xl m-2">
-              {paintingData?.description}
-            </p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(paintingData?.description || ""),
+              }}
+              className="  font-federo text-base lg:text-xl m-2"
+            ></p>
           </div>
         </div>
-        <div className="font-italiana flex justify-center text-4xl lg:text-[64px] mb-5 ">
+        <div className="font-italiana flex justify-center text-2xl lg:text-4xl lg:text-[64px] mb-5 ">
           Ähnliche Angebote
         </div>
       </>
