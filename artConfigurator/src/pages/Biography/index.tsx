@@ -1,6 +1,5 @@
 import elipse from "../../assets/images/Ellipse.png";
 import addPhoto from "./../../assets/images/Add_photo.png";
-// import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
@@ -41,7 +40,6 @@ export const Biography = () => {
 
   const fetchDataFromApi = async () => {
     try {
-      // const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
       const response = await Get(undefined, BURL, `${bio}`, false);
       return response.data;
     } catch (error) {
@@ -68,18 +66,7 @@ export const Biography = () => {
       reader.readAsDataURL(file);
     }
   };
-  // console.log("imageData", imageData);
-  // const handleDeletePhoto = () => {
-  //   const confirmation = window.confirm(
-  //     "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
-  //   );
-  //   if (confirmation) {
-  //     setImageData(undefined); //если удалили фото - удаляем все данные о нем
-  //     if (fileInputRef.current) {
-  //       fileInputRef.current.value = ""; // Сбрасываем значение input, чтобы можно было заново выбрать тот же файл
-  //     }
-  //   }
-  // };
+
   const checkData = () => {
     console.log("body = " + imageData?.body);
     console.log("url = " + imageData?.url);
@@ -94,7 +81,6 @@ export const Biography = () => {
     setEditorData(data);
   };
 
-  //отмена - просто получим снова и вставим
   const handleCancelClick = async () => {
     fetchDataFromApi().then((result) => {
       setEditorData(result.text_bio);
@@ -107,7 +93,6 @@ export const Biography = () => {
     });
   };
 
-  // отправка данных
   const handleSaveClick = async () => {
     console.log("checkData()", checkData());
     if (checkData()) {
@@ -141,7 +126,6 @@ export const Biography = () => {
     img_resource = imageData.url;
   }
   const handleTextClick = () => {
-    // При клике на текст "Foto ändern" вызываем клик на скрытый input
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -150,7 +134,7 @@ export const Biography = () => {
     <>
       <MainLayout>
         {loader && <Spinner />}
-        <div className="font-italiana text-5xl mx-[5%] my-[2%]">
+        <div className="font-italiana text-5xl px-[5%] my-[2%]">
           Bearbeiten der Biografie Seite
         </div>
         <div
@@ -169,7 +153,6 @@ export const Biography = () => {
                 />
               </label>
             </div>
-            {/* <img className="mb-2" /> */}
             <div
               onClick={handleTextClick}
               className="w-[100%] flex justify-center m-2 cursor-pointer "
@@ -184,14 +167,8 @@ export const Biography = () => {
               />{" "}
               <img src={addPhoto} /> Foto ändern
             </div>{" "}
-            {/* <button
-              onClick={handleDeletePhoto}
-              className="w-[100%] flex justify-center m-2"
-            >
-              <img src={deletePhoto} /> Foto löschen
-            </button> */}
           </div>{" "}
-          <div className="w-[60%]">
+          <div className="w-[60%] px-[5%]">
             <div className="font-federo text-3xl mb-4">Beschreibung</div>
             <CKEditor
               editor={ClassicEditor}
@@ -202,12 +179,6 @@ export const Biography = () => {
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);
               }}
-              // onBlur={(event, editor) => {
-              //   console.log("Blur.", editor);
-              // }}
-              // onFocus={(event, editor) => {
-              //   console.log("Focus.", editor);
-              // }}
             />
             <div className="flex justify-end my-4">
               <button className="btn-primary" onClick={handleCancelClick}>

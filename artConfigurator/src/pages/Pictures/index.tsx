@@ -60,7 +60,7 @@ const PicSection: React.FC<PicSectionProps> = ({
     <div className="flex justify-between gap-8 py-[5%]">
       <img
         src={miniImageUrl}
-        className="max-w-[90%] h-full lg:max-w-[100%] min-w-[300px]"
+        className="max-w-[90%] h-full lg:max-w-[100%] min-w-[300px] max-h-[400px]"
       />
       <div
         data-tooltip={sanitizedDescription}
@@ -168,7 +168,7 @@ export const Pictures = () => {
         }
       },
 
-      onCancel() {}
+      onCancel() {},
     });
   };
 
