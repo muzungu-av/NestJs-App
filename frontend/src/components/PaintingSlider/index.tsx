@@ -19,10 +19,19 @@ export const PaintingSlider = () => {
   const [paintings, setPaintings] = useState<Paintings>([
     { miniImageUrl: "", uid: "" },
   ]);
-
+  const params = {
+    typeOfImage: "isCopy",
+    fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
+  };
   const getPictures = async () => {
     try {
-      const response = await Get(undefined, BACKEND_API, `${ai}/`, false);
+      const response = await Get(
+        undefined,
+        BACKEND_API,
+        `${ai}/type/`,
+        false,
+        params
+      );
       setPaintings(
         response.data.filter((item: any) => item.typeOfImage === "isCopy")
       );
@@ -48,7 +57,7 @@ export const PaintingSlider = () => {
     sliderRef?.current?.swiper.slideNext();
   }, []);
 
-  return paintings.length !== 0 ? (
+  return paintings.length >= 4 ? (
     <div className="px-6 py-[5%] relative my-6">
       <Swiper
         ref={sliderRef}

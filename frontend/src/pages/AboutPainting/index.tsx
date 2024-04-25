@@ -12,6 +12,7 @@ import DOMPurify from "dompurify";
 
 export const AboutPainting: React.FC = () => {
   const [paintingData, setPaintingData] = useState<CreateImageDto>();
+  const [totalSum, setTotalSum] = useState<number>(0);
   const objPaint = {
     img: boatPic,
     isLandscape: false,
@@ -20,16 +21,43 @@ export const AboutPainting: React.FC = () => {
       { img: mini2, isMain: false },
     ],
   };
+  interface PaintingItem {
+    price: number;
+    width: number;
+    height: number;
+  }
+  const minPrice = paintingData?.copyAttribute?.length
+    ? paintingData.copyAttribute
+        .filter((item: PaintingItem) => item.price)
+        .sort((a: PaintingItem, b: PaintingItem) => a.price - b.price)?.[0]
+        .price
+    : undefined;
+  const maxPrice = paintingData?.copyAttribute?.length
+    ? paintingData.copyAttribute
+        .filter((item: PaintingItem) => item.price)
+        .sort((a: PaintingItem, b: PaintingItem) => b.price - a.price)?.[0]
+        .price
+    : undefined;
 
   const sc = import.meta?.env?.VITE_SCHEME;
   const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
   const ai = import.meta?.env?.VITE_API_IMAGE;
   const { id } = useParams();
+  const params = {
+    typeOfImage: "isCopy",
+    fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
+  };
   const BACKEND_API =
     sc && bu ? `${sc}://${bu}` : "http://localhost-default:9000";
   const getPictureById = async () => {
     try {
-      const response = await Get(undefined, BACKEND_API, `${ai}/${id}`, false);
+      const response = await Get(
+        undefined,
+        BACKEND_API,
+        `${ai}/type/${id}`,
+        false,
+        params
+      );
       setPaintingData(response.data);
       console.log("image", response.data);
     } catch (error) {
@@ -38,6 +66,7 @@ export const AboutPainting: React.FC = () => {
   };
   useEffect(() => {
     getPictureById();
+    setTotalSum(0);
   }, [id]);
   console.log("paintingData", paintingData);
   const navigate = useNavigate();
@@ -55,7 +84,6 @@ export const AboutPainting: React.FC = () => {
           <div className="flex lg:flex-row flex-col gap-[40px] px-[5%]">
             <div className=" lg:w-[60%]">
               <div className={objPaint.isLandscape ? "" : "flex flex-row"}>
-                {/*Main pic */}
                 <div
                   className={
                     objPaint.isLandscape
@@ -77,7 +105,7 @@ export const AboutPainting: React.FC = () => {
                     }
                   />
                 </div>
-                {/*Two min */}{" "}
+
                 <div
                   className={
                     objPaint.isLandscape
@@ -103,39 +131,33 @@ export const AboutPainting: React.FC = () => {
               <div className=" relative py-[15px]">
                 <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
                 <h3 className=" lg:text-2xl text-base font-federo ml-3">
-                  6 verfügbare Formate{" "}
+                  {paintingData?.copyAttribute?.length || "0"} verfügbare
+                  Formate{" "}
                 </h3>{" "}
                 <h3 className=" lg:text-2xl text-base  font-federo ml-3">
-                  von 99,00€ bis 4.700,00€
+                  von {minPrice} € bis {maxPrice} €
                 </h3>
               </div>
               <p className="lg:text-2xl text-xl flex flex-nowrap font-federo">
                 Wählen Sie Bildgröße
               </p>{" "}
               <div className="grid grid-cols-2 gap-4 justify-start w-[80%]">
-                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
-                  40 х 60 cm
-                </button>
-                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
-                  50 х 70 cm
-                </button>
-                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
-                  60 х 80 cm
-                </button>
-                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
-                  110 х 133 cm
-                </button>
-                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
-                  120 х 160 cm
-                </button>{" "}
-                <button className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl">
-                  150 х 200 cm
-                </button>
+                {paintingData?.copyAttribute.map(
+                  (item: PaintingItem, index: number) => (
+                    <button
+                      onClick={() => setTotalSum(item.price)}
+                      key={index}
+                      className="btn-size w-[100%] h-[54px] text-lg lg:text-2xl"
+                    >
+                      {item.width} x {item.height} cm
+                    </button>
+                  )
+                )}
               </div>{" "}
               <div className=" relative py-[10px]">
                 <div className=" absolute h-full bg-black w-1 top-0 left-0 "></div>{" "}
                 <h3 className=" font-federo text-lg lg:text-2xl ml-5">
-                  Gesamtbetrag : 1.230,00€
+                  Gesamtbetrag : {totalSum} €
                 </h3>{" "}
                 <button
                   onClick={() => navigate("/contacts")}

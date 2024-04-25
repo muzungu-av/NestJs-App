@@ -155,8 +155,6 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
 
     return (
       <>
-        {" "}
-        (
         {!!videos.length && (
           <div className=" flex flex-col gap-6">
             {videos.map((v) => {
@@ -170,7 +168,6 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
             })}
           </div>
         )}
-        );
       </>
     );
   };

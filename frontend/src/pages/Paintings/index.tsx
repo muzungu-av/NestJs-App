@@ -72,6 +72,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
   };
   useEffect(() => {
     getPictures();
+    console.log("paintings", paintings);
   }, [location.pathname]);
 
   return (
