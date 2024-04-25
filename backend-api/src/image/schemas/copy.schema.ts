@@ -49,6 +49,9 @@ export class Copy {
 
   @Prop({ type: MongooseSchema.Types.Mixed, required: true })
   copyAttribute: CopyAttribute[];
+
+  @Prop({ required: true })
+  name: string;
 }
 
 export const CopySchema = SchemaFactory.createForClass(Copy);

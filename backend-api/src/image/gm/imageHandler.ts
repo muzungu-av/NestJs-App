@@ -27,6 +27,7 @@ export interface ImgFileProcessingResult {
   errorMessage?: string;
   owner: User;
   dimension?: AllDimension;
+  name?: string;
 }
 
 @Injectable()

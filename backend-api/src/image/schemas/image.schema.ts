@@ -45,6 +45,9 @@ export class Image {
 
   @Prop({ type: MongooseSchema.Types.Mixed, required: false })
   dimension: AllDimension;
+
+  @Prop({ required: true })
+  name: string;
 }
 
 export const ImageSchema = SchemaFactory.createForClass(Image);

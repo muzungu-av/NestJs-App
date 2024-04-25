@@ -24,6 +24,7 @@ interface ImageDataStructure {
   url: string | undefined;
   filename: String | undefined;
   typeOfImage: string;
+  name?: string;
 }
 
 const type_A = "isAtelier";
@@ -36,7 +37,9 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   //Photo
   const fetchDataFromApi = async () => {
     try {
-      const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
+      const params = {
+        fields: "uid,miniImageUrl,description,typeOfImage,name"
+      };
       const response = await Get(
         undefined,
         BURL,
@@ -58,6 +61,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   useEffect(() => {
     fetchDataFromApi().then((result) => {
       setEditorData(result.description);
+      setEditorDataName(result.name);
       setImageData({
         body: undefined,
         url: result.miniImageUrl,
@@ -103,12 +107,15 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   const default_text = "Geben Sie eine Beschreibung in dieses Feld ein...";
 
   const [editorData, setEditorData] = useState(default_text);
-
+  const [editorDataName, setEditorDataName] = useState("");
   const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData();
     setEditorData(data);
   };
-
+  const handleEditorNameChange = (_event: any, editor: any) => {
+    const data = editor.getData();
+    setEditorDataName(data);
+  };
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setImageData((prevImageData) => {
@@ -129,12 +136,18 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   const handleCancel = () => {
     navigate("/painting_list");
     setEditorData(default_text);
+    setEditorDataName("");
     setImageData(undefined);
   };
 
   // Проверка наличия необходимых данных
   const checkData = () => {
-    if (!imageData || !imageData.typeOfImage || !editorData) {
+    if (
+      !imageData ||
+      !imageData.typeOfImage ||
+      !editorData ||
+      !editorDataName
+    ) {
       message.error("Nicht alle Daten sind ausgefüllt");
       return false;
     }
@@ -149,6 +162,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         if (!isEditMode) {
           const formData = new FormData();
           formData.append("description", editorData);
+          formData.append("name", editorDataName);
           formData.append("typeOfImage", imageData!.typeOfImage);
           if (imageData?.body) {
             formData.append("file", imageData.body);
@@ -156,12 +170,14 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           const headers = {
             "Content-Type": `multipart/form-data;`
           };
+
           const response = await Post(headers, BURL, IMG, true, formData);
           message.success("Gemälde erfolgreich hochgeladen");
           return response.data;
         } else {
           const formData = new FormData();
           formData.append("description", editorData);
+          formData.append("name", editorDataName);
           formData.append("typeOfImage", imageData!.typeOfImage);
           if (imageData?.body) {
             formData.append("file", imageData.body);
@@ -206,7 +222,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
     <MainLayout>
       {loader && <Spinner />}
       <div className="font-italiana text-5xl mx-[5%] my-[2%]">
-        Bearbeiten der Gemälde Seite111
+        Bearbeiten der Gemälde Seite
       </div>
       <div
         className={`flex gap-6 justify-around m-[5%] ${
@@ -227,7 +243,18 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           </button>
         </div>{" "}
         <div className="w-[60%]">
-          <div className="font-federo text-3xl mb-4">Beschreibung</div>
+          <div className="font-federo text-3xl mb-4">Bildname</div>
+          <CKEditor
+            editor={ClassicEditor}
+            data={editorDataName}
+            config={{
+              toolbar: []
+            }}
+            onChange={(event: any, editor: any) => {
+              handleEditorNameChange(event, editor);
+            }}
+          />
+          <div className="font-federo text-3xl my-4">Beschreibung</div>
           <CKEditor
             editor={ClassicEditor}
             data={editorData}

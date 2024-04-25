@@ -27,7 +27,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       {isLoader ? (
         <Spinner />
       ) : (
-        <div className="w-[75%] relative left-[25%]">{children}</div>
+        <div className="w-[75%] relative left-[25%] mb-20">{children}</div>
       )}
     </>
   );

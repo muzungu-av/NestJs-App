@@ -35,18 +35,18 @@ interface CopyData {
 }
 
 export const AddingEditingKopien = ({
-  isEditMode,
+  isEditMode
 }: AddingEditingKopienProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sizes, setSizes] = useState<CopyData[]>([]);
 
   const { uid } = useParams();
-  console.log(isEditMode);
+
   const fetchDataFromApi = async () => {
     try {
       const params = {
         typeOfImage: "isCopy",
-        fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
+        fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute,name"
       };
       const response = await Get(
         undefined,
@@ -69,7 +69,7 @@ export const AddingEditingKopien = ({
           body: undefined,
           url: result.miniImageUrl,
           filename: undefined,
-          typeOfImage: result.typeOfImage || "",
+          typeOfImage: result.typeOfImage || ""
         } as ImageDataStructure);
 
         if (result && result.copyAttribute) {
@@ -77,6 +77,9 @@ export const AddingEditingKopien = ({
         }
         if (result && result.description) {
           setEditorData(result.description);
+        }
+        if (result && result.name) {
+          setEditorDataName(result.name);
         }
       });
       imgUpd();
@@ -102,7 +105,7 @@ export const AddingEditingKopien = ({
   ) => {
     setCurrentRow((prevState: any) => ({
       ...prevState,
-      [field]: value,
+      [field]: value
     }));
   };
 
@@ -143,7 +146,7 @@ export const AddingEditingKopien = ({
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name,
+          filename: file.name
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -154,12 +157,15 @@ export const AddingEditingKopien = ({
   const default_text = "Geben Sie eine Beschreibung in dieses Feld ein...";
 
   const [editorData, setEditorData] = useState(default_text);
-
+  const [editorDataName, setEditorDataName] = useState(default_text);
   const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData();
     setEditorData(data);
   };
-
+  const handleEditorChangeName = (_event: any, editor: any) => {
+    const data = editor.getData();
+    setEditorDataName(data);
+  };
   // очистить контент
   const handleClearContent = () => {
     navigate("/copy_paintings");
@@ -170,7 +176,7 @@ export const AddingEditingKopien = ({
 
   enum HttpMethod {
     POST,
-    PUT,
+    PUT
   }
 
   interface ExChanges {
@@ -178,6 +184,7 @@ export const AddingEditingKopien = ({
     method: HttpMethod | undefined;
     imgFile: Partial<ImageDataStructure>;
     text: string | undefined;
+    name: string | undefined;
     sizes: CopyData[] | undefined;
   }
 
@@ -189,7 +196,9 @@ export const AddingEditingKopien = ({
       imgFile: { body: undefined, filename: undefined },
       text: undefined,
       sizes: undefined,
+      name: undefined
     };
+
     // режим добавления - должны быть все данные: файл(body), текст, размеры-цены
     if (!isEditMode) {
       if (
@@ -197,15 +206,16 @@ export const AddingEditingKopien = ({
         sizes.length > 0 &&
         imageData &&
         imageData.body &&
-        editorData
+        editorData &&
+        editorDataName
       ) {
         ex.method = HttpMethod.POST;
         ex.imgFile = { body: imageData.body, filename: imageData.filename };
         ex.text = editorData;
+        ex.name = editorDataName;
         ex.result = true;
         ex.sizes = sizes;
-        console.log("POST");
-        console.log(JSON.stringify(ex));
+
         return ex;
       }
     } else {
@@ -213,9 +223,9 @@ export const AddingEditingKopien = ({
       if (
         (sizes && sizes.length > 0) ||
         (imageData && imageData.body) ||
-        editorData
+        editorData ||
+        editorDataName
       ) {
-        console.log("PUT");
         ex.method = HttpMethod.PUT;
         if (imageData && imageData.body) {
           ex.imgFile = { body: imageData.body, filename: imageData.filename };
@@ -223,11 +233,14 @@ export const AddingEditingKopien = ({
         if (editorData) {
           ex.text = editorData;
         }
+        if (editorDataName) {
+          ex.name = editorDataName;
+        }
         if (sizes && sizes.length > 0) {
           ex.sizes = sizes;
         }
         ex.result = true;
-        console.log(JSON.stringify(ex));
+
         return ex;
       }
     }
@@ -250,6 +263,9 @@ export const AddingEditingKopien = ({
       if (newData.text) {
         formData.append("description", editorData);
       }
+      if (newData.name) {
+        formData.append("name", editorDataName);
+      }
       if (newData.sizes) {
         formData.append("sizes", JSON.stringify(sizes));
       }
@@ -258,9 +274,11 @@ export const AddingEditingKopien = ({
         formData.append("fileName", newData.imgFile.filename as string);
       }
       formData.append("typeOfImage", "isCopy");
+
       const headers = {
-        "Content-Type": `multipart/form-data;`,
+        "Content-Type": `multipart/form-data;`
       };
+
       let response;
       if (newData.method == HttpMethod.POST) {
         response = await Post(headers, url, cp, true, formData);
@@ -295,7 +313,7 @@ export const AddingEditingKopien = ({
       const newSize = {
         width: parseFloat(refWidth.current.value),
         height: parseFloat(refHeigth.current.value),
-        price: parseFloat(refPrice.current.value),
+        price: parseFloat(refPrice.current.value)
       };
       setSizes((prevSizes) => [...prevSizes, newSize]);
       refPrice.current.value = "";
@@ -526,13 +544,24 @@ export const AddingEditingKopien = ({
                   </div>
                 </div>
               </form>
-            </div>
-            <div className="font-federo text-3xl mb-4">Beschreibung</div>
+            </div>{" "}
+            <div className="font-federo text-3xl mb-4">Bildname</div>
+            <CKEditor
+              editor={ClassicEditor}
+              data={editorDataName}
+              config={{
+                toolbar: []
+              }}
+              onChange={(event: any, editor: any) => {
+                handleEditorChangeName(event, editor);
+              }}
+            />
+            <div className="font-federo text-3xl my-4">Beschreibung</div>
             <CKEditor
               editor={ClassicEditor}
               data={editorData}
               config={{
-                toolbar: [],
+                toolbar: []
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);

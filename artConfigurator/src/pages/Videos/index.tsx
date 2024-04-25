@@ -184,23 +184,30 @@ export const Videos = () => {
                   onCancel={() => setCurrentEditingId("")}
                 />
               ) : (
-                <div className="flex justify-between px-[5%]">
+                <div className="flex justify-between px-[5%] items-center">
                   {" "}
-                  <img src={v.imgUrl !== undefined ? v.imgUrl : Empty} />
-                  <div className="flex flex-col gap-6 ">
+                  <div className="w-[30%] flex items-center">
+                    <img
+                      src={v.imgUrl !== undefined ? v.imgUrl : Empty}
+                      className=" h-auto w-full"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-6 m-8 w-[40%]">
                     <p className="text-xl">{v.name}</p>
-                    <p className="text-base">Link:{v.link}</p>
+                    <a href={v.link} className="text-base">
+                      Link:{v.link}
+                    </a>
                     <p className="text-base">Description:{v.description}</p>
                   </div>
-                  <div className="self-end">
+                  <div className=" lg:flex-row flex-col self-end">
                     <button
-                      className="btn-primary w-[130px] h-[45px]"
+                      className="btn-primary w-[130px] h-[45px] mr-2"
                       onClick={() => handleEditClick(v._id)}
                     >
                       ändern {/*Change*/}
                     </button>
                     <button
-                      className="btn-primary w-[130px] h-[45px] ml-2"
+                      className="btn-primary w-[130px] h-[45px]  my-4"
                       onClick={() => handleDeleteClick(v)}
                     >
                       löschen {/*Delete*/}

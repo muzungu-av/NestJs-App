@@ -6,11 +6,13 @@ export const OnePaintingSection = ({
   text,
   imgURL,
   id,
+  name,
   onClick
 }: {
   text: string;
   imgURL: any;
   id: string;
+  name: string;
   onClick: any;
 }) => {
   function stripHtmlTags(html: string) {
@@ -29,9 +31,10 @@ export const OnePaintingSection = ({
           />
         </div>
         <div className="h-auto relative flex flex-col gap-6 w-[60%]">
-          <div className="font-['Italiana'] lg:text-2xl text-base">
-            Bildname
-          </div>{" "}
+          <div
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(name) }}
+            className="font-['Italiana'] lg:text-2xl text-base font-bold"
+          ></div>
           <p
             title={stripHtmlTags(text)}
             style={{}}

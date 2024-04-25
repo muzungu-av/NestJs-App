@@ -50,6 +50,7 @@ export class ImageController {
     @UploadedFile() file: Express.Multer.File,
     @Body('description') description: string,
     @Body('typeOfImage') typeOfImage: string,
+    @Body('name') name: string,
     @Req() request: any,
     @Res() response: any,
   ) {
@@ -63,6 +64,7 @@ export class ImageController {
         file,
         description,
         typeOfImage,
+        name,
         null,
       );
       return response.status(201).json({ uid: result.uid });
@@ -201,6 +203,7 @@ export class ImageController {
     @Param('uid') uid: string, // Получаем параметр uid из URL
     @Body('description') description: string,
     @Body('typeOfImage') typeOfImage: string,
+    @Body('name') name: string,
     @Body('fileName') fileName: string,
     @Req() request: any,
     @Res() response: any,
@@ -214,6 +217,7 @@ export class ImageController {
       const result = await this.imageService.updateFile(
         uid,
         description,
+        name,
         typeOfImage,
         file,
         fileName,
@@ -242,6 +246,7 @@ export class ImageController {
     @UploadedFile() file: Express.Multer.File,
     @Body('description') description: string,
     @Body('sizes') sizes: string,
+    @Body('name') name: string,
     @Req() request: any,
     @Res() response: any,
   ) {
@@ -255,6 +260,7 @@ export class ImageController {
         file,
         description,
         'isCopy',
+        name,
         sizes,
       );
       return response.status(201).json({ uid: result.uid });
@@ -270,6 +276,7 @@ export class ImageController {
     @UploadedFile() file: Express.Multer.File,
     @Param('uid') uid: string, // Получаем параметр uid из URL
     @Body('description') description: string,
+    @Body('name') name: string,
     @Body('typeOfImage') typeOfImage: string,
     @Body('fileName') fileName: string,
     @Body('sizes') sizes: string,
@@ -284,6 +291,7 @@ export class ImageController {
       const result = await this.imageService.updateFile(
         uid,
         description,
+        name,
         typeOfImage,
         file,
         fileName,

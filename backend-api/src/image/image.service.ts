@@ -240,6 +240,7 @@ export class ImageService {
     file: Express.Multer.File,
     description: string,
     typeOfImage: string,
+    name: string,
     size: string,
   ): Promise<ImgFileProcessingResult> {
     return new Promise((resolve, reject) => {
@@ -250,6 +251,7 @@ export class ImageService {
             // save to mongo
             result.description = description;
             result.typeOfImage = typeOfImage;
+            result.name = name;
             try {
               if (typeOfImage === 'isCopy') {
                 const createCopyDto = new CreateCopyDto(
@@ -435,6 +437,7 @@ export class ImageService {
   async updateFile(
     uid: string,
     description: string,
+    name: string,
     typeOfImage: string,
     file: Express.Multer.File,
     prevfileName: string,
@@ -452,6 +455,7 @@ export class ImageService {
     winstonLogger.info(`User ${userId} updates image ${uid}`);
     winstonLogger.info(`description - ${description}`);
     winstonLogger.info(`typeOfImage - ${typeOfImage}`);
+    winstonLogger.info(`name - ${name}`);
     if (sizes) {
       winstonLogger.info(`sizes - ${JSON.parse(sizes)}`);
     }
@@ -499,7 +503,7 @@ export class ImageService {
       }
       updatedData['description'] = description;
       updatedData['typeOfImage'] = typeOfImage;
-
+      updatedData['name'] = name;
       if (typeOfImage === 'isCopy' && sizes) {
         updatedData['copyAttribute'] = JSON.parse(sizes);
         await this.updateImage<Copy>(this.copyModel, uid, updatedData);
