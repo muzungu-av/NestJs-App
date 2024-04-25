@@ -27,16 +27,21 @@ export const AboutPainting: React.FC = () => {
     height: number;
   }
   const minPrice = paintingData?.copyAttribute?.length
-    ? paintingData.copyAttribute
-        .filter((item: PaintingItem) => item.price)
-        .sort((a: PaintingItem, b: PaintingItem) => a.price - b.price)?.[0]
-        .price
+    ? (
+        paintingData.copyAttribute.filter(
+          (item: PaintingItem) => item.price !== undefined
+        ) as PaintingItem[]
+      ).sort((a: PaintingItem, b: PaintingItem) => a.price - b.price)?.[0]
+        ?.price
     : undefined;
+
   const maxPrice = paintingData?.copyAttribute?.length
-    ? paintingData.copyAttribute
-        .filter((item: PaintingItem) => item.price)
-        .sort((a: PaintingItem, b: PaintingItem) => b.price - a.price)?.[0]
-        .price
+    ? (
+        paintingData.copyAttribute.filter(
+          (item: PaintingItem) => item.price !== undefined
+        ) as PaintingItem[]
+      ).sort((a: PaintingItem, b: PaintingItem) => b.price - a.price)?.[0]
+        ?.price
     : undefined;
 
   const sc = import.meta?.env?.VITE_SCHEME;
