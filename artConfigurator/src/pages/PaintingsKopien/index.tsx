@@ -73,7 +73,7 @@ export const PaintingsKopien = () => {
               <div className="flex my-[5%] " key={index}>
                 <div className="min-w-[30%] lg:w-[20%] max-w-[30%] h-auto">
                   {" "}
-                  <img src={v.miniImageUrl} className="w-full" />
+                  <img src={v.miniImageUrl} className="w-full max-h-[400px]" />
                 </div>
                 <div className="flex min-w-[35%] lg:min-w-[30%] mr-4">
                   <div className="flex flex-col w-[50%] mx-4">

@@ -119,7 +119,7 @@ export const Contacts: React.FC = () => {
               }`}
             >
               <div className="flex gap-10 flex-col lg:flex-row">
-                <div className="flex flex-col w-[50%]">
+                <div className="flex flex-col lg:w-[50%]">
                   <Form.Item
                     name="username"
                     label="Name"
@@ -137,7 +137,7 @@ export const Contacts: React.FC = () => {
                     ></input>
                   </Form.Item>
                 </div>
-                <div className="flex flex-col w-[50%]">
+                <div className="flex flex-col lg:w-[50%]">
                   <Form.Item
                     name="nachname"
                     label="Nachname"
