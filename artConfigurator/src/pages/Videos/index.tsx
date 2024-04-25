@@ -125,22 +125,14 @@ export const Videos = () => {
                 "Content-Type": `multipart/form-data;`
               };
               if (!id) {
-                const response = await Post(headers, url, vi, true, formData);
-                console.log(response);
+                await Post(headers, url, vi, true, formData);
 
                 message.success("Das Video wird auf der Startseite angezeigt");
                 setNewClicked(false);
                 setCurrentEditingId("");
                 fetchData();
               } else {
-                const response = await Put(
-                  headers,
-                  url,
-                  vi + "/" + id,
-                  true,
-                  formData
-                );
-                console.log(response);
+                await Put(headers, url, vi + "/" + id, true, formData);
 
                 message.success("Das Video wird auf der Startseite angezeigt");
                 setNewClicked(false);
@@ -177,6 +169,7 @@ export const Videos = () => {
           isNew={true}
           data={{} as Video}
           handleSaveClick={handleSaveClick}
+          onCancel={() => setNewClicked(false)}
         />
       )}
       <div className="flex flex-col gap-14">
@@ -188,6 +181,7 @@ export const Videos = () => {
                   isNew={false}
                   data={v}
                   handleSaveClick={handleSaveClick}
+                  onCancel={() => setCurrentEditingId("")}
                 />
               ) : (
                 <div className="flex justify-between px-[5%]">
