@@ -13,6 +13,7 @@ export interface User {
 }
 interface CreateImageDto {
   uid: string;
+  name: string;
   originalName: string;
   fileName: string;
   path: string;

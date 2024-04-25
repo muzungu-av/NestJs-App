@@ -79,7 +79,7 @@ export const AboutPainting: React.FC = () => {
             Kopien der Gemälde
           </div>{" "}
           <div className=" flex justify-center font-italiana text-2xl lg:text-2xl p-10">
-            {paintingData?.originalName}
+            {paintingData?.name}
           </div>
           <div className="flex lg:flex-row flex-col gap-[40px] px-[5%]">
             <div className=" lg:w-[60%]">
