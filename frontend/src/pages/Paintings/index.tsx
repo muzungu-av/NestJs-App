@@ -7,6 +7,7 @@ import { OnePaintingSection } from "./oneSection";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { message } from "antd";
+
 interface PaintingsProps {
   pageType: "Gemälde" | "Atelier" | "Kopien";
 }
@@ -47,16 +48,12 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
 
       if (pageType === "Gemälde") {
         setPaintings(
-          diffResponse.data.filter(
-            (item: any) => item.typeOfImage === "isPainting"
-          )
+          diffResponse.data.filter((item: any) => item.typeOfImage === type_P)
         );
       }
       if (pageType === "Atelier") {
         setPaintings(
-          diffResponse.data.filter(
-            (item: any) => item.typeOfImage === "isAtelier"
-          )
+          diffResponse.data.filter((item: any) => item.typeOfImage === type_A)
         );
       }
       if (pageType === "Kopien") {

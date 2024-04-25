@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Put, Get, Post } from "../../api/axiosInstance";
 import { useNavigate, useParams } from "react-router-dom";
 import { Spinner } from "../../components/Spinner";
+import { type_A, type_P } from "../../types/type.d";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -25,9 +26,6 @@ interface ImageDataStructure {
   filename: String | undefined;
   typeOfImage: string;
 }
-
-const type_A = "isAtelier";
-const type_P = "isPainting";
 
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   const [loader, setLoader] = useState<boolean>(false);
@@ -62,7 +60,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         body: undefined,
         url: result.miniImageUrl,
         filename: undefined,
-        typeOfImage: result.typeOfImage || ""
+        typeOfImage: result.typeOfImage || "",
       } as ImageDataStructure);
     });
   }, []);
@@ -79,7 +77,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           body: file,
           url: undefined,
           filename: file.name,
-          typeOfImage: type
+          typeOfImage: type,
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -119,7 +117,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           typeOfImage: value,
           body: undefined,
           url: undefined,
-          filename: undefined
+          filename: undefined,
         };
       }
     });
@@ -154,7 +152,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             formData.append("file", imageData.body);
           }
           const headers = {
-            "Content-Type": `multipart/form-data;`
+            "Content-Type": `multipart/form-data;`,
           };
           const response = await Post(headers, BURL, IMG, true, formData);
           message.success("Gemälde erfolgreich hochgeladen");
@@ -168,7 +166,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           }
 
           const headers = {
-            "Content-Type": `multipart/form-data;`
+            "Content-Type": `multipart/form-data;`,
           };
 
           const response = await Put(
@@ -232,7 +230,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             editor={ClassicEditor}
             data={editorData}
             config={{
-              toolbar: []
+              toolbar: [],
             }}
             onChange={(event: any, editor: any) => {
               handleEditorChange(event, editor);
@@ -254,7 +252,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                 <input
                   id="default-radio-1"
                   type="radio"
-                  checked={imageData?.typeOfImage === "isPainting"}
+                  checked={imageData?.typeOfImage === type_P}
                   value={type_P}
                   name="default-radio"
                   onChange={handleRadioChange}
@@ -271,7 +269,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
                 <input
                   id="default-radio-2"
                   type="radio"
-                  checked={imageData?.typeOfImage === "isAtelier"}
+                  checked={imageData?.typeOfImage === type_A}
                   value={type_A}
                   name="default-radio"
                   onChange={handleRadioChange}

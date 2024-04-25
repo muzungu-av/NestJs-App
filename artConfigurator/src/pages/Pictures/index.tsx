@@ -6,6 +6,8 @@ import DOMPurify from "dompurify";
 import { Modal, message } from "antd";
 import { Spinner } from "../../components/Spinner";
 import styles from "./style.module.scss";
+import { type_A, type_P } from "../../types/type.d";
+
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
 const img = import.meta?.env?.VITE_API_IMAGE;
@@ -29,10 +31,13 @@ const PicSection: React.FC<PicSectionProps> = ({
   handleDeleteClick,
 }) => {
   const [loader, setLoader] = useState(false);
+
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    console.log("handleRadioChange>>" + value + "<<");
     handleSaveClick(value);
   };
+
   const handleSaveClick = async (typeOfImage: string) => {
     try {
       setLoader(true);
@@ -43,6 +48,7 @@ const PicSection: React.FC<PicSectionProps> = ({
         description: description,
         typeOfImage: typeOfImage,
       };
+      console.log("PUT>>" + typeOfImage + "<<");
       const response = await Put(headers, url, img + "/" + uid, true, payload);
 
       message.success("Gemälde erfolgreich hochgeladen");
@@ -78,8 +84,8 @@ const PicSection: React.FC<PicSectionProps> = ({
                   onChange={handleRadioChange}
                   id={groupName + "_P"}
                   type="radio"
-                  value=""
-                  defaultChecked={typeOfImage === "isPainting"}
+                  value={type_P}
+                  defaultChecked={typeOfImage === type_P}
                   name={groupName}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -95,9 +101,9 @@ const PicSection: React.FC<PicSectionProps> = ({
                   onChange={handleRadioChange}
                   id={groupName + "_A"}
                   type="radio"
-                  value=""
+                  value={type_A}
                   name={groupName}
-                  defaultChecked={typeOfImage === "isAtelier"}
+                  defaultChecked={typeOfImage === type_A}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
