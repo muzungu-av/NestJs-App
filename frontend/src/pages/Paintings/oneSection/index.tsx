@@ -7,7 +7,7 @@ export const OnePaintingSection = ({
   imgURL,
   id,
   name,
-  onClick
+  onClick,
 }: {
   text: string;
   imgURL: any;
@@ -27,7 +27,7 @@ export const OnePaintingSection = ({
         <div className="max-w-[50%] min-h-full  ">
           <img
             src={imgURL}
-            className="max-w-[90%] h-auto lg:max-w-[100%] border-[5px] border-solid border-black rounded-3 shadow-[0_25px_20px_-5px_rgba(0,0,0,0.3)] lg:border-[15px] "
+            className="cursor-pointer max-w-[90%] h-auto lg:max-w-[100%] border-[5px] border-solid border-black rounded-3 shadow-[0_25px_20px_-5px_rgba(0,0,0,0.3)] lg:border-[15px] "
           />
         </div>
         <div className="h-auto relative flex flex-col gap-6 w-[60%]">

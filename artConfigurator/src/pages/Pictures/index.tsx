@@ -30,7 +30,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   miniImageUrl,
   description,
   name,
-  handleDeleteClick
+  handleDeleteClick,
 }) => {
   const [loader, setLoader] = useState(false);
 
@@ -43,11 +43,11 @@ const PicSection: React.FC<PicSectionProps> = ({
     try {
       setLoader(true);
       const headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       };
       const payload = {
         description: description,
-        typeOfImage: typeOfImage
+        typeOfImage: typeOfImage,
       };
       console.log("PUT>>" + typeOfImage + "<<");
       const response = await Put(headers, url, img + "/" + uid, true, payload);
@@ -87,7 +87,7 @@ const PicSection: React.FC<PicSectionProps> = ({
             {loader && <Spinner />}
             <p>Auf Seite posten: </p>
             <div>
-              <div className="flex items-center mb-4">
+              <div className="flex items-center mb-4 ">
                 <input
                   onChange={handleRadioChange}
                   id={groupName + "_P"}
@@ -95,16 +95,16 @@ const PicSection: React.FC<PicSectionProps> = ({
                   value={type_P}
                   defaultChecked={typeOfImage === type_P}
                   name={groupName}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  className="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
                   htmlFor={groupName + "_P"}
-                  className="ms-2 text-xl font-medium text-gray-900 dark:text-gray-300"
+                  className="ms-2 text-xl cursor-pointer font-medium text-gray-900 dark:text-gray-300"
                 >
                   Gemälde
                 </label>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center ">
                 <input
                   onChange={handleRadioChange}
                   id={groupName + "_A"}
@@ -112,11 +112,11 @@ const PicSection: React.FC<PicSectionProps> = ({
                   value={type_A}
                   name={groupName}
                   defaultChecked={typeOfImage === type_A}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  className="w-4 cursor-pointer h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-[#895c06] dark:focus:ring-[#895c06] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
                   htmlFor={groupName + "_A"}
-                  className="ms-2 text-xl font-medium text-gray-900 dark:text-gray-300"
+                  className="ms-2 cursor-pointer text-xl font-medium text-gray-900 dark:text-gray-300"
                 >
                   Atelier{" "}
                 </label>
@@ -182,7 +182,7 @@ export const Pictures = () => {
         }
       },
 
-      onCancel() {}
+      onCancel() {},
     });
   };
 

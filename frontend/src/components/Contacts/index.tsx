@@ -44,11 +44,11 @@ export const Contacts: React.FC = () => {
         text: form.getFieldValue("nachricht"),
         name: form.getFieldValue("username"),
         number: `+${form.getFieldValue("nummer")}`,
-        surname: form.getFieldValue("nachname")
+        surname: form.getFieldValue("nachname"),
       };
 
       const headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       };
       await Post(headers, URL, mailing, true, payload).then(() =>
         formRef.current?.reset()
@@ -85,19 +85,19 @@ export const Contacts: React.FC = () => {
               </h4>
             </div>
             <div className="flex gap-5 px-[5%] justify-center lg:justify-start font-federo text-base">
-              <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-32 h-12 items-center ">
+              <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-32 h-12 items-center cursor-pointer">
                 <a href="mailto:info@haltentech.com"> E-mail</a>
                 <img src={Gmail} />
               </div>
 
-              <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-12 h-12 items-center ">
+              <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-12 h-12 items-center cursor-pointer">
                 <a>
                   {" "}
                   <img src={Instagram} />
                 </a>
               </div>
 
-              <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-12 h-12 items-center ">
+              <div className="flex justify-center gap-4 rounded-[13px] bg-primary-100 w-12 h-12 items-center cursor-pointer">
                 <a>
                   {" "}
                   <img src={FaceBook} />
@@ -126,8 +126,8 @@ export const Contacts: React.FC = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihren Namen ein"
-                      }
+                        message: "Bitte geben Sie Ihren Namen ein",
+                      },
                     ]}
                   >
                     <input
@@ -144,8 +144,8 @@ export const Contacts: React.FC = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihren Nachnamen ein"
-                      }
+                        message: "Bitte geben Sie Ihren Nachnamen ein",
+                      },
                     ]}
                   >
                     <input
@@ -165,12 +165,12 @@ export const Contacts: React.FC = () => {
                       {
                         type: "email",
                         message:
-                          "Bitte geben Sie eine gültige Email-Adresse ein"
+                          "Bitte geben Sie eine gültige Email-Adresse ein",
                       },
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihre E-Mail-Adresse ein"
-                      }
+                        message: "Bitte geben Sie Ihre E-Mail-Adresse ein",
+                      },
                     ]}
                   >
                     <input
@@ -187,8 +187,8 @@ export const Contacts: React.FC = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihre Nummer ein"
-                      }
+                        message: "Bitte geben Sie Ihre Nummer ein",
+                      },
                     ]}
                   >
                     <PhoneInput
@@ -209,8 +209,8 @@ export const Contacts: React.FC = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Bitte geben Sie Ihre Nachricht ein"
-                      }
+                        message: "Bitte geben Sie Ihre Nachricht ein",
+                      },
                     ]}
                   >
                     <input

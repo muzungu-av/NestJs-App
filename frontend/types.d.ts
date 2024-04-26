@@ -28,5 +28,5 @@ interface CreateImageDto {
   miniImageUrl: string;
   owner: User;
   dimension: AllDimension;
-  copyAttribute: [];
+  copyAttribute: [] ;
 }
