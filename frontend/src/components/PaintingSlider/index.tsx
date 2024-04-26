@@ -17,11 +17,11 @@ const BACKEND_API =
 
 export const PaintingSlider = () => {
   const [paintings, setPaintings] = useState<Paintings>([
-    { miniImageUrl: "", uid: "" },
+    { miniImageUrl: "", uid: "" }
   ]);
   const params = {
     typeOfImage: "isCopy",
-    fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
+    fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute"
   };
   const getPictures = async () => {
     try {
@@ -62,30 +62,43 @@ export const PaintingSlider = () => {
       <Swiper
         ref={sliderRef}
         centeredSlides={false}
-        centerInsufficientSlides={true}
+        centerInsufficientSlides={false}
         navigation={{
           nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
+          prevEl: ".swiper-button-prev"
         }}
         effect="slide"
         speed={1000}
         loop={true}
         allowTouchMove
-        slidesPerView={3}
+        slidesPerView={"auto"}
         modules={[FreeMode, Pagination, Autoplay]}
-        className="mySwiper"
+        space-x-10
+        spaceBetween={50}
+        style={{
+          height: window.innerWidth > 1020 ? "300px" : "150px"
+        }} // Установка фиксированной высоты для слайдера
       >
         {paintings?.map((slide) => (
-          <SwiperSlide key={slide.uid}>
+          <SwiperSlide
+            key={slide.uid}
+            style={{
+              width: "auto",
+              minHeight: "100%",
+              maxWidth: "fit-content"
+            }}
+          >
             <img
               src={slide.miniImageUrl}
               alt="slide"
-              className="rounded-xl px-4 w-full h-[100px] sm:h-[200px] lg:h-[300px]"
+              className="rounded-xl cursor-pointer"
               onClick={() => navigate(`/painting/${slide.uid}`)}
+              style={{ height: "100%", width: "auto", maxWidth: "none" }} // Максимальная высота изображения равна высоте слайда
             />
           </SwiperSlide>
         ))}
       </Swiper>
+
       <img
         src={SwiperArrow}
         className="rotate-180 top-[25%] sm:top-[30%] lg:top-[45%] left-0 absolute z-[100]  cursor-pointer scale-50 sm:scale-75 lg:scale-100"
