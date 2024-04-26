@@ -7,6 +7,7 @@ import { PaintingSlider } from "../../components/PaintingSlider";
 import { Contacts } from "../../components/Contacts";
 import { BeforeSlider } from "../../components/BeforeSlider";
 import DOMPurify from "dompurify";
+import styles from "../Paintings/oneSection/oneSection.module.scss";
 
 interface AboutMeProps {
   isMain: boolean;
@@ -83,14 +84,18 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
               className="rounded-full w-[220px] h-[220px]"
             />
 
-            <h4 className="font-apple text-center text-2xl">Calvin Calva</h4>
+            <h4 className="font-apple text-center text-2xl mt-2">
+              Calvin Calva
+            </h4>
           </div>
           <div className="flex flex-col lg:w-[50%] gap-8">
             <p
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(biography?.text_bio || "")
               }}
-              className="  font-federo text-base lg:text-xl m-2"
+              className={`font-federo text-base lg:text-xl m-2 ${
+                isMain ? styles.wrappedText : ""
+              }`}
             ></p>
 
             {isMain && (
@@ -133,21 +138,30 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
     );
   };
   const VideoSection: React.FC = () => {
-    const VideoBlock = ({ name, imgUrl, description }: Partial<VideoBlock>) => {
+    const VideoBlock = ({
+      name,
+      imgUrl,
+      description,
+      link
+    }: Partial<VideoBlock>) => {
       return (
         <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-10 py-[5%] px-[5%]">
-          <div
+          <a
+            href={link}
+            target="_blank"
             className="bg-no-repeat	bg-cover w-full h-[170px] sm:h-[250px] lg:w-[600px] lg:h-[300px] flex justify-center items-center"
             style={{ backgroundImage: `url(${imgUrl})` }}
           >
             <div className="btn-play ">
               <img src={Play} />
             </div>
-          </div>
+          </a>
           <div className="lg:w-[50%] flex flex-col gap-4">
             <h3 className="font-italiana text-base lg:text-2xl ">{name}</h3>
             <p className="font-federo text-sm lg:text-lg">{description}</p>
-            <button className="btn-primary">Mehr erfahren</button>
+            <a href={link} target="_blank" className="btn-primary">
+              Mehr erfahren
+            </a>
           </div>
         </div>
       );
@@ -163,6 +177,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
                   name={(v as VideoBlock).name}
                   imgUrl={(v as VideoBlock).imgUrl}
                   description={(v as VideoBlock).description}
+                  link={(v as VideoBlock).link}
                 />
               );
             })}

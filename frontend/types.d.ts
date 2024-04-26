@@ -22,6 +22,7 @@ interface CreateImageDto {
   sizeBytes: string;
   createdAt: string;
   description: string;
+  name: string;
   typeOfImage: string;
   imageUrl: string;
   miniImageUrl: string;

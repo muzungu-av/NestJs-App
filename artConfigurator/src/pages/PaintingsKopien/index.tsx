@@ -14,6 +14,7 @@ type CopiesSectionProps = {
   typeOfImage: string;
   miniImageUrl: string;
   description: string;
+  name: string;
 };
 
 export const PaintingsKopien = () => {
@@ -21,7 +22,9 @@ export const PaintingsKopien = () => {
 
   const fetchDataFromApi = async () => {
     try {
-      const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
+      const params = {
+        fields: "uid,miniImageUrl,description,typeOfImage,name"
+      };
       const response = await Get(
         undefined,
         url,
@@ -72,7 +75,7 @@ export const PaintingsKopien = () => {
                   {" "}
                   <img src={v.miniImageUrl} className="w-full max-h-[400px]" />
                 </div>
-                <div className="flex min-w-[30%] lg:min-w-[20%] mr-4">
+                <div className="flex min-w-[35%] lg:min-w-[30%] mr-4">
                   <div className="flex flex-col w-[50%] mx-4">
                     {v?.copyAttribute
                       ?.slice(0, Math.ceil(v.copyAttribute.length / 2))
@@ -125,7 +128,7 @@ export const PaintingsKopien = () => {
                     {v && v.copyAttribute && v.copyAttribute.length > 1 && "€"}
                   </div>
                 </div>
-                <div className="flex lg:flex-row flex-col justify-end my-4 items-end">
+                <div className="flex  flex-col justify-end my-4 items-end">
                   <button
                     className="btn-primary font-federo text-base m-4 h-10 w-28"
                     onClick={() => {

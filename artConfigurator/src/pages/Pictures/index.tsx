@@ -19,6 +19,7 @@ type PicSectionProps = {
   typeOfImage: string;
   miniImageUrl: string;
   description: string;
+  name: string;
   handleDeleteClick: (uid: string) => void;
 };
 
@@ -28,13 +29,13 @@ const PicSection: React.FC<PicSectionProps> = ({
   groupName,
   miniImageUrl,
   description,
-  handleDeleteClick,
+  name,
+  handleDeleteClick
 }) => {
   const [loader, setLoader] = useState(false);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    console.log("handleRadioChange>>" + value + "<<");
     handleSaveClick(value);
   };
 
@@ -42,11 +43,11 @@ const PicSection: React.FC<PicSectionProps> = ({
     try {
       setLoader(true);
       const headers = {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       };
       const payload = {
         description: description,
-        typeOfImage: typeOfImage,
+        typeOfImage: typeOfImage
       };
       console.log("PUT>>" + typeOfImage + "<<");
       const response = await Put(headers, url, img + "/" + uid, true, payload);
@@ -68,11 +69,18 @@ const PicSection: React.FC<PicSectionProps> = ({
         src={miniImageUrl}
         className="max-w-[90%] h-full lg:max-w-[100%] min-w-[300px] max-h-[400px]"
       />
-      <div
-        data-tooltip={sanitizedDescription}
-        className={`w-[60%] text-xl ${styles.wrappedText}`}
-        dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-      />
+      <div className="flex flex-col w-[60%] ">
+        <div
+          data-tooltip={DOMPurify.sanitize(name)}
+          className="text-2xl mb-2"
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(name) }}
+        />
+        <div
+          data-tooltip={sanitizedDescription}
+          className={` text-xl ${styles.wrappedText}`}
+          dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+        />
+      </div>
       <div className="w-1/4 flex justify-center">
         <div className="flex flex-col gap-6">
           <div className="flex gap-8 text-xl">
@@ -139,7 +147,7 @@ const PicSection: React.FC<PicSectionProps> = ({
 
 const fetchDataFromApi = async () => {
   try {
-    const params = { fields: "uid,miniImageUrl,description,typeOfImage" };
+    const params = { fields: "uid,miniImageUrl,description,typeOfImage,name" };
     const response = await Get(undefined, url, img, false, params);
     return response.data;
   } catch (error) {
@@ -174,7 +182,7 @@ export const Pictures = () => {
         }
       },
 
-      onCancel() {},
+      onCancel() {}
     });
   };
 
@@ -203,6 +211,7 @@ export const Pictures = () => {
               groupName={"pic_section_" + ++j}
               miniImageUrl={item.miniImageUrl}
               description={item.description}
+              name={item.name}
               handleDeleteClick={handleDeleteClick}
             />
           ))}

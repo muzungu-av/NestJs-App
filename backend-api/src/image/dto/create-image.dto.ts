@@ -22,6 +22,7 @@ export class CreateImageDto {
   createdAt: string;
   description: string;
   typeOfImage: string;
+  name: string;
   imageUrl: string;
   miniImageUrl: string;
   owner: User;
@@ -37,6 +38,7 @@ export class CreateImageDto {
     this.sizeBytes = imgFileProcessingResult.sizeBytes?.toString() || '';
     this.createdAt = imgFileProcessingResult.createdAt?.toISOString() || '';
     this.description = imgFileProcessingResult.description || '';
+    this.name = imgFileProcessingResult.name || '';
     this.typeOfImage = imgFileProcessingResult.typeOfImage || '';
     this.owner = imgFileProcessingResult.owner;
     this.dimension = imgFileProcessingResult.dimension;

@@ -32,7 +32,7 @@ export const Biography = () => {
       setImageData({
         body: undefined,
         url: result.imgUrl,
-        filename: undefined,
+        filename: undefined
       } as ImageDataStructure);
       setEditorData(result.text_bio);
     });
@@ -60,7 +60,7 @@ export const Biography = () => {
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name,
+          filename: file.name
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -87,14 +87,13 @@ export const Biography = () => {
       setImageData({
         body: undefined,
         url: result.imgUrl,
-        filename: undefined,
+        filename: undefined
       } as ImageDataStructure);
       setEditorData(result.text_bio);
     });
   };
 
   const handleSaveClick = async () => {
-    console.log("checkData()", checkData());
     if (checkData()) {
       try {
         setLoader(true);
@@ -105,10 +104,10 @@ export const Biography = () => {
           formData.append("file", imageData.body);
         }
         const headers = {
-          "Content-Type": `multipart/form-data;`,
+          "Content-Type": `multipart/form-data;`
         };
         const response = await Post(headers, BURL, bio, true, formData);
-        console.log("response2", response);
+
         message.success("Gemälde erfolgreich hochgeladen");
         return response.data;
       } catch (e) {
@@ -138,7 +137,7 @@ export const Biography = () => {
           Bearbeiten der Biografie Seite
         </div>
         <div
-          className={`flex justify-around m-[5% ${
+          className={`flex justify-around mx-[5%] ${
             loader ? "opacity-50" : "opacity-100"
           }`}
         >
@@ -174,7 +173,7 @@ export const Biography = () => {
               editor={ClassicEditor}
               data={editorData}
               config={{
-                toolbar: [],
+                toolbar: []
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);

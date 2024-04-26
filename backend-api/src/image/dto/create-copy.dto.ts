@@ -17,6 +17,7 @@ export class CreateCopyDto {
   sizeBytes: string;
   createdAt: string;
   description: string;
+  name: string;
   typeOfImage: string;
   imageUrl: string;
   miniImageUrl: string;
@@ -38,6 +39,7 @@ export class CreateCopyDto {
     this.createdAt = imgFileProcessingResult.createdAt?.toISOString() || '';
     this.description = imgFileProcessingResult.description || '';
     this.typeOfImage = imgFileProcessingResult.typeOfImage || '';
+    this.name = imgFileProcessingResult.name || '';
     this.owner = imgFileProcessingResult.owner;
     this.dimension = imgFileProcessingResult.dimension;
     this.imageUrl = imgFileProcessingResult.imageUrl;

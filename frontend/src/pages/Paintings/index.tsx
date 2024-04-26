@@ -32,7 +32,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
         // Выполнить новый запрос, если тип страницы "Kopien"
         const params = {
           typeOfImage: "isCopy",
-          fields: "miniImageUrl,description,uid,typeOfImage",
+          fields: "miniImageUrl,description,uid,typeOfImage"
         };
         diffResponse = await Get(
           undefined,
@@ -88,7 +88,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
                 ? `url(${bgImgGemälde})`
                 : pageType === "Atelier"
                 ? `url(${bgImgAtelier})`
-                : `url(${bgImgKopien})`,
+                : `url(${bgImgKopien})`
           }}
         >
           {" "}
@@ -106,6 +106,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
               <OnePaintingSection
                 key={index}
                 text={painting.description}
+                name={painting.name}
                 imgURL={painting.miniImageUrl}
                 id={painting.id}
                 onClick={() => {
