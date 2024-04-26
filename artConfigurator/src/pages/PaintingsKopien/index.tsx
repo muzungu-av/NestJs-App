@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import { useEffect, useState } from "react";
 import { Delete, Get } from "../../api/axiosInstance";
-import { message } from "antd";
+import { Modal, message } from "antd";
 
 const sc = import.meta?.env?.VITE_SCHEME;
 const bu = import.meta.env?.VITE_BACKEND_URL?.replace(/https?:\/\//g, "");
@@ -40,14 +40,25 @@ export const PaintingsKopien = () => {
   };
 
   const handleDeleteClick = async (uid: string) => {
-    const confirmation = window.confirm(
-      "Sind Sie sicher, dass Sie das ausgewählte Foto löschen möchten?"
-    );
-    if (confirmation) {
-      await Delete(url + img, "/copy/" + uid, true);
-      fetchDataFromApi().then((result) => setCopies(result));
-      message.success("Successfully deleted");
-    }
+    Modal.confirm({
+      title: "Möchten Sie löschen?",
+      icon: null, // Чтобы убрать значок (по умолчанию он есть)
+      okText: "Ja",
+      okType: "danger",
+      cancelText: "Nein",
+      async onOk() {
+        try {
+          await Delete(url + img, "/copy/" + uid, true);
+          fetchDataFromApi().then((result) => setCopies(result));
+          message.success("Successfully deleted");
+        } catch (error) {
+          console.error("Fehler beim Löschen:", error);
+          message.error("Fehler beim Löschen");
+        }
+      },
+
+      onCancel() {}
+    });
   };
 
   const [copies, setCopies] = useState<CopiesSectionProps[] | null>(null);
