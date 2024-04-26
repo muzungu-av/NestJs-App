@@ -1,7 +1,6 @@
 import emptyPhoto from "./../../assets/images/EmptyPhoto.png";
 import addPhoto from "./../../assets/images/Add_photo.png";
 import { message } from "antd";
-// import deletePhoto from "./../../assets/images/Delete.svg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import MainLayout from "../../layouts/MainLayout";
@@ -36,7 +35,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   const fetchDataFromApi = async () => {
     try {
       const params = {
-        fields: "uid,miniImageUrl,description,typeOfImage,name"
+        fields: "uid,miniImageUrl,description,typeOfImage,name",
       };
       const response = await Get(
         undefined,
@@ -246,7 +245,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             editor={ClassicEditor}
             data={editorDataName}
             config={{
-              toolbar: []
+              toolbar: [],
             }}
             onChange={(event: any, editor: any) => {
               handleEditorNameChange(event, editor);

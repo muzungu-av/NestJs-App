@@ -1,2 +1,2 @@
-const type_A = "isAtelier";
-const type_P = "isPainting";
+export const type_A = "isAtelier";
+export const type_P = "isPainting";

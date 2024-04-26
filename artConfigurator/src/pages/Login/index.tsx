@@ -6,6 +6,7 @@ import AuthStore from "../../store/AuthStore.ts";
 import { menuItemsWithPaths } from "../../App.tsx";
 import { message } from "antd";
 import { useAuth } from "../../context/AuthContext.tsx";
+
 type FormData = {
   username: string;
   password: string;
@@ -16,7 +17,7 @@ const LogIn: React.FC = observer(() => {
 
   const [formData, setFormData] = useState<FormData>({
     username: "",
-    password: ""
+    password: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

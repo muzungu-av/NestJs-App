@@ -26,7 +26,7 @@ class AuthStore {
   }
   async login(loginFormData: { username: string; password: string }) {
     try {
-      const res = await Post(undefined, URL, login, true, loginFormData); // это не тестировалось, нет страницы
+      const res = await Post(undefined, URL, login, true, loginFormData);
       this.access_token = res.access_token;
       localStorage.setItem("access_token", this.access_token);
       this.isLoggedIn = true;

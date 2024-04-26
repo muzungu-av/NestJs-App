@@ -7,6 +7,7 @@ import { OnePaintingSection } from "./oneSection";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { message } from "antd";
+import { type_A, type_P } from "../../types/type.d";
 
 interface PaintingsProps {
   pageType: "Gemälde" | "Atelier" | "Kopien";
@@ -32,7 +33,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
         // Выполнить новый запрос, если тип страницы "Kopien"
         const params = {
           typeOfImage: "isCopy",
-          fields: "miniImageUrl,description,uid,typeOfImage"
+          fields: "miniImageUrl,description,uid,typeOfImage",
         };
         diffResponse = await Get(
           undefined,
@@ -88,7 +89,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
                 ? `url(${bgImgGemälde})`
                 : pageType === "Atelier"
                 ? `url(${bgImgAtelier})`
-                : `url(${bgImgKopien})`
+                : `url(${bgImgKopien})`,
           }}
         >
           {" "}
