@@ -17,11 +17,11 @@ const BACKEND_API =
 
 export const PaintingSlider = () => {
   const [paintings, setPaintings] = useState<Paintings>([
-    { miniImageUrl: "", uid: "" }
+    { miniImageUrl: "", uid: "" },
   ]);
   const params = {
     typeOfImage: "isCopy",
-    fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute"
+    fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
   };
   const getPictures = async () => {
     try {
@@ -65,7 +65,7 @@ export const PaintingSlider = () => {
         centerInsufficientSlides={false}
         navigation={{
           nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
+          prevEl: ".swiper-button-prev",
         }}
         effect="slide"
         speed={1000}
@@ -76,8 +76,9 @@ export const PaintingSlider = () => {
         space-x-10
         spaceBetween={50}
         style={{
-          height: window.innerWidth > 1020 ? "300px" : "150px"
-        }} // Установка фиксированной высоты для слайдера
+          height: window.innerWidth > 1020 ? "300px" : "150px",
+          marginInline: "15px",
+        }}
       >
         {paintings?.map((slide) => (
           <SwiperSlide
@@ -85,7 +86,7 @@ export const PaintingSlider = () => {
             style={{
               width: "auto",
               minHeight: "100%",
-              maxWidth: "fit-content"
+              maxWidth: "fit-content",
             }}
           >
             <img
@@ -93,7 +94,7 @@ export const PaintingSlider = () => {
               alt="slide"
               className="rounded-xl cursor-pointer"
               onClick={() => navigate(`/painting/${slide.uid}`)}
-              style={{ height: "100%", width: "auto", maxWidth: "none" }} // Максимальная высота изображения равна высоте слайда
+              style={{ height: "100%", width: "auto", maxWidth: "none" }}
             />
           </SwiperSlide>
         ))}
