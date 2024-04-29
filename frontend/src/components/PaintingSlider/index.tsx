@@ -62,7 +62,7 @@ export const PaintingSlider = () => {
       <Swiper
         ref={sliderRef}
         centeredSlides={false}
-        centerInsufficientSlides={false}
+        centerInsufficientSlides={true}
         navigation={{
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
@@ -71,43 +71,55 @@ export const PaintingSlider = () => {
         speed={1000}
         loop={true}
         allowTouchMove
-        slidesPerView={"auto"}
+        slidesPerView={4}
         modules={[FreeMode, Pagination, Autoplay]}
-        space-x-10
-        spaceBetween={50}
-        style={{
-          height: window.innerWidth > 1020 ? "300px" : "150px",
-          marginInline: "15px",
+        className="mySwiper"
+        style={{ marginInline: "15px" }}
+        breakpoints={{
+          1300: {
+            slidesPerView: 4,
+            spaceBetween: 30,
+          },
+          1020: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          },
+
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+
+          400: {
+            slidesPerView: 2,
+            spaceBetween: 10,
+          },
+
+          200: {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
         }}
       >
         {paintings?.map((slide) => (
-          <SwiperSlide
-            key={slide.uid}
-            style={{
-              width: "auto",
-              minHeight: "100%",
-              maxWidth: "fit-content",
-            }}
-          >
+          <SwiperSlide key={slide.uid}>
             <img
               src={slide.miniImageUrl}
               alt="slide"
-              className="rounded-xl cursor-pointer"
+              className="rounded-xl px-4 "
               onClick={() => navigate(`/painting/${slide.uid}`)}
-              style={{ height: "100%", width: "auto", maxWidth: "none" }}
             />
           </SwiperSlide>
         ))}
       </Swiper>
-
       <img
         src={SwiperArrow}
-        className="rotate-180 top-[25%] sm:top-[30%] lg:top-[45%] left-0 absolute z-[100]  cursor-pointer scale-50 sm:scale-75 lg:scale-100"
+        className="rotate-180 bottom-[45%] left-0 absolute z-[100]  cursor-pointer scale-50 sm:scale-75 lg:scale-100"
         onClick={handlePrev}
       ></img>
       <img
         src={SwiperArrow}
-        className="top-[25%] sm:top-[30%] lg:top-[45%] right-0 absolute z-[100] cursor-pointer scale-50 sm:scale-75 lg:scale-100"
+        className="bottom-[45%] right-0 absolute z-[100] cursor-pointer scale-50 sm:scale-75 lg:scale-100"
         onClick={handleNext}
       ></img>
     </div>

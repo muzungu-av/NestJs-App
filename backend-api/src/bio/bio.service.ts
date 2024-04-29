@@ -76,7 +76,6 @@ export class BioService {
    */
   async getBio(): Promise<Bio> {
     const r = await this.bioModel.findOne().exec();
-    winstonLogger.info(`Getting Bio`);
     return r;
   }
 

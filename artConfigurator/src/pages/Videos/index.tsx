@@ -79,7 +79,7 @@ export const Videos = () => {
         }
       },
 
-      onCancel() {}
+      onCancel() {},
     });
   };
 
@@ -117,23 +117,22 @@ export const Videos = () => {
               formData.append("name", textData.videoName);
               formData.append("description", textData.videoDescription);
               formData.append("link", textData.videoLink);
-              if (imageData?.body) {
-                formData.append("file", imageData.body);
+              if (imageData?.body && fileName) {
+                // когда видео менялось
+                formData.append("fileName", fileName!);
+                formData.append("file", imageData!.body!);
               }
-              fileName && formData.append("fileName", fileName);
               const headers = {
-                "Content-Type": `multipart/form-data;`
+                "Content-Type": `multipart/form-data;`,
               };
               if (!id) {
                 await Post(headers, url, vi, true, formData);
-
                 message.success("Das Video wird auf der Startseite angezeigt");
                 setNewClicked(false);
                 setCurrentEditingId("");
                 fetchData();
               } else {
                 await Put(headers, url, vi + "/" + id, true, formData);
-
                 message.success("Das Video wird auf der Startseite angezeigt");
                 setNewClicked(false);
                 setCurrentEditingId("");
@@ -145,7 +144,7 @@ export const Videos = () => {
             }
           },
 
-          onCancel() {}
+          onCancel() {},
         });
       } catch (error) {}
     }

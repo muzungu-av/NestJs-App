@@ -134,13 +134,21 @@ export class ImageService {
    * @param fields set of requested fields
    * @returns Promise<any[]> document array
    */
-  async getAllImagesWithFields(fields: string): Promise<Partial<Image>[]> {
+  async getAllImagesWithFields(
+    fields: string,
+    sortBy: string,
+  ): Promise<Partial<Image>[]> {
     let query = this.imageModel.find();
     if (fields) {
       const selectedFields = fields.split(',').join(' ');
       query = query.select(`-_id ${selectedFields}`);
     } else {
       query = query.select(`-_id -__v`);
+    }
+    if (sortBy) {
+      const sortOrder = sortBy.startsWith('-') ? -1 : 1;
+      const sortField = sortBy.replace('-', '');
+      query = query.sort({ [sortField]: sortOrder });
     }
     return await query.exec();
   }

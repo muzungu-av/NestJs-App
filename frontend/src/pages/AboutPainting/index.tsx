@@ -140,10 +140,17 @@ export const AboutPainting: React.FC = () => {
                   Formate{" "}
                 </h3>{" "}
                 <h3 className=" lg:text-2xl text-base  font-federo ml-3">
-                  {paintingData?.copyAttribute?.length === 1 ? "" : "von "}
+                  {(paintingData?.copyAttribute?.length as number) === 1
+                    ? ""
+                    : "von "}
                   {minPrice}{" "}
-                  {paintingData?.copyAttribute?.length === 1 ? "" : "€ bis "}
-                  {paintingData?.copyAttribute?.length === 1 ? "" : maxPrice} €
+                  {paintingData?.copyAttribute?.length === (1 as number)
+                    ? ""
+                    : "€ bis "}
+                  {paintingData?.copyAttribute?.length === (1 as number)
+                    ? ""
+                    : maxPrice}{" "}
+                  €
                 </h3>
               </div>
               <p className="lg:text-2xl text-xl flex flex-nowrap font-federo">

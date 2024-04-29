@@ -73,7 +73,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
   const navigate = useNavigate();
   const AboutPainterSection: React.FC = () => {
     return (
-      <div className="py-[10%] px-[5%]">
+      <div className="py-[5%] px-[5%]">
         <h3 className="font-italiana text-4xl lg:text-6xl pb-8 text-center">
           Biografie
         </h3>
@@ -91,7 +91,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
           <div className="flex flex-col lg:w-[50%] gap-8">
             <p
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(biography?.text_bio || "")
+                __html: DOMPurify.sanitize(biography?.text_bio || ""),
               }}
               className={`font-federo text-base lg:text-xl m-2 ${
                 isMain ? styles.wrappedText : ""
@@ -142,7 +142,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
       name,
       imgUrl,
       description,
-      link
+      link,
     }: Partial<VideoBlock>) => {
       return (
         <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-10 py-[5%] px-[5%]">
