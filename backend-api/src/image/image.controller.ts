@@ -97,7 +97,7 @@ export class ImageController {
     @Query(new ValidationPipe({ transform: true })) dto: FindAllDto,
   ): Promise<any> {
     winstonLogger.info(`Getting all Images with Query fields: ${dto.fields}`);
-    return this.imageService.getAllImagesWithFields(dto.fields);
+    return this.imageService.getAllImagesWithFields(dto.fields, '-createdAt');
   }
 
   /**
