@@ -101,11 +101,9 @@ export class VideoController {
   ) {
     const { user } = request;
     winstonLogger.info(
-      `PUT request 'updateFile' from user: ${JSON.stringify(user.userId)}`,
+      `PUT request update video from user: ${JSON.stringify(user.userId)}`,
     );
     try {
-      // Предположим, что ваш сервис имеет метод для обновления данных файла по его uid
-
       const result = await this.videoService.updateFile(
         uid,
         user.userId,

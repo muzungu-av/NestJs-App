@@ -120,17 +120,15 @@ export class VideoService {
     file: Express.Multer.File,
     prevFilename: string,
   ): Promise<boolean> {
-    const resp = await this.handler.do(userId, file); //validation and creation of a miniature
-    if (resp.success !== true) {
-      winstonLogger.error(`Error in addVideo: Problems with the image`);
+    let resp = undefined;
+    if (file) {
+      resp = await this.handler.do(userId, file); //validation and creation of a miniature
+      if (resp && resp.success !== true) {
+        winstonLogger.error(`Error in addVideo: Problems with the image`);
+      }
     }
-
-    winstonLogger.info(`Try uploading image to Cloudinary`);
-    winstonLogger.info(`User ${userId} updates image ${_id}`);
-    winstonLogger.info(`name - ${name}`);
-    winstonLogger.info(`link - ${link}`);
-    winstonLogger.info(`description - ${description}`);
     if (resp && resp.success) {
+      winstonLogger.info(`Try uploading video-image to Cloudinary`);
       try {
         resp.imageUrl = await this.cloudinary.upload(
           userId,
@@ -153,23 +151,29 @@ export class VideoService {
     }
 
     try {
-      const result = await this.videoModel.findOneAndUpdate(
-        { _id },
-        {
-          name,
-          link,
-          description,
-          imgUrl: resp.imageUrl,
-          fileName: resp.fileName,
-        },
-        { new: true },
-      );
-      winstonLogger.info(`result-${result}`);
+      const newData = {};
+      if (name) {
+        newData['name'] = name;
+      }
+      if (link) {
+        newData['link'] = link;
+      }
+      if (description) {
+        newData['description'] = description;
+      }
+      if (resp && resp.imageUrl && resp.fileName) {
+        newData['imgUrl'] = resp.imageUrl;
+        newData['fileName'] = resp.fileName;
+      }
+      const result = await this.videoModel.findOneAndUpdate({ _id }, newData, {
+        new: true,
+      });
+      winstonLogger.info(`Result udated one video: ${result}`);
       const indexOfDot = prevFilename.lastIndexOf('.');
       const nameWithoutDot = prevFilename.slice(0, indexOfDot);
       const urlForDel = `${userId}/${nameWithoutDot}`;
       const delRes = await this.cloudinary.delete(urlForDel);
-      winstonLogger.info(`delRes-${delRes}`);
+      winstonLogger.info(`Delete Cloudinary resource: ${delRes}`);
     } catch (error) {
       // Обработка ошибок, если что-то пошло не так
       console.error('Error updating file:', error);
