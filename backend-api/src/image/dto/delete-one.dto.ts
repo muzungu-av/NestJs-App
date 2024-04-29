@@ -1,6 +1,9 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class DeleteOneDto {
-  @IsNotEmpty()
-  uid: string;
+  @IsString()
+  fileName: string;
+
+  @IsString()
+  id: string;
 }

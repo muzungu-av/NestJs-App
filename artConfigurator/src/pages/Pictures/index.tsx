@@ -147,7 +147,9 @@ const PicSection: React.FC<PicSectionProps> = ({
 
 const fetchDataFromApi = async () => {
   try {
-    const params = { fields: "uid,miniImageUrl,description,typeOfImage,name" };
+    const params = {
+      fields: "uid,miniImageUrl,description,typeOfImage,name,fileName"
+    };
     const response = await Get(undefined, url, img, false, params);
     return response.data;
   } catch (error) {
@@ -162,7 +164,7 @@ export const Pictures = () => {
     navigate("/add_paint");
   };
   const [data, setData] = useState<PicSectionProps[] | null>(null);
-  const handleDeleteClick = async (uid: string) => {
+  const handleDeleteClick = async (v: any) => {
     Modal.confirm({
       title: "Möchten Sie löschen?",
       icon: null, // Чтобы убрать значок (по умолчанию он есть)
@@ -171,10 +173,11 @@ export const Pictures = () => {
       cancelText: "Nein",
       async onOk() {
         try {
-          await Delete(url + img, "/" + uid, true);
+          const params = { fileName: v.fileName, id: v.uid };
+          await Delete(url, img, true, params);
           message.success("Erfolgreich gelöscht");
           setData((prev: any) => {
-            return prev.filter((item: any) => item.uid !== uid);
+            return prev.filter((item: any) => item.uid !== v.uid);
           });
         } catch (error) {
           console.error("Fehler beim Löschen:", error);
@@ -212,7 +215,7 @@ export const Pictures = () => {
               miniImageUrl={item.miniImageUrl}
               description={item.description}
               name={item.name}
-              handleDeleteClick={handleDeleteClick}
+              handleDeleteClick={() => handleDeleteClick(item)}
             />
           ))}
       </div>

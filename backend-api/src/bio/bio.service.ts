@@ -27,7 +27,8 @@ export class BioService {
         `Image processing error (Bio): Problems with the image`,
       );
     }
-
+    //сначала удалить старое, поэтому нет метода обновления - биография всегда одна
+    await this.deleteBio(userId);
     // загрузка в клауд
     winstonLogger.info(`Try uploading Bio-image to Cloudinary`);
     if (result && result.success) {
@@ -52,8 +53,6 @@ export class BioService {
       }
     }
     try {
-      //сначала удалить старое, поэтому нет метода обновления - биография всегда одна
-      await this.deleteBio();
       // добавляем в БД
       const createBioDto = new CreateBioDto(result.imageUrl, text);
       await this.bioModel.create(createBioDto);
@@ -85,12 +84,13 @@ export class BioService {
    *
    * @returns
    */
-  async deleteBio(): Promise<boolean> {
+  async deleteBio(userId: string): Promise<boolean> {
     let r;
     try {
       r = await this.bioModel.deleteMany().exec();
       if (r.deletedCount > 0) {
         winstonLogger.info(`Bio has been successfully deleted`);
+        await this.cloudinary.deleteAllBioImg(`${userId}/bio`);
         return Promise.resolve(true);
       } else {
         winstonLogger.warning(
