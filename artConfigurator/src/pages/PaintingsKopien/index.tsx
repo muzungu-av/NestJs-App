@@ -123,7 +123,7 @@ export const PaintingsKopien = () => {
                       )}
                   </div>
                 </div>
-                <div className=" relative flex ">
+                <div className=" relative flex w-[20%]  ">
                   <div className=" absolute h-[80%] bg-black w-1 top-0 left-0 "></div>{" "}
                   <div className=" mx-8 self-center h-[80%] font-federo text-xl">
                     {" "}
