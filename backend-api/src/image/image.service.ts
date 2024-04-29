@@ -422,7 +422,12 @@ export class ImageService {
    * @param uid document's UID
    * @returns Promise<any> one document
    */
-  async deleteOne(uid: string, type: string): Promise<boolean> {
+  async deleteOne(
+    uid: string,
+    type: string,
+    prevfileName: string,
+    userId: string,
+  ): Promise<boolean> {
     try {
       let result;
       if (type === 'isCopy') {
@@ -431,6 +436,14 @@ export class ImageService {
         result = await this.imageModel.deleteOne({ uid }).exec();
       }
       if (result && result.deletedCount === 1) {
+        const indexOfDot = prevfileName.lastIndexOf('.');
+        const nameWithoutDot = prevfileName.slice(0, indexOfDot);
+        const urlForDel = `${userId}/${nameWithoutDot}`;
+        const urlForDelMini = `${userId}/mini_${nameWithoutDot}`;
+        const delRes = await this.cloudinary.delete(urlForDel);
+
+        const delResMini = await this.cloudinary.delete(urlForDelMini);
+
         return true;
       } else {
         return false;
@@ -522,8 +535,11 @@ export class ImageService {
       const indexOfDot = prevfileName.lastIndexOf('.');
       const nameWithoutDot = prevfileName.slice(0, indexOfDot);
       const urlForDel = `${userId}/${nameWithoutDot}`;
+      const urlForDelMini = `${userId}/mini_${nameWithoutDot}`;
       const delRes = await this.cloudinary.delete(urlForDel);
-
+      const delResMini = await this.cloudinary.delete(urlForDelMini);
+      winstonLogger.info(`delRes-${delResMini} urlForDel-${urlForDelMini}`);
+      winstonLogger.info(`delRes-${delRes} urlForDel-${urlForDel}`);
       winstonLogger.info(`delRes-${delRes}`);
       return true;
     } catch (error) {

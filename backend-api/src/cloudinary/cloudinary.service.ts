@@ -64,6 +64,9 @@ export class CloudinaryService {
       resource_type: 'image',
     });
   }
+  public async deleteAllBioImg(prefix: string): Promise<any> {
+    return this.cloudinary.api.delete_resources_by_prefix(prefix);
+  }
 }
 // ОТВЕТ CLOUDINARY
 // {"api_key":"149313672292296",

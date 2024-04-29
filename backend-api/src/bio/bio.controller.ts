@@ -51,6 +51,6 @@ export class BioController {
   @Delete()
   deleteVideoById(): Promise<boolean> {
     winstonLogger.info(`Deleting a Bio`);
-    return this.bioService.deleteBio();
+    return this.bioService.deleteBio('');
   }
 }

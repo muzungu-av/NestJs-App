@@ -29,13 +29,15 @@ interface ImageDataStructure {
 
 export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   const [loader, setLoader] = useState<boolean>(false);
+  const [data, setData] = useState<any>();
+
   const { uid } = useParams();
   const navigate = useNavigate();
   //Photo
   const fetchDataFromApi = async () => {
     try {
       const params = {
-        fields: "uid,miniImageUrl,description,typeOfImage,name",
+        fields: "uid,miniImageUrl,description,typeOfImage,name,fileName"
       };
       const response = await Get(
         undefined,
@@ -57,13 +59,14 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
   useEffect(() => {
     fetchDataFromApi().then((result) => {
+      setData(result);
       setEditorData(result.description);
       setEditorDataName(result.name);
       setImageData({
         body: undefined,
         url: result.miniImageUrl,
         filename: undefined,
-        typeOfImage: result.typeOfImage || "",
+        typeOfImage: result.typeOfImage || ""
       } as ImageDataStructure);
     });
   }, []);
@@ -80,7 +83,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           body: file,
           url: undefined,
           filename: file.name,
-          typeOfImage: type,
+          typeOfImage: type
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -123,7 +126,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           typeOfImage: value,
           body: undefined,
           url: undefined,
-          filename: undefined,
+          filename: undefined
         };
       }
     });
@@ -165,7 +168,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             formData.append("file", imageData.body);
           }
           const headers = {
-            "Content-Type": `multipart/form-data;`,
+            "Content-Type": `multipart/form-data;`
           };
 
           const response = await Post(headers, BURL, IMG, true, formData);
@@ -174,6 +177,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         } else {
           const formData = new FormData();
           formData.append("description", editorData);
+          formData.append("fileName", data.fileName);
           formData.append("name", editorDataName);
           formData.append("typeOfImage", imageData!.typeOfImage);
           if (imageData?.body) {
@@ -181,7 +185,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           }
 
           const headers = {
-            "Content-Type": `multipart/form-data;`,
+            "Content-Type": `multipart/form-data;`
           };
 
           const response = await Put(
@@ -245,7 +249,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             editor={ClassicEditor}
             data={editorDataName}
             config={{
-              toolbar: [],
+              toolbar: []
             }}
             onChange={(event: any, editor: any) => {
               handleEditorNameChange(event, editor);
@@ -256,7 +260,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             editor={ClassicEditor}
             data={editorData}
             config={{
-              toolbar: [],
+              toolbar: []
             }}
             onChange={(event: any, editor: any) => {
               handleEditorChange(event, editor);
