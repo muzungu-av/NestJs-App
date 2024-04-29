@@ -30,7 +30,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   miniImageUrl,
   description,
   name,
-  handleDeleteClick,
+  handleDeleteClick
 }) => {
   const [loader, setLoader] = useState(false);
 
@@ -43,11 +43,11 @@ const PicSection: React.FC<PicSectionProps> = ({
     try {
       setLoader(true);
       const headers = {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       };
       const payload = {
         description: description,
-        typeOfImage: typeOfImage,
+        typeOfImage: typeOfImage
       };
       console.log("PUT>>" + typeOfImage + "<<");
       const response = await Put(headers, url, img + "/" + uid, true, payload);
@@ -69,7 +69,7 @@ const PicSection: React.FC<PicSectionProps> = ({
         src={miniImageUrl}
         className="max-w-[90%] h-full lg:max-w-[100%] min-w-[300px] max-h-[400px]"
       />
-      <div className="flex flex-col w-[60%] ">
+      <div className="flex flex-col min-w-[40%] ">
         <div
           data-tooltip={DOMPurify.sanitize(name)}
           className="text-2xl mb-2"
@@ -182,7 +182,7 @@ export const Pictures = () => {
         }
       },
 
-      onCancel() {},
+      onCancel() {}
     });
   };
 
