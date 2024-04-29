@@ -33,7 +33,7 @@ export const Main: React.FC = () => {
   const HeroSection: React.FC = () => {
     return (
       <div className="bg-[#F5F5F5] mt-10">
-        <div className="py-[10%] px-[5%] flex justify-center gap-20 ">
+        <div className="py-[5%] px-[5%] flex justify-center gap-20 ">
           <div className="self-center">
             <img className=" border-[15px] border-[#240909] " src={SmallPic} />
           </div>
