@@ -17,11 +17,11 @@ const BACKEND_API =
 
 export const PaintingSlider = () => {
   const [paintings, setPaintings] = useState<Paintings>([
-    { miniImageUrl: "", uid: "" },
+    { miniImageUrl: "", uid: "" }
   ]);
   const params = {
     typeOfImage: "isCopy",
-    fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute",
+    fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute"
   };
   const getPictures = async () => {
     try {
@@ -58,14 +58,14 @@ export const PaintingSlider = () => {
   }, []);
 
   return paintings.length >= 4 ? (
-    <div className="px-6 py-[5%] relative my-6">
+    <div className="px-6 py-[2%] relative my-6">
       <Swiper
         ref={sliderRef}
         centeredSlides={false}
         centerInsufficientSlides={true}
         navigation={{
           nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
+          prevEl: ".swiper-button-prev"
         }}
         effect="slide"
         speed={1000}
@@ -78,27 +78,27 @@ export const PaintingSlider = () => {
         breakpoints={{
           1300: {
             slidesPerView: 4,
-            spaceBetween: 30,
+            spaceBetween: 30
           },
           1020: {
             slidesPerView: 3,
-            spaceBetween: 30,
+            spaceBetween: 30
           },
 
           768: {
             slidesPerView: 2,
-            spaceBetween: 20,
+            spaceBetween: 20
           },
 
           400: {
             slidesPerView: 2,
-            spaceBetween: 10,
+            spaceBetween: 10
           },
 
           200: {
             slidesPerView: 1,
-            spaceBetween: 10,
-          },
+            spaceBetween: 10
+          }
         }}
       >
         {paintings?.map((slide) => (
