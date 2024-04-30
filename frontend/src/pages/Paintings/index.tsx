@@ -33,7 +33,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
         // Выполнить новый запрос, если тип страницы "Kopien"
         const params = {
           typeOfImage: "isCopy",
-          fields: "miniImageUrl,description,uid,typeOfImage",
+          fields: "miniImageUrl,description,uid,typeOfImage,createdAt", //включение "createdAt" - включает сортировку",
         };
         diffResponse = await Get(
           undefined,

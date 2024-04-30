@@ -111,6 +111,7 @@ export class ImageService {
             copyAttribute: { $push: '$copyAttribute' },
           },
         },
+        { $sort: { createdAt: -1 } },
       ])
       .exec();
   }

@@ -23,7 +23,8 @@ export const PaintingsKopien = () => {
   const fetchDataFromApi = async () => {
     try {
       const params = {
-        fields: "uid,miniImageUrl,description,typeOfImage,name,fileName"
+        fields:
+          "uid,miniImageUrl,description,typeOfImage,name,fileName,createdAt", //включение "createdAt" - включает сортировку
       };
       const response = await Get(
         undefined,
@@ -58,7 +59,7 @@ export const PaintingsKopien = () => {
         }
       },
 
-      onCancel() {}
+      onCancel() {},
     });
   };
 

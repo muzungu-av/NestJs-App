@@ -113,7 +113,7 @@ export class ImageController {
     @Query(new ValidationPipe())
     fieldsDto: GetImagesFilterDto,
   ): Promise<any> {
-    winstonLogger.info(`Try getting image by type: ${fieldsDto.typeOfImage}`);
+    winstonLogger.info(`>Try getting image by type: ${fieldsDto.typeOfImage}`);
     if (fieldsDto.typeOfImage === 'isCopy') {
       let fieldsArray: string[] = [];
       try {
