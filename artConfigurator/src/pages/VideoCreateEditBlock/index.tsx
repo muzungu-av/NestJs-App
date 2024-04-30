@@ -37,7 +37,7 @@ export const VideoCreateEditBlock = ({
   data,
   isNew,
   handleSaveClick,
-  onCancel
+  onCancel,
 }: VideoBlock) => {
   const [imageData, setImageData] = useState<ImageDataStructure>(
     {} as ImageDataStructure
@@ -48,14 +48,14 @@ export const VideoCreateEditBlock = ({
       : {
           videoDescription: data.description,
           videoLink: data.link,
-          videoName: data.name
+          videoName: data.name,
         }
   );
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -70,7 +70,7 @@ export const VideoCreateEditBlock = ({
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name
+          filename: file.name,
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -159,7 +159,7 @@ export const VideoCreateEditBlock = ({
               onClick={onCancel}
               className="btn-rounded-md bg-[#F5F5F5] font-federo w-[130px] h-[45px] ml-2"
             >
-              abbrechen
+              Abbrechen
               {/* Delete */}
             </button>
           </div>

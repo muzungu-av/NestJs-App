@@ -27,9 +27,13 @@ export class VideoService {
     link: string,
     description: string,
   ): Promise<ImgFileProcessingResult> {
+    winstonLogger.info(`>>>> Trying to process an image for Video`);
+    winstonLogger.info(`>>>>> File ${file}`);
     const result = await this.handler.do(userId, file); //validation and creation of a miniature
     if (result.success !== true) {
       winstonLogger.error(`Error in addVideo: Problems with the image`);
+    } else {
+      winstonLogger.info(`Video-Image successfully processed`);
     }
 
     winstonLogger.info(`Try uploading image to Cloudinary`);

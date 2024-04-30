@@ -117,10 +117,11 @@ export const Videos = () => {
               formData.append("name", textData.videoName);
               formData.append("description", textData.videoDescription);
               formData.append("link", textData.videoLink);
-              if (imageData?.body && fileName) {
+
+              if (imageData && imageData.body) {
                 // когда видео менялось
-                formData.append("fileName", fileName!);
-                formData.append("file", imageData!.body!);
+                formData.append("fileName", fileName as string);
+                formData.append("file", imageData.body);
               }
               const headers = {
                 "Content-Type": `multipart/form-data;`,
@@ -139,8 +140,8 @@ export const Videos = () => {
                 fetchData();
               }
             } catch (error) {
-              console.error("Fehler beim Löschen:", error);
-              message.error("Fehler beim Löschen");
+              console.error("Fehler beim Update oder Download:", error);
+              message.error("Fehler beim Update oder Download");
             }
           },
 
