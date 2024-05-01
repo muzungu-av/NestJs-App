@@ -21,10 +21,31 @@ import { BioService } from './bio.service';
 export class BioController {
   constructor(private readonly bioService: BioService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFileAndPassValidation(
+  async uploadBio(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('text_bio') text: string,
+    @Req() request: any,
+    @Res() response: any,
+  ) {
+    const { user } = request;
+    winstonLogger.info(
+      `Post request 'upload Bio' from user: ${JSON.stringify(user.userId)}`,
+    );
+    try {
+      const result = await this.bioService.addBio(user.userId, file, text);
+      return response.status(201).json(result);
+    } catch (error) {
+      return response.status(500).json({ message: `${error}` });
+    }
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async updateBio(
     @UploadedFile() file: Express.Multer.File,
     @Body('text_bio') text: string,
     @Req() request: any,
@@ -49,6 +70,7 @@ export class BioController {
   }
 
   @Delete()
+  @UseGuards(JwtAuthGuard)
   deleteVideoById(): Promise<boolean> {
     winstonLogger.info(`Deleting a Bio`);
     return this.bioService.deleteBio('');
