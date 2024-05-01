@@ -104,7 +104,7 @@ export const PaintingsKopien = () => {
                         ) => (
                           <button
                             key={index}
-                            className="btn-size w-full lg:max-w-[150px] h-[35px] m-2 text-sm"
+                            className="btn-size w-fit min-w-[100px] lg:max-w-[150px] h-[35px] m-2 text-sm"
                           >
                             {width} x {height} cm
                           </button>
@@ -121,7 +121,7 @@ export const PaintingsKopien = () => {
                         ) => (
                           <button
                             key={index}
-                            className="btn-size w-20 h-[35px] lg:max-w-[150px] m-2 text-sm"
+                            className="btn-size w-fit min-w-[100px] h-[35px] lg:max-w-[150px] m-2 text-sm"
                           >
                             {width} x {height} cm
                           </button>
