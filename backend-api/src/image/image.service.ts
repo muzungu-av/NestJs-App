@@ -111,6 +111,7 @@ export class ImageService {
             copyAttribute: { $push: '$copyAttribute' },
           },
         },
+        { $sort: { createdAt: -1 } },
       ])
       .exec();
   }
@@ -134,13 +135,21 @@ export class ImageService {
    * @param fields set of requested fields
    * @returns Promise<any[]> document array
    */
-  async getAllImagesWithFields(fields: string): Promise<Partial<Image>[]> {
+  async getAllImagesWithFields(
+    fields: string,
+    sortBy: string,
+  ): Promise<Partial<Image>[]> {
     let query = this.imageModel.find();
     if (fields) {
       const selectedFields = fields.split(',').join(' ');
       query = query.select(`-_id ${selectedFields}`);
     } else {
       query = query.select(`-_id -__v`);
+    }
+    if (sortBy) {
+      const sortOrder = sortBy.startsWith('-') ? -1 : 1;
+      const sortField = sortBy.replace('-', '');
+      query = query.sort({ [sortField]: sortOrder });
     }
     return await query.exec();
   }
@@ -414,7 +423,12 @@ export class ImageService {
    * @param uid document's UID
    * @returns Promise<any> one document
    */
-  async deleteOne(uid: string, type: string): Promise<boolean> {
+  async deleteOne(
+    uid: string,
+    type: string,
+    prevfileName: string,
+    userId: string,
+  ): Promise<boolean> {
     try {
       let result;
       if (type === 'isCopy') {
@@ -423,6 +437,14 @@ export class ImageService {
         result = await this.imageModel.deleteOne({ uid }).exec();
       }
       if (result && result.deletedCount === 1) {
+        const indexOfDot = prevfileName.lastIndexOf('.');
+        const nameWithoutDot = prevfileName.slice(0, indexOfDot);
+        const urlForDel = `${userId}/${nameWithoutDot}`;
+        const urlForDelMini = `${userId}/mini_${nameWithoutDot}`;
+        const delRes = await this.cloudinary.delete(urlForDel);
+
+        const delResMini = await this.cloudinary.delete(urlForDelMini);
+
         return true;
       } else {
         return false;
@@ -514,8 +536,11 @@ export class ImageService {
       const indexOfDot = prevfileName.lastIndexOf('.');
       const nameWithoutDot = prevfileName.slice(0, indexOfDot);
       const urlForDel = `${userId}/${nameWithoutDot}`;
+      const urlForDelMini = `${userId}/mini_${nameWithoutDot}`;
       const delRes = await this.cloudinary.delete(urlForDel);
-
+      const delResMini = await this.cloudinary.delete(urlForDelMini);
+      winstonLogger.info(`delRes-${delResMini} urlForDel-${urlForDelMini}`);
+      winstonLogger.info(`delRes-${delRes} urlForDel-${urlForDel}`);
       winstonLogger.info(`delRes-${delRes}`);
       return true;
     } catch (error) {

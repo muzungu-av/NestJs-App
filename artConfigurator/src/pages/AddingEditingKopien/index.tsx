@@ -39,14 +39,15 @@ export const AddingEditingKopien = ({
 }: AddingEditingKopienProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sizes, setSizes] = useState<CopyData[]>([]);
-
+  const [data, setData] = useState<any>();
   const { uid } = useParams();
 
   const fetchDataFromApi = async () => {
     try {
       const params = {
         typeOfImage: "isCopy",
-        fields: "uid,miniImageUrl,description,typeOfImage,copyAttribute,name",
+        fields:
+          "uid,miniImageUrl,description,typeOfImage,copyAttribute,name,fileName"
       };
       const response = await Get(
         undefined,
@@ -65,6 +66,7 @@ export const AddingEditingKopien = ({
   useEffect(() => {
     if (uid) {
       fetchDataFromApi().then((result) => {
+        setData(result);
         setImageData({
           body: undefined,
           url: result.miniImageUrl,
@@ -186,6 +188,7 @@ export const AddingEditingKopien = ({
     text: string | undefined;
     name: string | undefined;
     sizes: CopyData[] | undefined;
+    fileName?: string;
   }
 
   // Проверка наличия необходимых данных
@@ -197,6 +200,7 @@ export const AddingEditingKopien = ({
       text: undefined,
       sizes: undefined,
       name: undefined,
+      fileName: undefined
     };
 
     // режим добавления - должны быть все данные: файл(body), текст, размеры-цены
@@ -219,7 +223,7 @@ export const AddingEditingKopien = ({
         return ex;
       }
     } else {
-      // режим РЕДАКТИРОВАНИЯ - должны быть что-то одно: файл(body), текст, размеры-цены
+      // режим РЕДАКТИРОВАНИЯ - должны быть что-то одно: файл(body), текст, размеры-цены, и имя старого файла для удаления из клаудинари
       if (
         (sizes && sizes.length > 0) ||
         (imageData && imageData.body) ||
@@ -229,6 +233,7 @@ export const AddingEditingKopien = ({
         ex.method = HttpMethod.PUT;
         if (imageData && imageData.body) {
           ex.imgFile = { body: imageData.body, filename: imageData.filename };
+          ex.fileName = data.fileName;
         }
         if (editorData) {
           ex.text = editorData;
@@ -271,7 +276,7 @@ export const AddingEditingKopien = ({
       }
       if (newData.imgFile.body) {
         formData.append("file", newData.imgFile.body);
-        formData.append("fileName", newData.imgFile.filename as string);
+        formData.append("fileName", newData.fileName as string);
       }
       formData.append("typeOfImage", "isCopy");
 

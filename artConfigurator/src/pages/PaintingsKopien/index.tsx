@@ -23,7 +23,8 @@ export const PaintingsKopien = () => {
   const fetchDataFromApi = async () => {
     try {
       const params = {
-        fields: "uid,miniImageUrl,description,typeOfImage,name"
+        fields:
+          "uid,miniImageUrl,description,typeOfImage,name,fileName,createdAt", //включение "createdAt" - включает сортировку
       };
       const response = await Get(
         undefined,
@@ -39,7 +40,7 @@ export const PaintingsKopien = () => {
     }
   };
 
-  const handleDeleteClick = async (uid: string) => {
+  const handleDeleteClick = async (v: any) => {
     Modal.confirm({
       title: "Möchten Sie löschen?",
       icon: null, // Чтобы убрать значок (по умолчанию он есть)
@@ -47,8 +48,9 @@ export const PaintingsKopien = () => {
       okType: "danger",
       cancelText: "Nein",
       async onOk() {
+        const params = { fileName: v.fileName, id: v.uid };
         try {
-          await Delete(url + img, "/copy/" + uid, true);
+          await Delete(url, img + "/copy/", true, params);
           fetchDataFromApi().then((result) => setCopies(result));
           message.success("Successfully deleted");
         } catch (error) {
@@ -57,7 +59,7 @@ export const PaintingsKopien = () => {
         }
       },
 
-      onCancel() {}
+      onCancel() {},
     });
   };
 
@@ -122,7 +124,7 @@ export const PaintingsKopien = () => {
                       )}
                   </div>
                 </div>
-                <div className=" relative flex ">
+                <div className=" relative flex w-[20%]  ">
                   <div className=" absolute h-[80%] bg-black w-1 top-0 left-0 "></div>{" "}
                   <div className=" mx-8 self-center h-[80%] font-federo text-xl">
                     {" "}
@@ -151,7 +153,7 @@ export const PaintingsKopien = () => {
                   </button>{" "}
                   <button
                     className="btn-primary ml-2 font-federo text-base m-4 h-10 w-28"
-                    onClick={() => handleDeleteClick(v.uid)}
+                    onClick={() => handleDeleteClick(v)}
                   >
                     löschen
                   </button>

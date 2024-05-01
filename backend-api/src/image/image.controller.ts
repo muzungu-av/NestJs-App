@@ -23,6 +23,7 @@ import { GetImagesFilterDto } from './dto/get-images-filter.dto';
 import { DocumentCountDto } from './dto/document-count.dto';
 import { FindAllDto } from './dto/find-all.dto';
 import { GetForBlockDto } from './dto/get-for-block.dto';
+import { DeleteOneDto } from './dto/delete-one.dto';
 
 /**
  * Controller for image manipulation.
@@ -97,7 +98,7 @@ export class ImageController {
     @Query(new ValidationPipe({ transform: true })) dto: FindAllDto,
   ): Promise<any> {
     winstonLogger.info(`Getting all Images with Query fields: ${dto.fields}`);
-    return this.imageService.getAllImagesWithFields(dto.fields);
+    return this.imageService.getAllImagesWithFields(dto.fields, '-createdAt');
   }
 
   /**
@@ -112,7 +113,7 @@ export class ImageController {
     @Query(new ValidationPipe())
     fieldsDto: GetImagesFilterDto,
   ): Promise<any> {
-    winstonLogger.info(`Try getting image by type: ${fieldsDto.typeOfImage}`);
+    winstonLogger.info(`>Try getting image by type: ${fieldsDto.typeOfImage}`);
     if (fieldsDto.typeOfImage === 'isCopy') {
       let fieldsArray: string[] = [];
       try {
@@ -233,10 +234,25 @@ export class ImageController {
   /**
    * Delete document by its UID
    */
-  @Delete(':uid')
-  deleteOne(@Param('uid', ValidationPipe) uid: string): Promise<boolean> {
-    winstonLogger.info(`Request for deletion of this document: ${uid}`);
-    return this.imageService.deleteOne(uid, undefined);
+
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  deleteOne(
+    @Req() request: any,
+    @Query(new ValidationPipe({ transform: true }))
+    dto: DeleteOneDto,
+  ): Promise<boolean> {
+    const { user } = request;
+    console.log('dto', dto);
+    winstonLogger.info(
+      `Deleting a IMG ${user} by id ${dto.id}, filename=${dto.fileName}`,
+    );
+    return this.imageService.deleteOne(
+      dto.id,
+      undefined,
+      dto.fileName,
+      user.userId,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -304,9 +320,23 @@ export class ImageController {
     }
   }
 
-  @Delete('/copy/:uid')
-  deleteOneCopy(@Param('uid', ValidationPipe) uid: string): Promise<boolean> {
-    winstonLogger.info(`Request for deletion of this Copy: ${uid}`);
-    return this.imageService.deleteOne(uid, 'isCopy');
+  @UseGuards(JwtAuthGuard)
+  @Delete('/copy')
+  deleteOnCopy(
+    @Req() request: any,
+    @Query(new ValidationPipe({ transform: true }))
+    dto: DeleteOneDto,
+  ): Promise<boolean> {
+    const { user } = request;
+    console.log('dto', dto);
+    winstonLogger.info(
+      `Deleting a IMG ${user} by id ${dto.id}, filename=${dto.fileName}`,
+    );
+    return this.imageService.deleteOne(
+      dto.id,
+      'isCopy',
+      dto.fileName,
+      user.userId,
+    );
   }
 }
