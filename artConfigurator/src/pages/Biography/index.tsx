@@ -179,6 +179,8 @@ export const Biography = () => {
               editor={ClassicEditor}
               data={editorData}
               config={{
+                placeholder:
+                  "Geben Sie eine Beschreibung in dieses Feld ein...",
                 toolbar: [],
               }}
               onChange={(event: any, editor: any) => {

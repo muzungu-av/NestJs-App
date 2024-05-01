@@ -249,6 +249,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             editor={ClassicEditor}
             data={editorDataName}
             config={{
+              placeholder: "Geben Sie eine Beschreibung in dieses Feld ein...",
               toolbar: [],
             }}
             onChange={(event: any, editor: any) => {
@@ -260,6 +261,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             editor={ClassicEditor}
             data={editorData}
             config={{
+              placeholder: "Geben Sie eine Beschreibung in dieses Feld ein...",
               toolbar: [],
             }}
             onChange={(event: any, editor: any) => {
