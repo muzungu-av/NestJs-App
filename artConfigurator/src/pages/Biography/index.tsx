@@ -32,7 +32,7 @@ export const Biography = () => {
       setImageData({
         body: undefined,
         url: result.imgUrl,
-        filename: undefined
+        filename: undefined,
       } as ImageDataStructure);
       setEditorData(result.text_bio);
     });
@@ -60,7 +60,7 @@ export const Biography = () => {
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name
+          filename: file.name,
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -87,7 +87,7 @@ export const Biography = () => {
       setImageData({
         body: undefined,
         url: result.imgUrl,
-        filename: undefined
+        filename: undefined,
       } as ImageDataStructure);
       setEditorData(result.text_bio);
     });
@@ -104,7 +104,7 @@ export const Biography = () => {
           formData.append("file", imageData.body);
         }
         const headers = {
-          "Content-Type": `multipart/form-data;`
+          "Content-Type": `multipart/form-data;`,
         };
         const response = await Post(headers, BURL, bio, true, formData);
 
@@ -144,7 +144,7 @@ export const Biography = () => {
           <div className="flex flex-col justify-start items-center w-[40%]">
             <div className="font-federo text-3xl mb-4">Foto</div>
             <div className="w-60 h-60 rounded-full overflow-hidden">
-              <label htmlFor="file-input">
+              <label htmlFor="file-input" className="cursor-pointer">
                 <img
                   className="w-full h-full object-cover"
                   src={img_resource}
@@ -164,7 +164,7 @@ export const Biography = () => {
                 className="hidden"
                 onChange={handleFileInputChange}
               />{" "}
-              <img src={addPhoto} /> Foto ändern
+              <img src={addPhoto}  /> Foto ändern
             </div>{" "}
           </div>{" "}
           <div className="w-[60%] px-[5%]">
@@ -173,7 +173,7 @@ export const Biography = () => {
               editor={ClassicEditor}
               data={editorData}
               config={{
-                toolbar: []
+                toolbar: [],
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);

@@ -47,7 +47,7 @@ export const AddingEditingKopien = ({
       const params = {
         typeOfImage: "isCopy",
         fields:
-          "uid,miniImageUrl,description,typeOfImage,copyAttribute,name,fileName"
+          "uid,miniImageUrl,description,typeOfImage,copyAttribute,name,fileName",
       };
       const response = await Get(
         undefined,
@@ -200,7 +200,7 @@ export const AddingEditingKopien = ({
       text: undefined,
       sizes: undefined,
       name: undefined,
-      fileName: undefined
+      fileName: undefined,
     };
 
     // режим добавления - должны быть все данные: файл(body), текст, размеры-цены
@@ -397,7 +397,7 @@ export const AddingEditingKopien = ({
                                       handleChangeCurrentRow("width", v)
                                     }
                                     type="text"
-                                    className="w-[30%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
+                                    className="w-[50%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
                                   />{" "}
                                   X
                                   <input
@@ -406,7 +406,7 @@ export const AddingEditingKopien = ({
                                     }
                                     value={currentRow?.height}
                                     type="text"
-                                    className="w-[30%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
+                                    className="w-[50%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
                                   />
                                 </div>
                               </td>
