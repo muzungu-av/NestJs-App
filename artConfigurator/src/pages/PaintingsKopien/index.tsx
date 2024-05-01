@@ -71,10 +71,12 @@ export const PaintingsKopien = () => {
 
   return (
     <MainLayout>
-      <div className="font-italiana text-5xl mx-[5%] my-[2%]">Kopien</div>
+      <div className="font-italiana text-2xl lg:text-5xl mx-[5%] my-[2%]">
+        Kopien
+      </div>
       <button
         onClick={() => navigate("/add_copy")}
-        className="btn-primary w-[230px] h-[45px] p-0 text-base  mx-[5%]"
+        className="btn-primary w-[180px] lg:w-[230px] h-[45px] p-0 text-sm lg:text-base  mx-[5%]"
       >
         Neue Kopie hinzufügen +
       </button>
@@ -83,10 +85,13 @@ export const PaintingsKopien = () => {
           copies.length > 0 &&
           copies.map((v: any, index: number) => {
             return (
-              <div className="flex my-[5%] " key={index}>
+              <div className="flex flex-col lg:flex-row my-[5%] " key={index}>
                 <div className="min-w-[30%] lg:w-[20%] max-w-[30%] h-auto">
                   {" "}
-                  <img src={v.miniImageUrl} className="w-full max-h-[400px]" />
+                  <img
+                    src={v.miniImageUrl}
+                    className="w-full min-w-[180px] max-h-[400px]"
+                  />
                 </div>
                 <div className="flex min-w-[35%] lg:min-w-[30%] mr-4">
                   <div className="flex flex-col w-[50%] mx-4">
@@ -116,7 +121,7 @@ export const PaintingsKopien = () => {
                         ) => (
                           <button
                             key={index}
-                            className="btn-size w-full h-[35px] lg:max-w-[150px] m-2 text-sm"
+                            className="btn-size w-20 h-[35px] lg:max-w-[150px] m-2 text-sm"
                           >
                             {width} x {height} cm
                           </button>
@@ -141,7 +146,7 @@ export const PaintingsKopien = () => {
                     {v && v.copyAttribute && v.copyAttribute.length > 1 && "€"}
                   </div>
                 </div>
-                <div className="flex  flex-col justify-end my-4 items-end">
+                <div className="flex flex-row  lg:flex-col lg:justify-end my-4 items-end">
                   <button
                     className="btn-primary font-federo text-base m-4 h-10 w-28"
                     onClick={() => {

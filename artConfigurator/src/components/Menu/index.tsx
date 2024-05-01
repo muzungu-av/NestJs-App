@@ -42,7 +42,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
           <Link to={item.path} onClick={handleClick}>
             <button
               type="button"
-              className={`${className} bg-[#ffedcb] flex items-center w-full p-2 text-xl text-gray-900 transition duration-75 rounded-lg group `}
+              className={`${className} bg-[#ffedcb] flex items-center w-full p-2 text-sm lg:text-xl text-gray-900 transition duration-75 rounded-lg group `}
               aria-controls="dropdown-example"
               data-collapse-toggle="dropdown-example"
             >
@@ -55,7 +55,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
           <div onClick={handleClick}>
             <button
               type="button"
-              className="flex bg-[#ffedcb] items-center w-full p-2 text-xl text-gray-900 transition duration-75 rounded-lg group "
+              className="flex bg-[#ffedcb] items-center w-full p-2 text-sm lg:text-xl text-gray-900 transition duration-75 rounded-lg group "
               aria-controls="dropdown-example"
               data-collapse-toggle="dropdown-example"
             >
@@ -75,7 +75,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
               <MenuItem
                 key={child.id}
                 item={child}
-                className="font-federo text-sm ml-2"
+                className="font-federo text-xs lg:text-sm ml-2"
               />
             ))}
           </ul>

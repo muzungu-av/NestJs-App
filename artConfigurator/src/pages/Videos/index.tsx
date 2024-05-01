@@ -154,7 +154,9 @@ export const Videos = () => {
   return (
     <MainLayout>
       {" "}
-      <div className="font-italiana text-5xl px-[5%] my-[2%]">Videos</div>
+      <div className="font-italiana text-2xl lg:text-5xl px-[5%] my-[2%]">
+        Videos
+      </div>
       <button
         onClick={() => {
           setNewClicked(true);
@@ -184,7 +186,7 @@ export const Videos = () => {
                   onCancel={() => setCurrentEditingId("")}
                 />
               ) : (
-                <div className="flex justify-between px-[5%] items-center">
+                <div className="flex flex-col lg:flex-row justify-between px-[5%] items-center">
                   {" "}
                   <div className="w-[30%] flex items-center">
                     <img
@@ -199,7 +201,7 @@ export const Videos = () => {
                     </a>
                     <p className="text-base">Description:{v.description}</p>
                   </div>
-                  <div className=" lg:flex-row flex-col self-end">
+                  <div className=" lg:flex-row flex-col lg:self-end">
                     <button
                       className="btn-primary w-[130px] h-[45px] mr-2"
                       onClick={() => handleEditClick(v._id)}

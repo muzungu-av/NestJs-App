@@ -133,16 +133,16 @@ export const Biography = () => {
     <>
       <MainLayout>
         {loader && <Spinner />}
-        <div className="font-italiana text-5xl px-[5%] my-[2%]">
+        <div className="font-italiana text-center lg:text-start text-2xl lg:text-5xl px-[5%] my-[2%]">
           Bearbeiten der Biografie Seite
         </div>
         <div
-          className={`flex justify-around mx-[5%] ${
+          className={`flex flex-col lg:flex-row justify-center items-center lg:items-start lg:justify-around mx-[5%] ${
             loader ? "opacity-50" : "opacity-100"
           }`}
         >
           <div className="flex flex-col justify-start items-center w-[40%]">
-            <div className="font-federo text-3xl mb-4">Foto</div>
+            <div className="font-federo text-xl lg:text-3xl mb-4">Foto</div>
             <div className="w-60 h-60 rounded-full overflow-hidden">
               <label htmlFor="file-input" className="cursor-pointer">
                 <img
@@ -164,11 +164,13 @@ export const Biography = () => {
                 className="hidden"
                 onChange={handleFileInputChange}
               />{" "}
-              <img src={addPhoto}  /> Foto ändern
+              <img src={addPhoto} /> Foto ändern
             </div>{" "}
           </div>{" "}
-          <div className="w-[60%] px-[5%]">
-            <div className="font-federo text-3xl mb-4">Beschreibung</div>
+          <div className="w-full lg:w-[60%] px-[5%]">
+            <div className="font-federo text-xl lg:text-3xl mb-4">
+              Beschreibung
+            </div>
             <CKEditor
               editor={ClassicEditor}
               data={editorData}
@@ -179,7 +181,7 @@ export const Biography = () => {
                 handleEditorChange(event, editor);
               }}
             />
-            <div className="flex justify-end my-4">
+            <div className="flex justify-center lg:justify-end my-4">
               <button className="btn-primary" onClick={handleCancelClick}>
                 abbrechen
               </button>{" "}

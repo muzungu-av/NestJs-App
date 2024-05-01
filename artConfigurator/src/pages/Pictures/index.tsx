@@ -30,7 +30,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   miniImageUrl,
   description,
   name,
-  handleDeleteClick
+  handleDeleteClick,
 }) => {
   const [loader, setLoader] = useState(false);
 
@@ -43,11 +43,11 @@ const PicSection: React.FC<PicSectionProps> = ({
     try {
       setLoader(true);
       const headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       };
       const payload = {
         description: description,
-        typeOfImage: typeOfImage
+        typeOfImage: typeOfImage,
       };
       console.log("PUT>>" + typeOfImage + "<<");
       const response = await Put(headers, url, img + "/" + uid, true, payload);
@@ -64,7 +64,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   const sanitizedDescription = DOMPurify.sanitize(description);
 
   return (
-    <div className="flex justify-between gap-8 py-[5%]">
+    <div className="flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-8 py-[5%]">
       <img
         src={miniImageUrl}
         className="max-w-[90%] h-full lg:max-w-[100%] min-w-[300px] max-h-[400px]"
@@ -77,13 +77,13 @@ const PicSection: React.FC<PicSectionProps> = ({
         />
         <div
           data-tooltip={sanitizedDescription}
-          className={` text-xl ${styles.wrappedText}`}
+          className={`text-md lg:text-xl ${styles.wrappedText}`}
           dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
         />
       </div>
       <div className="w-1/4 flex justify-center">
         <div className="flex flex-col gap-6">
-          <div className="flex gap-8 text-xl">
+          <div className="flex gap-8 text-md lg:text-xl">
             {loader && <Spinner />}
             <p>Auf Seite posten: </p>
             <div>
@@ -99,7 +99,7 @@ const PicSection: React.FC<PicSectionProps> = ({
                 />
                 <label
                   htmlFor={groupName + "_P"}
-                  className="ms-2 text-xl cursor-pointer font-medium text-gray-900 dark:text-gray-300"
+                  className="ms-2 text-md lg:text-xl cursor-pointer font-medium text-gray-900 dark:text-gray-300"
                 >
                   Gemälde
                 </label>
@@ -116,7 +116,7 @@ const PicSection: React.FC<PicSectionProps> = ({
                 />
                 <label
                   htmlFor={groupName + "_A"}
-                  className="ms-2 cursor-pointer text-xl font-medium text-gray-900 dark:text-gray-300"
+                  className="ms-2 cursor-pointer text-md lg:text-xl font-medium text-gray-900 dark:text-gray-300"
                 >
                   Atelier{" "}
                 </label>
@@ -148,7 +148,7 @@ const PicSection: React.FC<PicSectionProps> = ({
 const fetchDataFromApi = async () => {
   try {
     const params = {
-      fields: "uid,miniImageUrl,description,typeOfImage,name,fileName"
+      fields: "uid,miniImageUrl,description,typeOfImage,name,fileName",
     };
     const response = await Get(undefined, url, img, false, params);
     return response.data;
@@ -185,7 +185,7 @@ export const Pictures = () => {
         }
       },
 
-      onCancel() {}
+      onCancel() {},
     });
   };
 
@@ -197,7 +197,7 @@ export const Pictures = () => {
   return (
     <MainLayout>
       <div className="px-[5%] pt-[2%]">
-        <h3 className="font-italiana text-5xl">
+        <h3 className="font-italiana text-2xl lg:text-5xl">
           Liste der Bilder auf der Website
         </h3>
 

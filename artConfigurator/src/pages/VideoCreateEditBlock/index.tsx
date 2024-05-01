@@ -93,12 +93,12 @@ export const VideoCreateEditBlock = ({
         {" "}
         <form
           onSubmit={handleAddVideo}
-          className="bg-[#FFEDCB] m-8 flex justify-between items-center px-4"
+          className="bg-[#FFEDCB] m-8 flex flex-col lg:flex-row justify-between items-center px-4"
         >
           {" "}
           <div className="w-[30%] m-4 ">
             <label htmlFor="file-input">
-              <img className=" w-full  " src={img_resource} />
+              <img className=" w-full  cursor-pointer" src={img_resource} />
             </label>
             <input
               ref={fileInputRef}

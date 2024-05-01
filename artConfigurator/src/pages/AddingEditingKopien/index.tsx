@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import addPhoto from "./../../assets/images/Add_photo.png";
+import addPhoto from "./../../assets/icons/addPhoto.svg";
 import Empty from "./../../assets/images/EmptyPhoto.png";
 import editRecord from "./../../assets/images/EditRecord.svg";
 import deletePhoto from "./../../assets/images/Delete.svg";
@@ -158,8 +158,8 @@ export const AddingEditingKopien = ({
   // EDITOR
   const default_text = "Geben Sie eine Beschreibung in dieses Feld ein...";
 
-  const [editorData, setEditorData] = useState(default_text);
-  const [editorDataName, setEditorDataName] = useState(default_text);
+  const [editorData, setEditorData] = useState("");
+  const [editorDataName, setEditorDataName] = useState("");
   const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData();
     setEditorData(data);
@@ -171,7 +171,7 @@ export const AddingEditingKopien = ({
   // очистить контент
   const handleClearContent = () => {
     navigate("/copy_paintings");
-    setEditorData(default_text);
+    setEditorData("");
     setImageData(undefined);
     setSizes([]);
   };
@@ -333,23 +333,28 @@ export const AddingEditingKopien = ({
     <>
       <MainLayout>
         {loader && <Spinner />}
-        <div className="font-italiana text-5xl mx-[5%] my-[2%]">Kopien</div>
+        <div className="font-italiana text-5xl mx-[5%] my-[2%] text-center lg:text-start">
+          Kopien
+        </div>
         <div
           className={`flex gap-6 justify-around m-[5%] ${
             loader ? "opacity-50" : "opacity-100"
           }`}
         ></div>
-        <div className="flex justify-around m-[5%] ">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-around m-[5%] ">
           <div className="flex flex-col justify-start items-center w-[40%]">
             <div className="font-federo text-3xl mb-4">Foto</div>
             <label htmlFor="file-input">
-              <img className="mb-2 w-full cursor-pointer" src={img_resource} />
+              <img
+                className="mb-2 w-full min-w-[200px] cursor-pointer"
+                src={img_resource}
+              />
             </label>
             <label
               htmlFor="file-input"
-              className="w-[100%] flex justify-center m-2 cursor-pointer"
+              className="w-[100%] flex flex-col lg:flex-row items-center lg:items-start justify-center m-2 cursor-pointer"
             >
-              <img src={addPhoto} /> Foto ändern
+              <img className="w-4 h-4" src={addPhoto} /> Foto ändern
             </label>
 
             <input
@@ -390,14 +395,14 @@ export const AddingEditingKopien = ({
                           {index == currentRow?.index ? (
                             <tr>
                               <td className="px-6 py-2 whitespace-nowrap">
-                                <div className=" flex justify-center items-center border border-black rounded-md w-[80%]">
+                                <div className=" flex justify-center items-center border border-black rounded-md min-w-[150px] w-[80%]">
                                   <input
                                     value={currentRow?.width}
                                     onChange={(v) =>
                                       handleChangeCurrentRow("width", v)
                                     }
                                     type="text"
-                                    className="w-[50%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
+                                    className="w-[70%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
                                   />{" "}
                                   X
                                   <input
@@ -406,12 +411,12 @@ export const AddingEditingKopien = ({
                                     }
                                     value={currentRow?.height}
                                     type="text"
-                                    className="w-[50%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
+                                    className="w-[70%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
                                   />
                                 </div>
                               </td>
                               <td className="px-6 py-2 whitespace-nowrap">
-                                <div className=" flex justify-center border border-black rounded-md w-[70%]">
+                                <div className=" flex justify-center border border-black rounded-md w-[80%]">
                                   {" "}
                                   <input
                                     onChange={(v) =>
@@ -502,19 +507,19 @@ export const AddingEditingKopien = ({
               </div>
               {}
               <form
-                className="flex"
+                className="flex flex-col lg:flex-row"
                 // onSubmit={handleAddSize}
               >
-                <div className="flex flex-col w-[30%] pb-4 font-federo text-xl ">
+                <div className="flex flex-col w-[60%] pb-4 font-federo text-xl ">
                   {" "}
                   Größe:{" "}
-                  <div className=" flex justify-center items-center border border-black rounded-md w-[70%] mt-2">
+                  <div className=" flex justify-center items-center border border-black rounded-md w-[120%] lg:w-[70%] mt-2">
                     <input
                       ref={refWidth}
                       id="newWidth"
                       name="width"
                       type="text"
-                      className="w-[30%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
+                      className="w-[50%] px-2 m-2 h-6 bg-gray-300 border-none outline-none"
                     />{" "}
                     X
                     <input
@@ -522,14 +527,14 @@ export const AddingEditingKopien = ({
                       id="newHeigth"
                       type="text"
                       name="height"
-                      className="w-[30%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
+                      className="w-[50%] px-2  m-2  h-6 bg-gray-300 border-none outline-none"
                     />
                   </div>
                 </div>{" "}
-                <div className="flex flex-col w-[20%] pb-4 font-federo text-xl">
+                <div className="flex flex-col w-[40%] pb-4 font-federo text-xl">
                   {" "}
                   Preis:{" "}
-                  <div className=" flex justify-center items-center border border-black rounded-md w-[70%] mt-2">
+                  <div className=" flex justify-center items-center border border-black rounded-md w-[120%] lg:w-[70%] mt-2">
                     <input
                       ref={refPrice}
                       id="newPrice"
@@ -555,6 +560,8 @@ export const AddingEditingKopien = ({
               editor={ClassicEditor}
               data={editorDataName}
               config={{
+                placeholder:
+                  "Geben Sie eine Beschreibung in dieses Feld ein...",
                 toolbar: [],
               }}
               onChange={(event: any, editor: any) => {
@@ -566,6 +573,8 @@ export const AddingEditingKopien = ({
               editor={ClassicEditor}
               data={editorData}
               config={{
+                placeholder:
+                  "Geben Sie eine Beschreibung in dieses Feld ein...",
                 toolbar: [],
               }}
               onChange={(event: any, editor: any) => {
