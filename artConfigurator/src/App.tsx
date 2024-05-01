@@ -63,7 +63,7 @@ export const menuItemsWithPaths = [
       {
         id: 8,
         visibilty: true,
-        name: "Gemälde kopieren" /* список копий */,
+        name: "Liste der Gemäldekopien" /* список копий */,
         path: "/copy_paintings",
         element: PaintingsKopien,
       },

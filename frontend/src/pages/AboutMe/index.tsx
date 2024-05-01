@@ -81,7 +81,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
           <div>
             <img
               src={biography.imgUrl}
-              className="rounded-full w-[220px] h-[220px]"
+              className="rounded-full w-[160px] h-[160px] lg:w-[220px] lg:h-[220px]"
             />
 
             <h4 className="font-apple text-center text-2xl mt-2">
@@ -99,7 +99,7 @@ export const AboutMe = ({ isMain }: AboutMeProps) => {
             ></p>
 
             {isMain && (
-              <p className="font-apple lg:w-[60%] self-center pt-5 text-sm lg:text-base">
+              <p className="font-apple text-center lg:w-[60%] self-center pt-5 text-sm lg:text-base">
                 “ Color meus est bonus amicus et ipsum loqui vellem. ”
               </p>
             )}

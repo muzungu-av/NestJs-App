@@ -8,7 +8,7 @@ export const GallerySection = () => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="">
+      <div className="py-[5%] mt-10 md:mt-0">
         <h3 className="text-4xl font-federo text-center mb-6 block lg:hidden">
           Meine Galerie
         </h3>
@@ -16,14 +16,14 @@ export const GallerySection = () => {
           <div className="py-[5%] px-[5%] flex justify-between  gap-4">
             <div className="self-end">
               <img
-                className=" border-[15px] border-[#240909]  "
+                className="border-8 lg:border-[15px] border-[#240909]  "
                 src={galleryPic1}
               />
             </div>
 
             <div className="self-end">
               <img
-                className="border-[15px] border-[#240909]  "
+                className="border-8 lg:border-[15px] border-[#240909]  "
                 src={galleryPic2}
               />
             </div>
@@ -38,7 +38,7 @@ export const GallerySection = () => {
                 Mehr erfahren
               </button>
               <img
-                className=" border-[15px] border-[#240909]  "
+                className="border-8 lg:border-[15px] border-[#240909]  "
                 src={galleryPic3}
               />
             </div>
