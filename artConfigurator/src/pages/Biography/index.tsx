@@ -16,6 +16,7 @@ interface ImageDataStructure {
 
 export const Biography = () => {
   const [editorData, setEditorData] = useState("");
+  const [modifiedEditorData, setModifiedEditorData] = useState(false); // факт изменения
   const [imageData, setImageData] = useState<ImageDataStructure | undefined>(
     undefined
   );
@@ -66,18 +67,21 @@ export const Biography = () => {
       reader.readAsDataURL(file);
     }
   };
+  //todo один текст ошибка 500 - нет файла
 
   const checkData = () => {
-    console.log("body = " + imageData?.body);
-    console.log("url = " + imageData?.url);
-    if (!imageData || !imageData?.body || !editorData) {
-      message.error("Nicht alle Daten sind ausgefüllt");
+    if (!(imageData && imageData?.body) && !modifiedEditorData) {
+      message.error(
+        "Nicht alle Daten sind ausgefüllt oder wurden nicht geändert"
+      );
       return false;
     }
     return true;
   };
+
   const handleEditorChange = (_event: any, editor: any) => {
     const data = editor.getData();
+    setModifiedEditorData(true);
     setEditorData(data);
   };
 

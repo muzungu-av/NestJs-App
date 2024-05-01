@@ -21,44 +21,61 @@ export class BioService {
     file: Express.Multer.File,
     text: string,
   ): Promise<boolean> {
-    const result = await this.handler.do(userId, file); //validation and creation of a miniature
-    if (result.success !== true) {
-      winstonLogger.error(
-        `Image processing error (Bio): Problems with the image`,
-      );
-    }
-    //сначала удалить старое, поэтому нет метода обновления - биография всегда одна
-    await this.deleteBio(userId);
-    // загрузка в клауд
-    winstonLogger.info(`Try uploading Bio-image to Cloudinary`);
-    if (result && result.success) {
-      try {
-        result.imageUrl = await this.cloudinary.upload(
-          userId + '/bio',
-          result.miniPath,
-          result.fileName,
-        );
-      } catch (error) {
+    let result;
+    if (file !== undefined) {
+      result = await this.handler.do(userId, file); //validation and creation of a miniature
+      if (result.success !== true) {
         winstonLogger.error(
-          `Error during upload Bio pic to Cloudinary: ${JSON.stringify(error)}`,
+          `Image processing error (Bio): Problems with the image`,
         );
-        result.success = false;
-        throw new CustomError({
-          message: 'Error during upload Bio pic to Cloudinary',
-          success: false,
-          path: result.path,
-          miniPath: result.miniPath,
-          uid: result.uid,
-        });
       }
     }
+
+    if (file && result && result.success) {
+      //сначала удалить старое, поэтому нет метода обновления - биография всегда одна
+      winstonLogger.info(`Try deleting Bio-image from Cloudinary`);
+      await this.deleteBio(userId);
+      // загрузка в клауд
+      winstonLogger.info(`Try uploading Bio-image to Cloudinary`);
+      if (result && result.success) {
+        try {
+          result.imageUrl = await this.cloudinary.upload(
+            userId + '/bio',
+            result.miniPath,
+            result.fileName,
+          );
+        } catch (error) {
+          winstonLogger.error(
+            `Error during upload Bio pic to Cloudinary: ${JSON.stringify(error)}`,
+          );
+          result.success = false;
+          throw new CustomError({
+            message: 'Error during upload Bio pic to Cloudinary',
+            success: false,
+          });
+        }
+      }
+    }
+    // добавляем в БД
     try {
-      // добавляем в БД
-      const createBioDto = new CreateBioDto(result.imageUrl, text);
-      await this.bioModel.create(createBioDto);
-      return Promise.resolve(true);
+      let updatedData = {};
+      if (file && result && result.success) {
+        const createBioDto = new CreateBioDto(result.imageUrl, text);
+        await this.bioModel.create(createBioDto);
+        return Promise.resolve(true);
+      } else {
+        updatedData = { text_bio: text };
+        const res = await this.bioModel
+          .updateMany({ $set: updatedData }) //предполагается что одна биография - поэтому updateMany
+          .exec();
+        if (res.modifiedCount === 1) {
+          return Promise.resolve(true);
+        } else {
+          winstonLogger.error(`Failed to update the Bio (modifiedCount != 1)`);
+        }
+      }
     } catch (error) {
-      winstonLogger.error(`'Error putting Bio into the Database'`);
+      winstonLogger.error(`Error putting Bio into the Database - ${error}`);
       throw new CustomError({
         message: 'Error putting Bio into the Database',
         success: false,

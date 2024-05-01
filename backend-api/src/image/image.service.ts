@@ -474,14 +474,6 @@ export class ImageService {
       }
     }
 
-    winstonLogger.info(`User ${userId} updates image ${uid}`);
-    winstonLogger.info(`description - ${description}`);
-    winstonLogger.info(`typeOfImage - ${typeOfImage}`);
-    winstonLogger.info(`name - ${name}`);
-    if (sizes) {
-      winstonLogger.info(`sizes - ${JSON.parse(sizes)}`);
-    }
-
     if (file && resp && resp.success) {
       try {
         resp.imageUrl = await this.cloudinary.upload(
