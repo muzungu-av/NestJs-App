@@ -38,7 +38,6 @@ export class MailService {
        `,
       });
     } catch (error) {
-      console.error(error);
       throw error;
     }
   }

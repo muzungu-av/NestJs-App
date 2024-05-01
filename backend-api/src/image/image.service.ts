@@ -441,10 +441,8 @@ export class ImageService {
         const nameWithoutDot = prevfileName.slice(0, indexOfDot);
         const urlForDel = `${userId}/${nameWithoutDot}`;
         const urlForDelMini = `${userId}/mini_${nameWithoutDot}`;
-        const delRes = await this.cloudinary.delete(urlForDel);
-
-        const delResMini = await this.cloudinary.delete(urlForDelMini);
-
+        await this.cloudinary.delete(urlForDel);
+        await this.cloudinary.delete(urlForDelMini);
         return true;
       } else {
         return false;
@@ -529,16 +527,12 @@ export class ImageService {
       const nameWithoutDot = prevfileName.slice(0, indexOfDot);
       const urlForDel = `${userId}/${nameWithoutDot}`;
       const urlForDelMini = `${userId}/mini_${nameWithoutDot}`;
-      const delRes = await this.cloudinary.delete(urlForDel);
-      const delResMini = await this.cloudinary.delete(urlForDelMini);
-      winstonLogger.info(`delRes-${delResMini} urlForDel-${urlForDelMini}`);
-      winstonLogger.info(`delRes-${delRes} urlForDel-${urlForDel}`);
-      winstonLogger.info(`delRes-${delRes}`);
+      await this.cloudinary.delete(urlForDel);
+      await this.cloudinary.delete(urlForDelMini);
       return true;
     } catch (error) {
-      console.error('Error updating file:', error);
+      winstonLogger.error(`Error updating file: ${error}`);
       return false;
     }
-    return true;
   }
 }

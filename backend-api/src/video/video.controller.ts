@@ -79,7 +79,6 @@ export class VideoController {
     dto: DeleteVideoDto,
   ): Promise<boolean> {
     const { user } = request;
-    console.log('dto', dto);
     winstonLogger.info(
       `Deleting a video ${user} by id ${dto.id}, filename=${dto.fileName}`,
     );

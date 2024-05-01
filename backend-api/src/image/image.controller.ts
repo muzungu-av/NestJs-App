@@ -243,7 +243,6 @@ export class ImageController {
     dto: DeleteOneDto,
   ): Promise<boolean> {
     const { user } = request;
-    console.log('dto', dto);
     winstonLogger.info(
       `Deleting a IMG ${user} by id ${dto.id}, filename=${dto.fileName}`,
     );
@@ -328,7 +327,6 @@ export class ImageController {
     dto: DeleteOneDto,
   ): Promise<boolean> {
     const { user } = request;
-    console.log('dto', dto);
     winstonLogger.info(
       `Deleting a IMG ${user} by id ${dto.id}, filename=${dto.fileName}`,
     );

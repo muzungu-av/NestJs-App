@@ -62,6 +62,9 @@ export class ImageHandler {
     const originalFileName = file.originalname; // see MulterConfigService
     const newFileName = file.filename;
 
+    winstonLogger.info(`>>>>> originalFileName ${originalFileName}`);
+    winstonLogger.info(`>>>>> newFileName ${newFileName}`);
+
     const filePath = path.join(process.cwd(), this.dest, newFileName); // from MulterConfigService
     const miniFilePath = path.join(
       process.cwd(),

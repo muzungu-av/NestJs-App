@@ -63,5 +63,6 @@ export class MulterConfigService implements MulterOptionsFactory {
 }
 
 function uuid_fn(file: Express.Multer.File) {
-  return `${Date.now()}_${file.originalname}`;
+  const newfn = file.originalname.replace(/[^\dA-Za-z._()#]/g, '');
+  return `${Date.now()}_${newfn}`;
 }

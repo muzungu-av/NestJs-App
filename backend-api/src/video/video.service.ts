@@ -180,7 +180,7 @@ export class VideoService {
       winstonLogger.info(`Delete Cloudinary resource: ${delRes}`);
     } catch (error) {
       // Обработка ошибок, если что-то пошло не так
-      console.error('Error updating file:', error);
+      winstonLogger.error(`Error updating file: ${error}`);
       return false;
     }
     return true;
