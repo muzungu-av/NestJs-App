@@ -156,8 +156,6 @@ export const AddingEditingKopien = ({
   };
 
   // EDITOR
-  const default_text = "Geben Sie eine Beschreibung in dieses Feld ein...";
-
   const [editorData, setEditorData] = useState("");
   const [editorDataName, setEditorDataName] = useState("");
   const handleEditorChange = (_event: any, editor: any) => {
@@ -223,7 +221,7 @@ export const AddingEditingKopien = ({
         return ex;
       }
     } else {
-      // режим РЕДАКТИРОВАНИЯ - должны быть что-то одно: файл(body), текст, размеры-цены, и имя старого файла для удаления из клаудинари
+      // режим РЕДАКТИРОВАНИЯ - должно быть что-то одно: файл(body), текст, размеры-цены, и имя старого файла для удаления из клаудинари
       if (
         (sizes && sizes.length > 0) ||
         (imageData && imageData.body) ||
