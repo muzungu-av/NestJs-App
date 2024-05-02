@@ -1,6 +1,6 @@
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import {Spinner} from "../../components/Spinner";
+import { Spinner } from "../../components/Spinner";
 import { ReactNode, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 

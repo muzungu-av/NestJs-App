@@ -76,7 +76,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
   return (
     <MainLayout>
       <>
-        <div className="font-italiana py-8 flex justify-center lg:leading-tight text-4xl lg:text-[64px] ">
+        <div className="font-italiana pt-[5%] pb-8 flex justify-center lg:leading-tight text-4xl lg:text-[64px] ">
           {pageType}
         </div>
         <div

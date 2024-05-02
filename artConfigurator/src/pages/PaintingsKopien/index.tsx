@@ -52,7 +52,7 @@ export const PaintingsKopien = () => {
         try {
           await Delete(url, img + "/copy/", true, params);
           fetchDataFromApi().then((result) => setCopies(result));
-          message.success("Successfully deleted");
+          message.success("Erfolgreich gelöscht");
         } catch (error) {
           console.error("Fehler beim Löschen:", error);
           message.error("Fehler beim Löschen");

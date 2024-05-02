@@ -289,7 +289,7 @@ export const AddingEditingKopien = ({
       if (newData.method == HttpMethod.PUT) {
         response = await Put(headers, url, cp + `/${uid}`, true, formData);
       }
-      message.success("Painting successfully uploaded");
+      message.success("Gemälde erfolgreich hochgeladen");
       navigate("/copy_paintings");
       return response.data;
       // }
