@@ -93,7 +93,7 @@ export const PaintingsKopien = () => {
                     className="w-full min-w-[180px] max-h-[400px]"
                   />
                 </div>
-                <div className="flex min-w-[35%] lg:min-w-[30%] mr-4">
+                <div className="flex min-w-[35%] mr-4">
                   <div className="flex flex-col w-[50%] mx-4">
                     {v?.copyAttribute
                       ?.slice(0, Math.ceil(v.copyAttribute.length / 2))
