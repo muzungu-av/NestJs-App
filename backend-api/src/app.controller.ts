@@ -5,6 +5,7 @@ import {
   UseGuards,
   Request,
   Head,
+  Body,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LocalAuthGuard } from 'auth/local-auth.guard';
@@ -23,6 +24,13 @@ export class AppController {
   getHello(): string {
     return this.appService.getPublicHello();
   }
+
+  // @Post('hash')
+  // hash(@Body() body: { password: string }) {
+  //   const { password } = body;
+  //   const hashedPassword = this.authService.hashPassword(password);
+  //   return hashedPassword;
+  // }
 
   /**
    * Проверка JWT токена

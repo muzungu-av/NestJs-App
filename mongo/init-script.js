@@ -4,7 +4,7 @@ db.getSiblingDB("paintings").createCollection("users");
 db.getSiblingDB("paintings").users.insertOne({
   username: "Viktor",
   email: "abc@gl.com",
-  password: "1234",
+  password: "change_me",
 });
 sleep(1000);
 db.getSiblingDB("paintings").createUser({

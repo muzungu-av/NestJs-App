@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { winstonLogger } from 'winston.logger';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -9,6 +10,12 @@ export class AuthService {
     private usersService: UserService,
     private jwtService: JwtService,
   ) {}
+
+  // async hashPassword(password: string): Promise<string> {
+  //   const saltRounds = 3; // кол-во "соли" для хеширования
+  //   const hashedPassword = await bcrypt.hash(password, saltRounds);
+  //   return hashedPassword;
+  // }
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
