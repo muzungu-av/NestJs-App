@@ -1,6 +1,3 @@
-// import { User } from 'user/schemas/user.schema';
-// import { Model } from 'mongoose';
-
 import * as bcrypt from 'bcrypt';
 
 async function hashPassword(password) {
@@ -10,9 +7,9 @@ async function hashPassword(password) {
 }
 
 async function main() {
-  const result_string = await hashPassword('618542');
+  const result_string = await hashPassword('ASie~shai2Vae%nmaeph7'); // пароль входа в арт-конф
   return result_string;
 }
 
-const result = await main();
-console.log(result);
+let _ = await main();
+console.log(_);

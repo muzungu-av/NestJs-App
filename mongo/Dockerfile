@@ -19,6 +19,7 @@ COPY ./mongo/init-script.js /docker-entrypoint-initdb.d/init-script.js
 # вытаскиваем хешированный пароль (bcrypt) подготовленный в образе paint-back-api-img
 # подменяем его в скрипте инициализации монго init-script.js, вместо "change_me"
 COPY --from=paint-back-api-img /app/shared_volume/hashed_pass.txt /tmp/shared_volume/hashed_pass.txt
+
 RUN HASHED_PASS=$(cat /tmp/shared_volume/hashed_pass.txt) \
     && sed -i "s~password: \"change_me\"~password: \"${HASHED_PASS}\"~" /docker-entrypoint-initdb.d/init-script.js
 
