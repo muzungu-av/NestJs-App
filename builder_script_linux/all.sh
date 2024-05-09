@@ -1,4 +1,4 @@
-docker compose stop
+docker compose down
 echo "************* BACK **************"
 cd ./backend-api
 rm -r ./dist
