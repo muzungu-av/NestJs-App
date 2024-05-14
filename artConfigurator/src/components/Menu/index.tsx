@@ -64,7 +64,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, className }) => {
               </span>
               <img
                 src={arrow}
-                className={`w-4 h-4 ${isOpen ? "rotate-180" : ""}`}
+                className={`w-4 h-4 ${!isOpen ? "rotate-180" : ""}`}
               />
             </button>
           </div>
