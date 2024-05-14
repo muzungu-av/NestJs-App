@@ -15,7 +15,7 @@ const Footer = () => {
           </h3>
           <div className="flex flex-col lg:flex-row justify-between text-white gap-8 font-federo text-xl ">
             <p className="cursor-pointer" onClick={() => navigate("/bio")}>
-              Über mich
+              Biografie
             </p>
             <p
               className="cursor-pointer"
@@ -24,7 +24,10 @@ const Footer = () => {
               Gemälde
             </p>
             <p className="cursor-pointer" onClick={() => navigate("/dibond")}>
-              Dibond
+              Atelier
+            </p>
+            <p className="cursor-pointer" onClick={() => navigate("/kopien")}>
+              Kopien
             </p>
             <p className="cursor-pointer" onClick={() => navigate("/contacts")}>
               Kontakte
