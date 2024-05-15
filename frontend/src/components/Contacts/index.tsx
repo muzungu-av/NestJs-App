@@ -64,8 +64,10 @@ export const Contacts: React.FC = () => {
 
   return (
     <div className={`py-[5%] px-[5%]  ${loader ? "opacity-50" : ""}`}>
-      <div className="flex flex-col justify-center gap-6">
-        <h2 className="font-italiana text-6xl hidden lg:block">Kontaktdaten</h2>
+      <div className="flex flex-col justify-center gap-10">
+        <h2 className="font-italiana text-center text-6xl hidden lg:block">
+          Kontaktdaten
+        </h2>
         <div className="lg:border-t-4 lg:border-black flex flex-col lg:flex-row gap-10">
           <div
             className="lg:w-[50%] px-[5%] py-[5%] bg-no-repeat bg-cover min-h-[400px] "
