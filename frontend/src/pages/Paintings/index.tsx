@@ -33,7 +33,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
         // Выполнить новый запрос, если тип страницы "Kopien"
         const params = {
           typeOfImage: "isCopy",
-          fields: "miniImageUrl,description,uid,typeOfImage,createdAt", //включение "createdAt" - включает сортировку",
+          fields: "miniImageUrl,description,uid,typeOfImage,createdAt" //включение "createdAt" - включает сортировку",
         };
         diffResponse = await Get(
           undefined,
@@ -76,7 +76,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
   return (
     <MainLayout>
       <>
-        <div className="font-italiana pt-[5%] pb-8 flex justify-center lg:leading-tight text-4xl lg:text-[64px] ">
+        <div className="font-italiana pt-0 pb-2  flex justify-center lg:leading-tight text-4xl lg:text-[64px] ">
           {pageType}
         </div>
         <div
@@ -89,7 +89,7 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
                 ? `url(${bgImgGemälde})`
                 : pageType === "Atelier"
                 ? `url(${bgImgAtelier})`
-                : `url(${bgImgKopien})`,
+                : `url(${bgImgKopien})`
           }}
         >
           {" "}
@@ -101,31 +101,29 @@ export const Paintings = ({ pageType }: PaintingsProps) => {
               : " “ Malerei ist Poesie, die man sieht, und Poesie ist Malerei, die man hört. ”"}
           </div>
         </div>
-        {paintings.map(
-          (painting: any, index: number) => {
-            return (
-              <OnePaintingSection
-                key={index}
-                text={painting.description}
-                name={painting.name}
-                imgURL={painting.miniImageUrl}
-                id={painting.id}
-                onClick={() => {
-                  if (pageType === "Gemälde") {
-                    navigate(`/contacts`);
-                  }
-                  if (pageType === "Atelier") {
-                    navigate(`/contacts`);
-                  }
-                  if (pageType === "Kopien") {
-                    navigate(`/painting/${painting.uid}`);
-                  }
-                }}
-              />
-            );
-          }
-          //))
-        )}
+        {paintings.map((painting: any, index: number) => {
+          console.log("painting", painting);
+          if (!painting.miniImageUrl.length) return null;
+
+          const handleClick = () => {
+            if (pageType === "Gemälde" || pageType === "Atelier") {
+              navigate(`/contacts`);
+            } else if (pageType === "Kopien") {
+              navigate(`/painting/${painting.uid}`);
+            }
+          };
+
+          return (
+            <OnePaintingSection
+              key={index}
+              text={painting.description}
+              name={painting.name}
+              imgURL={painting.miniImageUrl}
+              id={painting.id}
+              onClick={handleClick}
+            />
+          );
+        })}
       </>
     </MainLayout>
   );

@@ -36,7 +36,7 @@ const SideBar = ({ setIsClicked, buttonRef }: SideBar) => {
       <div className={`bg-[#ffedcb] font-federo `}>
         <aside
           id="sidebar-multi-level-sidebar "
-          className="bg-[#ffedcb] fixed top-0 left-0 z-40 w-[35%] lg:w-[23%] h-screen transition-transform sm:translate-x-0"
+          className="bg-[#ffedcb] fixed top-0 left-0 z-40 w-[280px]  h-screen transition-transform sm:translate-x-0"
           aria-label="Sidebar"
           ref={ref}
         >

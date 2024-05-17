@@ -37,7 +37,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
   const fetchDataFromApi = async () => {
     try {
       const params = {
-        fields: "uid,miniImageUrl,description,typeOfImage,name,fileName",
+        fields: "uid,miniImageUrl,description,typeOfImage,name,fileName"
       };
       const response = await Get(
         undefined,
@@ -66,7 +66,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
         body: undefined,
         url: result.miniImageUrl,
         filename: undefined,
-        typeOfImage: result.typeOfImage || "",
+        typeOfImage: result.typeOfImage || ""
       } as ImageDataStructure);
     });
   }, []);
@@ -83,7 +83,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           body: file,
           url: undefined,
           filename: file.name,
-          typeOfImage: type,
+          typeOfImage: type
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -126,7 +126,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           typeOfImage: value,
           body: undefined,
           url: undefined,
-          filename: undefined,
+          filename: undefined
         };
       }
     });
@@ -168,7 +168,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             formData.append("file", imageData.body);
           }
           const headers = {
-            "Content-Type": `multipart/form-data;`,
+            "Content-Type": `multipart/form-data;`
           };
 
           const response = await Post(headers, BURL, IMG, true, formData);
@@ -185,7 +185,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
           }
 
           const headers = {
-            "Content-Type": `multipart/form-data;`,
+            "Content-Type": `multipart/form-data;`
           };
 
           const response = await Put(
@@ -238,9 +238,10 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
 
           <button
             onClick={handleTextClick}
-            className="w-[100%] flex flex-col lg:flex-row items-center lg:items-start justify-center m-2 "
+            className="w-[100%] flex flex-col lg:flex-row items-center justify-center m-2 "
           >
-            <img src={addPhoto} /> Foto ändern {/* Change photo */}
+            <img src={addPhoto} />{" "}
+            {isEditMode ? "Foto ändern" : "Foto hochladen"}
           </button>
         </div>{" "}
         <div className="w-[60%]">
@@ -250,7 +251,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             data={editorDataName}
             config={{
               placeholder: "Geben Sie eine Beschreibung in dieses Feld ein...",
-              toolbar: [],
+              toolbar: []
             }}
             onChange={(event: any, editor: any) => {
               handleEditorNameChange(event, editor);
@@ -262,7 +263,7 @@ export const AddingEditingPaint = ({ isEditMode }: AddingEditingPaintProps) => {
             data={editorData}
             config={{
               placeholder: "Geben Sie eine Beschreibung in dieses Feld ein...",
-              toolbar: [],
+              toolbar: []
             }}
             onChange={(event: any, editor: any) => {
               handleEditorChange(event, editor);

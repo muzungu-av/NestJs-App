@@ -1,6 +1,10 @@
 export const Spinner = () => {
   return (
-    <div role="status" className="absolute top-1/2 left-1/2">
+    <div
+      style={{ zIndex: "1000" }}
+      role="status"
+      className="absolute top-1/2 left-1/2"
+    >
       <svg
         aria-hidden="true"
         className="inline w-20 h-20 text-primary-50 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-500 "

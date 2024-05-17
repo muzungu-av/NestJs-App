@@ -30,7 +30,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   miniImageUrl,
   description,
   name,
-  handleDeleteClick,
+  handleDeleteClick
 }) => {
   const [loader, setLoader] = useState(false);
 
@@ -43,11 +43,11 @@ const PicSection: React.FC<PicSectionProps> = ({
     try {
       setLoader(true);
       const headers = {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       };
       const payload = {
         description: description,
-        typeOfImage: typeOfImage,
+        typeOfImage: typeOfImage
       };
       console.log("PUT>>" + typeOfImage + "<<");
       const response = await Put(headers, url, img + "/" + uid, true, payload);
@@ -65,10 +65,7 @@ const PicSection: React.FC<PicSectionProps> = ({
 
   return (
     <div className="flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-8 py-[5%]">
-      <img
-        src={miniImageUrl}
-        className="max-w-[90%] h-full lg:max-w-[100%] min-w-[300px] max-h-[400px]"
-      />
+      <img src={miniImageUrl} className="min-w-[250px] max-h-[400px]" />
       <div className="flex flex-col min-w-[40%] ">
         <div
           data-tooltip={DOMPurify.sanitize(name)}
@@ -148,7 +145,7 @@ const PicSection: React.FC<PicSectionProps> = ({
 const fetchDataFromApi = async () => {
   try {
     const params = {
-      fields: "uid,miniImageUrl,description,typeOfImage,name,fileName",
+      fields: "uid,miniImageUrl,description,typeOfImage,name,fileName"
     };
     const response = await Get(undefined, url, img, false, params);
     return response.data;
@@ -185,7 +182,7 @@ export const Pictures = () => {
         }
       },
 
-      onCancel() {},
+      onCancel() {}
     });
   };
 
