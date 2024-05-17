@@ -83,7 +83,7 @@ const Header = () => {
   return (
     <>
       <div className="m-auto max-w-[1600px] h-24">
-        <div className="header px-[5%] pt-[5%] pb-[3%] flex justify-between ">
+        <div className="header px-[5%] pt-[2%] pb-[15px] flex justify-between ">
           <h5
             onClick={() => {
               navigate("/");

@@ -35,7 +35,7 @@ interface CopyData {
 }
 
 export const AddingEditingKopien = ({
-  isEditMode,
+  isEditMode
 }: AddingEditingKopienProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sizes, setSizes] = useState<CopyData[]>([]);
@@ -47,7 +47,7 @@ export const AddingEditingKopien = ({
       const params = {
         typeOfImage: "isCopy",
         fields:
-          "uid,miniImageUrl,description,typeOfImage,copyAttribute,name,fileName",
+          "uid,miniImageUrl,description,typeOfImage,copyAttribute,name,fileName"
       };
       const response = await Get(
         undefined,
@@ -71,7 +71,7 @@ export const AddingEditingKopien = ({
           body: undefined,
           url: result.miniImageUrl,
           filename: undefined,
-          typeOfImage: result.typeOfImage || "",
+          typeOfImage: result.typeOfImage || ""
         } as ImageDataStructure);
 
         if (result && result.copyAttribute) {
@@ -107,7 +107,7 @@ export const AddingEditingKopien = ({
   ) => {
     setCurrentRow((prevState: any) => ({
       ...prevState,
-      [field]: value,
+      [field]: value
     }));
   };
 
@@ -148,7 +148,7 @@ export const AddingEditingKopien = ({
         setImageData({
           body: file,
           url: undefined,
-          filename: file.name,
+          filename: file.name
         } as ImageDataStructure);
       };
       reader.readAsDataURL(file);
@@ -176,7 +176,7 @@ export const AddingEditingKopien = ({
 
   enum HttpMethod {
     POST,
-    PUT,
+    PUT
   }
 
   interface ExChanges {
@@ -198,7 +198,7 @@ export const AddingEditingKopien = ({
       text: undefined,
       sizes: undefined,
       name: undefined,
-      fileName: undefined,
+      fileName: undefined
     };
 
     // режим добавления - должны быть все данные: файл(body), текст, размеры-цены
@@ -279,7 +279,7 @@ export const AddingEditingKopien = ({
       formData.append("typeOfImage", "isCopy");
 
       const headers = {
-        "Content-Type": `multipart/form-data;`,
+        "Content-Type": `multipart/form-data;`
       };
 
       let response;
@@ -316,7 +316,7 @@ export const AddingEditingKopien = ({
       const newSize = {
         width: parseFloat(refWidth.current.value),
         height: parseFloat(refHeigth.current.value),
-        price: parseFloat(refPrice.current.value),
+        price: parseFloat(refPrice.current.value)
       };
       setSizes((prevSizes) => [...prevSizes, newSize]);
       refPrice.current.value = "";
@@ -350,9 +350,10 @@ export const AddingEditingKopien = ({
             </label>
             <label
               htmlFor="file-input"
-              className="w-[100%] flex flex-col lg:flex-row items-center lg:items-start justify-center m-2 cursor-pointer"
+              className="w-[100%] flex flex-col lg:flex-row items-center justify-center m-2 cursor-pointer"
             >
-              <img className="w-4 h-4" src={addPhoto} /> Foto ändern
+              <img className="w-4 h-4" src={addPhoto} />
+              {isEditMode ? "Foto ändern" : "Foto hochladen"}
             </label>
 
             <input
@@ -364,10 +365,10 @@ export const AddingEditingKopien = ({
               onChange={handleFileInputChange}
             />
           </div>{" "}
-          <div className="w-[60%] m-6">
+          <div className="w-[80%] m-6">
             {/* {isEditMode && */}
             {sizes && sizes.length > 0 && (
-              <div className="bg-[#FFEDCB] w-[80%]">
+              <div className="bg-[#FFEDCB] w-full xl:w-[80%] ">
                 <div className="overflow-x-auto">
                   <table className="min-w-full ">
                     <thead className="bg-[#FFEDCB]">
@@ -380,7 +381,7 @@ export const AddingEditingKopien = ({
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left font-medium font-federo text-base lg:text-xl "
+                          className="px-6 py-3 text-left font-medium font-federo text-base lg:text-xl whitespace-nowrap "
                         >
                           Preis (Euro):
                         </th>
@@ -392,7 +393,7 @@ export const AddingEditingKopien = ({
                         <>
                           {index == currentRow?.index ? (
                             <tr>
-                              <td className="px-6 py-2 whitespace-nowrap">
+                              <td className="px-6 py-2 whitespace-nowrap ">
                                 <div className=" flex justify-center items-center border border-black rounded-md min-w-[150px] w-[80%]">
                                   <input
                                     value={currentRow?.width}
@@ -413,8 +414,8 @@ export const AddingEditingKopien = ({
                                   />
                                 </div>
                               </td>
-                              <td className="px-6 py-2 whitespace-nowrap">
-                                <div className=" flex justify-center border border-black rounded-md w-[80%]">
+                              <td className="px-6 py-2 whitespace-nowrap ">
+                                <div className=" flex justify-center border border-black rounded-md ">
                                   {" "}
                                   <input
                                     onChange={(v) =>
@@ -560,7 +561,7 @@ export const AddingEditingKopien = ({
               config={{
                 placeholder:
                   "Geben Sie eine Beschreibung in dieses Feld ein...",
-                toolbar: [],
+                toolbar: []
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChangeName(event, editor);
@@ -573,7 +574,7 @@ export const AddingEditingKopien = ({
               config={{
                 placeholder:
                   "Geben Sie eine Beschreibung in dieses Feld ein...",
-                toolbar: [],
+                toolbar: []
               }}
               onChange={(event: any, editor: any) => {
                 handleEditorChange(event, editor);

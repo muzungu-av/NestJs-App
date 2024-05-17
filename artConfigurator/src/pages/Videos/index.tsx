@@ -79,7 +79,7 @@ export const Videos = () => {
         }
       },
 
-      onCancel() {},
+      onCancel() {}
     });
   };
 
@@ -124,7 +124,7 @@ export const Videos = () => {
                 formData.append("file", imageData.body);
               }
               const headers = {
-                "Content-Type": `multipart/form-data;`,
+                "Content-Type": `multipart/form-data;`
               };
               if (!id) {
                 await Post(headers, url, vi, true, formData);
@@ -145,7 +145,7 @@ export const Videos = () => {
             }
           },
 
-          onCancel() {},
+          onCancel() {}
         });
       } catch (error) {}
     }
@@ -186,12 +186,12 @@ export const Videos = () => {
                   onCancel={() => setCurrentEditingId("")}
                 />
               ) : (
-                <div className="flex flex-col lg:flex-row justify-between px-[5%] items-center">
+                <div className="flex flex-col lg:flex-row justify-between px-[5%] items-start">
                   {" "}
                   <div className="w-[30%] flex items-center">
                     <img
                       src={v.imgUrl !== undefined ? v.imgUrl : Empty}
-                      className=" h-auto w-full"
+                      className=" h-auto w-full mt-8 "
                     />
                   </div>
                   <div className="flex flex-col gap-6 m-8 w-[40%]">
