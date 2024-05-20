@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AllDimension } from 'image/dto/create-image.dto';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { User } from 'user/schemas/user.schema';
-import { CopyAttribute } from '../dto/create-copy.dto';
+import { CopyAttribute, Thumbnail } from '../dto/create-copy.dto';
 
 export type CopyDocument = Copy & Document;
 
@@ -52,6 +52,9 @@ export class Copy {
 
   @Prop({ required: true })
   name: string;
+
+  @Prop({ type: MongooseSchema.Types.Mixed, required: false })
+  thumbnail: Thumbnail[];
 }
 
 export const CopySchema = SchemaFactory.createForClass(Copy);

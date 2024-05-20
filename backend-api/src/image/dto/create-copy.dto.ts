@@ -7,6 +7,14 @@ export interface CopyAttribute {
   price?: number;
 }
 
+export interface Thumbnail {
+  uid: string;
+  fileName: string;
+  path: string;
+  originalName: string;
+  imageUrl: string;
+}
+
 export class CreateCopyDto {
   uid: string;
   originalName: string;
@@ -24,6 +32,7 @@ export class CreateCopyDto {
   owner: User;
   dimension: AllDimension;
   copyAttribute: CopyAttribute[];
+  thumbnail: Thumbnail[];
 
   constructor(
     imgFileProcessingResult: ImgFileProcessingResult,
@@ -45,5 +54,6 @@ export class CreateCopyDto {
     this.imageUrl = imgFileProcessingResult.imageUrl;
     this.miniImageUrl = imgFileProcessingResult.miniImageUrl;
     this.copyAttribute = copyAttribute;
+    this.thumbnail = imgFileProcessingResult.thumbnail;
   }
 }

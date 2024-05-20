@@ -197,7 +197,7 @@ export class ImageService {
    * @param updatedData updated data
    * @returns updated document
    */
-  async updateImage<T>(
+  async updateImageDocument<T>(
     model: Model<T>,
     uid: string,
     updatedData: Partial<T>,
@@ -375,13 +375,13 @@ export class ImageService {
             miniImageUrl: result.miniImageUrl,
           };
           if (result.typeOfImage === 'isCopy') {
-            await this.updateImage<Copy>(
+            await this.updateImageDocument<Copy>(
               this.copyModel,
               result.uid,
               updatedData,
             );
           } else {
-            await this.updateImage<Image>(
+            await this.updateImageDocument<Image>(
               this.imageModel,
               result.uid,
               updatedData,
@@ -454,7 +454,7 @@ export class ImageService {
     }
   }
 
-  async updateFile(
+  async updateImage(
     uid: string,
     description: string,
     name: string,
@@ -468,7 +468,7 @@ export class ImageService {
     if (file !== undefined) {
       resp = await this.handler.do(userId, file); //validation and creation of a miniature
       if (resp.success !== true) {
-        winstonLogger.error(`Error in addVideo: Problems with the image`);
+        winstonLogger.error(`Error while add image: Problems with the image`);
       }
     }
 
@@ -518,9 +518,13 @@ export class ImageService {
       updatedData['name'] = name;
       if (typeOfImage === 'isCopy' && sizes) {
         updatedData['copyAttribute'] = JSON.parse(sizes);
-        await this.updateImage<Copy>(this.copyModel, uid, updatedData);
+        await this.updateImageDocument<Copy>(this.copyModel, uid, updatedData);
       } else {
-        await this.updateImage<Image>(this.imageModel, uid, updatedData);
+        await this.updateImageDocument<Image>(
+          this.imageModel,
+          uid,
+          updatedData,
+        );
       }
 
       const indexOfDot = prevfileName.lastIndexOf('.');
@@ -534,5 +538,135 @@ export class ImageService {
       winstonLogger.error(`Error updating file: ${error}`);
       return false;
     }
+  }
+
+  async addThumbnail(
+    uid: string,
+    file: Express.Multer.File,
+    userId: string,
+  ): Promise<boolean> {
+    let resp;
+    if (file !== undefined) {
+      resp = await this.handler.do(userId, file); //validation and creation of a miniature
+      if (resp.success !== true) {
+        winstonLogger.error(`Error while add image: Problems with the image`);
+      }
+    } else winstonLogger.error(`Error while with File (undefined)`);
+
+    if (file && resp && resp.success) {
+      try {
+        winstonLogger.info(`I'm trying to upload to Claudinary`);
+        resp.imageUrl = await this.cloudinary.upload(
+          userId,
+          resp.path,
+          resp.fileName,
+        );
+        winstonLogger.info(
+          `File uploaded to Claudinary Succesful: ${resp.imageUrl}`,
+        );
+      } catch (error) {
+        winstonLogger.error(
+          `Error during upload Image to Cloudinary: ${error}`,
+        );
+        resp.success = false;
+        throw new CustomError({
+          message: 'Error during upload Image to Cloudinary',
+          success: false,
+          path: resp.path,
+          uid: resp.uid,
+        });
+      }
+    }
+
+    try {
+      let data = {};
+      if (file && resp && resp.success) {
+        const doc = await this.copyModel.findOne({ uid }).exec();
+        const thumb = {
+          uid: resp.uid,
+          fileName: resp.fileName,
+          path: resp.path,
+          originalName: resp.originalName,
+          imageUrl: resp.imageUrl,
+        };
+        if (doc && (!doc.thumbnail || doc.thumbnail.length == 0)) {
+          thumb.uid = '0-' + thumb.uid;
+          data = {
+            thumbnail: [thumb],
+          };
+          await this.updateImageDocument<Copy>(this.copyModel, uid, data);
+        } else {
+          let length_thumb = doc.thumbnail.length;
+          const thumbnails = doc.thumbnail;
+          thumb.uid = length_thumb++ + '-' + thumb.uid;
+          thumbnails.push(thumb);
+          data = {
+            thumbnail: thumbnails,
+          };
+          await this.updateImageDocument<Copy>(this.copyModel, uid, data);
+        }
+      }
+      return true;
+    } catch (error) {
+      winstonLogger.error(`Error updating file: ${error}`);
+      return false;
+    }
+  }
+
+  async sizeThumbnails(uid: string): Promise<number> {
+    const doc = await this.copyModel.findOne({ uid }).exec();
+    if (doc && doc.thumbnail && doc.thumbnail.length != 0) {
+      return doc.thumbnail.length;
+    } else {
+      return 0;
+    }
+  }
+
+  async deleteThumbnailOnCopy(uid: string, thuid: string): Promise<boolean> {
+    const doc = await this.copyModel.findOne({ uid }).exec();
+    try {
+      if (doc && doc.thumbnail && doc.thumbnail.length != 0) {
+        winstonLogger.verbose(
+          `Trying delete one thumbnail: ${thuid} ; from this copy image: ${uid}`,
+        );
+        const removedThumbnail = doc.thumbnail.find(
+          (item) => item.uid === thuid,
+        );
+        const thumbnails = doc.thumbnail.filter((item) => item.uid !== thuid);
+        const data = {
+          thumbnail: thumbnails,
+        };
+        await this.updateImageDocument<Copy>(this.copyModel, uid, data);
+        const rmUrl = this.extractUrlPart(removedThumbnail.imageUrl);
+        if (rmUrl) {
+          await this.cloudinary.delete(rmUrl);
+        } else {
+          winstonLogger.warning(
+            `Failed to retrieve the URL of the deleted image using regex expression - ${removedThumbnail.imageUrl}`,
+          );
+        }
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      winstonLogger.error(
+        `Error during delete this Thumbnail: ${thuid} for this Copy: ${uid}`,
+      );
+      return false;
+    }
+  }
+
+  /*
+   * Используем регулярное выражение для получения нужной части строки
+   */
+  extractUrlPart(url) {
+    const regex = /\/([^\/]+\/[^\/.]+)\.\w+$/;
+    const match = url.match(regex);
+    if (match) {
+      return match[1];
+    }
+    return null;
   }
 }
