@@ -24,6 +24,7 @@ import { DocumentCountDto } from './dto/document-count.dto';
 import { FindAllDto } from './dto/find-all.dto';
 import { GetForBlockDto } from './dto/get-for-block.dto';
 import { DeleteOneDto } from './dto/delete-one.dto';
+import { Thumbnail } from './dto/create-copy.dto';
 
 /**
  * Controller for image manipulation.
@@ -215,7 +216,7 @@ export class ImageController {
     );
     try {
       // Предположим, что ваш сервис имеет метод для обновления данных файла по его uid
-      const result = await this.imageService.updateFile(
+      const result = await this.imageService.updateImage(
         uid,
         description,
         name,
@@ -303,7 +304,7 @@ export class ImageController {
       `PUT request 'updateFile' from user: ${JSON.stringify(user.userId)}`,
     );
     try {
-      const result = await this.imageService.updateFile(
+      const result = await this.imageService.updateImage(
         uid,
         description,
         name,
@@ -336,5 +337,41 @@ export class ImageController {
       dto.fileName,
       user.userId,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/copy/thumbnail/:uid') // Используем PUT метод и ожидаем параметр uid в URL
+  @UseInterceptors(FileInterceptor('file'))
+  async addThumbnail(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('uid') uid: string, // Получаем параметр uid из URL
+    @Req() request: any,
+  ) {
+    const { user } = request;
+    winstonLogger.info(
+      `I'm trying to add an additional thumbnail for - ${uid}`,
+    );
+    return this.imageService.addThumbnail(uid, file, user.userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/copy/thumbnail/count/:uid')
+  getCountThumbnails(@Param('uid') uid: string): Promise<number> {
+    return this.imageService.sizeThumbnails(uid);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/copy/thumbnail/:uid')
+  getThumbnails(@Param('uid') uid: string): Promise<Thumbnail[]> {
+    return this.imageService.getThumbnails(uid);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/copy/thumbnail/:uid/:thuid')
+  deleteThumbnailOnCopy(
+    @Param('uid') uid: string,
+    @Param('thuid') thuid: string,
+  ): Promise<boolean> {
+    return this.imageService.deleteThumbnailOnCopy(uid, thuid);
   }
 }

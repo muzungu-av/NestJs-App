@@ -36,9 +36,10 @@ export class CloudinaryService {
     );
     let secure_url = undefined;
     try {
+      const f = 'thumbnail_'.concat(fileName.replace(/\.[^/.]+$/, ''));
       await this.cloudinary.uploader.upload(
         file,
-        { public_id: fileName.replace(/\.[^/.]+$/, ''), folder: userId },
+        { public_id: f, folder: userId },
         (error, result) => {
           if (error) {
             winstonLogger.error(error);

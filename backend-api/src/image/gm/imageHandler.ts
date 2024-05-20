@@ -9,6 +9,7 @@ import { CryptoHash } from 'image/crypto/crypto';
 import { UserService } from 'user/user.service';
 import { User } from 'user/schemas/user.schema';
 import { AllDimension, Dimension } from 'image/dto/create-image.dto';
+import { Thumbnail } from '../dto/create-copy.dto';
 
 export interface ImgFileProcessingResult {
   uid?: string;
@@ -28,6 +29,7 @@ export interface ImgFileProcessingResult {
   owner: User;
   dimension?: AllDimension;
   name?: string;
+  thumbnail?: Thumbnail[];
 }
 
 @Injectable()
@@ -61,9 +63,6 @@ export class ImageHandler {
   ): Promise<ImgFileProcessingResult> {
     const originalFileName = file.originalname; // see MulterConfigService
     const newFileName = file.filename;
-
-    winstonLogger.info(`>>>>> originalFileName ${originalFileName}`);
-    winstonLogger.info(`>>>>> newFileName ${newFileName}`);
 
     const filePath = path.join(process.cwd(), this.dest, newFileName); // from MulterConfigService
     const miniFilePath = path.join(
@@ -138,6 +137,7 @@ export class ImageHandler {
         result.success = true;
         result.imageUrl = undefined; //Promises<string>
         result.miniImageUrl = undefined; //Promises<string>
+        result.thumbnail = undefined;
         result.dimension = { basic: basicDimension, mini: mini_size };
         return result;
       } else {
