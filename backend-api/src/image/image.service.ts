@@ -9,7 +9,7 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import FilterDocs from './utils/alg';
 import { SliderMemoryService } from './utils/SliderMemoryService';
 import { Copy } from './schemas/copy.schema';
-import { CreateCopyDto } from './dto/create-copy.dto';
+import { CreateCopyDto, Thumbnail } from './dto/create-copy.dto';
 import { CustomError } from './utils/customError';
 
 @Injectable()
@@ -610,6 +610,15 @@ export class ImageService {
     } catch (error) {
       winstonLogger.error(`Error updating file: ${error}`);
       return false;
+    }
+  }
+
+  async getThumbnails(uid: string): Promise<Thumbnail[]> {
+    const doc = await this.copyModel.findOne({ uid }).exec();
+    if (doc && doc.thumbnail && doc.thumbnail.length != 0) {
+      return doc.thumbnail;
+    } else {
+      return [];
     }
   }
 
