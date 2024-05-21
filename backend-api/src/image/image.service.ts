@@ -444,6 +444,11 @@ export class ImageService {
             : Promise.resolve())(
           this.extractUrlPart(deletedDocument.miniImageUrl),
         );
+        deletedDocument.thumbnail.map(async (item) => {
+          await ((urlForDel) => {
+            urlForDel ? this.cloudinary.delete(urlForDel) : Promise.resolve();
+          })(this.extractUrlPart(item.imageUrl));
+        });
         return true;
       } else {
         return false;
@@ -649,14 +654,10 @@ export class ImageService {
           thumbnail: thumbnails,
         };
         await this.updateImageDocument<Copy>(this.copyModel, uid, data);
-        const rmUrl = this.extractUrlPart(removedThumbnail.imageUrl);
-        if (rmUrl) {
-          await this.cloudinary.delete(rmUrl);
-        } else {
-          winstonLogger.warning(
-            `Failed to retrieve the URL of the deleted image using regex expression - ${removedThumbnail.imageUrl}`,
-          );
-        }
+        await ((urlForDel) =>
+          urlForDel ? this.cloudinary.delete(urlForDel) : Promise.resolve())(
+          this.extractUrlPart(removedThumbnail.imageUrl),
+        );
 
         return true;
       } else {
