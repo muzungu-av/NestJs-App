@@ -434,16 +434,19 @@ export class ImageService {
           .exec();
       }
       if (deletedDocument) {
+        //удаляем главную из Cloudinary
         await ((urlForDel) =>
           urlForDel ? this.cloudinary.delete(urlForDel) : Promise.resolve())(
           this.extractUrlPart(deletedDocument.imageUrl),
         );
+        //удаляем mini из Cloudinary
         await ((urlForDelMini) =>
           urlForDelMini
             ? this.cloudinary.delete(urlForDelMini)
             : Promise.resolve())(
           this.extractUrlPart(deletedDocument.miniImageUrl),
         );
+        //удаляем все thumbnail из Cloudinary
         deletedDocument.thumbnail.map(async (item) => {
           await ((urlForDel) => {
             urlForDel ? this.cloudinary.delete(urlForDel) : Promise.resolve();
