@@ -423,26 +423,27 @@ export class ImageService {
    * @param uid document's UID
    * @returns Promise<any> one document
    */
-  async deleteOne(
-    uid: string,
-    type: string,
-    prevfileName: string,
-    userId: string,
-  ): Promise<boolean> {
+  async deleteOne(uid: string, type: string): Promise<boolean> {
     try {
-      let result;
+      let deletedDocument;
       if (type === 'isCopy') {
-        result = await this.copyModel.deleteOne({ uid }).exec();
+        deletedDocument = await this.copyModel.findOneAndDelete({ uid }).exec();
       } else {
-        result = await this.imageModel.deleteOne({ uid }).exec();
+        deletedDocument = await this.imageModel
+          .findOneAndDelete({ uid })
+          .exec();
       }
-      if (result && result.deletedCount === 1) {
-        const indexOfDot = prevfileName.lastIndexOf('.');
-        const nameWithoutDot = prevfileName.slice(0, indexOfDot);
-        const urlForDel = `${userId}/${nameWithoutDot}`;
-        const urlForDelMini = `${userId}/mini_${nameWithoutDot}`;
-        await this.cloudinary.delete(urlForDel);
-        await this.cloudinary.delete(urlForDelMini);
+      if (deletedDocument) {
+        await ((urlForDel) =>
+          urlForDel ? this.cloudinary.delete(urlForDel) : Promise.resolve())(
+          this.extractUrlPart(deletedDocument.imageUrl),
+        );
+        await ((urlForDelMini) =>
+          urlForDelMini
+            ? this.cloudinary.delete(urlForDelMini)
+            : Promise.resolve())(
+          this.extractUrlPart(deletedDocument.miniImageUrl),
+        );
         return true;
       } else {
         return false;
@@ -559,8 +560,10 @@ export class ImageService {
         resp.imageUrl = await this.cloudinary.upload(
           userId,
           resp.path,
-          resp.fileName,
+          'thumbnail_'.concat(resp.fileName), //'thumbnail_'
         );
+        winstonLogger.info(`resp.path -- ${resp.path}`);
+        winstonLogger.info(`resp.fileName -- ${resp.fileName}`);
         winstonLogger.info(
           `File uploaded to Claudinary Succesful: ${resp.imageUrl}`,
         );

@@ -65,8 +65,8 @@ export const Videos = () => {
       cancelText: "Nein",
       async onOk() {
         try {
-          const params = { fileName: v.fileName, id: v._id };
-          await Delete(url, vi, true, params);
+          // const params = { fileName: v.fileName, id: v._id };
+          await Delete(url, vi + `/${v._id}`, true);
 
           message.success("Erfolgreich gelöscht");
 
@@ -79,7 +79,7 @@ export const Videos = () => {
         }
       },
 
-      onCancel() {}
+      onCancel() {},
     });
   };
 
@@ -124,7 +124,7 @@ export const Videos = () => {
                 formData.append("file", imageData.body);
               }
               const headers = {
-                "Content-Type": `multipart/form-data;`
+                "Content-Type": `multipart/form-data;`,
               };
               if (!id) {
                 await Post(headers, url, vi, true, formData);
@@ -145,7 +145,7 @@ export const Videos = () => {
             }
           },
 
-          onCancel() {}
+          onCancel() {},
         });
       } catch (error) {}
     }

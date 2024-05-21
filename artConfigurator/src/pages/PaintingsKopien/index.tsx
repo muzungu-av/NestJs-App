@@ -48,9 +48,9 @@ export const PaintingsKopien = () => {
       okType: "danger",
       cancelText: "Nein",
       async onOk() {
-        const params = { fileName: v.fileName, id: v.uid };
+        //const params = { fileName: v.fileName, id: v.uid };
         try {
-          await Delete(url, img + "/copy/", true, params);
+          await Delete(url, img + `/copy/${v.uid}`, true);
           fetchDataFromApi().then((result) => setCopies(result));
           message.success("Erfolgreich gelöscht");
         } catch (error) {

@@ -30,7 +30,7 @@ const PicSection: React.FC<PicSectionProps> = ({
   miniImageUrl,
   description,
   name,
-  handleDeleteClick
+  handleDeleteClick,
 }) => {
   const [loader, setLoader] = useState(false);
 
@@ -43,11 +43,11 @@ const PicSection: React.FC<PicSectionProps> = ({
     try {
       setLoader(true);
       const headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       };
       const payload = {
         description: description,
-        typeOfImage: typeOfImage
+        typeOfImage: typeOfImage,
       };
       console.log("PUT>>" + typeOfImage + "<<");
       const response = await Put(headers, url, img + "/" + uid, true, payload);
@@ -145,7 +145,7 @@ const PicSection: React.FC<PicSectionProps> = ({
 const fetchDataFromApi = async () => {
   try {
     const params = {
-      fields: "uid,miniImageUrl,description,typeOfImage,name,fileName"
+      fields: "uid,miniImageUrl,description,typeOfImage,name,fileName",
     };
     const response = await Get(undefined, url, img, false, params);
     return response.data;
@@ -170,8 +170,8 @@ export const Pictures = () => {
       cancelText: "Nein",
       async onOk() {
         try {
-          const params = { fileName: v.fileName, id: v.uid };
-          await Delete(url, img, true, params);
+          // const params = { fileName: v.fileName, id: v.uid };
+          await Delete(url, img + `/${v.uid}`, true);
           message.success("Erfolgreich gelöscht");
           setData((prev: any) => {
             return prev.filter((item: any) => item.uid !== v.uid);
@@ -182,7 +182,7 @@ export const Pictures = () => {
         }
       },
 
-      onCancel() {}
+      onCancel() {},
     });
   };
 

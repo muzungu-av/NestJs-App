@@ -19,7 +19,7 @@ import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { winstonLogger } from 'winston.logger';
 import { Video } from './schemas/video.schema';
-import { DeleteVideoDto } from './dto/gelete-video-dto';
+// import { DeleteVideoDto } from './dto/gelete-video-dto';
 
 @Controller('/api/video')
 export class VideoController {
@@ -72,17 +72,14 @@ export class VideoController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete()
+  @Delete('/:id')
   deleteVideoById(
     @Req() request: any,
-    @Query(new ValidationPipe({ transform: true }))
-    dto: DeleteVideoDto,
+    @Param('id') id: string,
   ): Promise<boolean> {
     const { user } = request;
-    winstonLogger.info(
-      `Deleting a video ${user} by id ${dto.id}, filename=${dto.fileName}`,
-    );
-    return this.videoService.deleteVideoById(dto.id, dto.fileName, user.userId);
+    winstonLogger.info(`Deleting a video ${user} by id ${id}`);
+    return this.videoService.deleteVideoById(id);
   }
 
   @UseGuards(JwtAuthGuard)

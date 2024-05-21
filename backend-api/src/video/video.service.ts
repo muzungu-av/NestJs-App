@@ -27,8 +27,6 @@ export class VideoService {
     link: string,
     description: string,
   ): Promise<ImgFileProcessingResult> {
-    winstonLogger.info(`>>>> Trying to process an image for Video`);
-    winstonLogger.info(`>>>>> File ${file}`);
     const result = await this.handler.do(userId, file); //validation and creation of a miniature
     if (result.success !== true) {
       winstonLogger.error(`Error in addVideo: Problems with the image`);
@@ -94,25 +92,40 @@ export class VideoService {
 
   async deleteVideoById(
     _id: string,
-    prevFileName: string,
-    userId: string,
+    // prevFileName: string,
+    // userId: string,
   ): Promise<boolean> {
-    let r;
+    let deletedDocument;
     try {
-      r = await this.videoModel.deleteOne({ _id }).exec();
-      if (r?.deletedCount > 0) {
+      deletedDocument = await this.videoModel.findOneAndDelete({ _id }).exec();
+      if (deletedDocument) {
         winstonLogger.info(`Video has been successfully deleted: ${_id}`);
-        const indexOfDot = prevFileName.lastIndexOf('.');
-        const nameWithoutDot = prevFileName.slice(0, indexOfDot);
-        const urlForDel = `${userId}/${nameWithoutDot}`;
-        const delRes = await this.cloudinary.delete(urlForDel);
-        winstonLogger.info(`delRes-${delRes}`);
+        // const indexOfDot = prevFileName.lastIndexOf('.');
+        // const nameWithoutDot = prevFileName.slice(0, indexOfDot);
+        // const urlForDel = `${userId}/${nameWithoutDot}`;
+        // await this.cloudinary.delete(urlForDel);
+        await ((urlForDel) =>
+          urlForDel ? this.cloudinary.delete(urlForDel) : Promise.resolve())(
+          this.extractUrlPart(deletedDocument.imgUrl),
+        );
       }
     } catch (error) {
       winstonLogger.error(`${error.message}`);
       return false;
     }
-    return r?.deletedCount > 0;
+    return true;
+  }
+
+  /*
+   * Используем регулярное выражение для получения нужной части строки
+   */
+  extractUrlPart(url) {
+    const regex = /\/([^\/]+\/[^\/.]+)\.\w+$/;
+    const match = url.match(regex);
+    if (match) {
+      return match[1];
+    }
+    return null;
   }
 
   async updateFile(

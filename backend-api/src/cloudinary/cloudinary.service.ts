@@ -36,7 +36,8 @@ export class CloudinaryService {
     );
     let secure_url = undefined;
     try {
-      const f = 'thumbnail_'.concat(fileName.replace(/\.[^/.]+$/, ''));
+      const f = fileName.replace(/\.[^/.]+$/, '');
+      // const f = 'thumbnail_'.concat(fileName.replace(/\.[^/.]+$/, ''));
       await this.cloudinary.uploader.upload(
         file,
         { public_id: f, folder: userId },

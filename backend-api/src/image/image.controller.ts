@@ -23,7 +23,6 @@ import { GetImagesFilterDto } from './dto/get-images-filter.dto';
 import { DocumentCountDto } from './dto/document-count.dto';
 import { FindAllDto } from './dto/find-all.dto';
 import { GetForBlockDto } from './dto/get-for-block.dto';
-import { DeleteOneDto } from './dto/delete-one.dto';
 import { Thumbnail } from './dto/create-copy.dto';
 
 /**
@@ -235,24 +234,12 @@ export class ImageController {
   /**
    * Delete document by its UID
    */
-
   @UseGuards(JwtAuthGuard)
-  @Delete()
-  deleteOne(
-    @Req() request: any,
-    @Query(new ValidationPipe({ transform: true }))
-    dto: DeleteOneDto,
-  ): Promise<boolean> {
+  @Delete('/:uid')
+  deleteOne(@Req() request: any, @Param('uid') uid: string): Promise<boolean> {
     const { user } = request;
-    winstonLogger.info(
-      `Deleting a IMG ${user} by id ${dto.id}, filename=${dto.fileName}`,
-    );
-    return this.imageService.deleteOne(
-      dto.id,
-      undefined,
-      dto.fileName,
-      user.userId,
-    );
+    winstonLogger.info(`Deleting an Image ${user} by id ${uid}`);
+    return this.imageService.deleteOne(uid, undefined);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -321,22 +308,14 @@ export class ImageController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete('/copy')
+  @Delete('/copy/:uid')
   deleteOnCopy(
     @Req() request: any,
-    @Query(new ValidationPipe({ transform: true }))
-    dto: DeleteOneDto,
+    @Param('uid') uid: string,
   ): Promise<boolean> {
     const { user } = request;
-    winstonLogger.info(
-      `Deleting a IMG ${user} by id ${dto.id}, filename=${dto.fileName}`,
-    );
-    return this.imageService.deleteOne(
-      dto.id,
-      'isCopy',
-      dto.fileName,
-      user.userId,
-    );
+    winstonLogger.info(`Deleting a Copy ${user._id} by id ${uid}`);
+    return this.imageService.deleteOne(uid, 'isCopy');
   }
 
   @UseGuards(JwtAuthGuard)
